@@ -8,14 +8,26 @@ $stmt = $conn->prepare("SELECT id, name FROM marcas");
 $stmt->execute();
 $brands = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+// Obtener todas las categorías para el campo de selección
+$categories = [];
+$stmt = $conn->prepare("SELECT id, name FROM categorias");
+$stmt->execute();
+$categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 // Si se está editando un producto existente, recuperar los datos del producto
 $product = null;
+$imagen = ''; // Inicializar la variable de imagen
 if (isset($_GET['id'])) {
     $id = intval($_GET['id']);
     $stmt = $conn->prepare("SELECT * FROM productos WHERE id = :id");
     $stmt->bindParam(':id', $id, PDO::PARAM_INT);
     $stmt->execute();
     $product = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    // Asignar la imagen existente
+    if ($product) {
+        $imagen = $product['imagen'];
+    }
 }
 
 // Guardar o actualizar el producto
@@ -26,31 +38,42 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $price = $_POST['price'];
     $stock = $_POST['stock'];
     $brand_id = $_POST['brand']; // Obtener la marca seleccionada
+    $category_id = $_POST['category']; // Obtener la categoría seleccionada
     $datasheet = $_POST['datasheet'];
 
     // Convertir características a formato JSON
     $characteristics = $_POST['characteristics'] ?? [];
     $characteristics_json = json_encode($characteristics);
 
-    // Manejar la imagen
-    $imagen = $_FILES['imagen']['name'];
-    if ($_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
+    // Manejar la imagen subida
+    if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
+        $imagen = $_FILES['imagen']['name'];
         $tmpName = $_FILES['imagen']['tmp_name'];
         $destination = '../assets/images/' . basename($imagen);
-        move_uploaded_file($tmpName, $destination);
-    } else {
-        // Si no se subió una imagen nueva, mantener la imagen existente
-        $imagen = $product['imagen'] ?? '';
+
+        if (move_uploaded_file($tmpName, $destination)) {
+            echo "Imagen subida correctamente.";
+        } else {
+            echo "Error al mover la imagen al destino.";
+        }
+    } elseif ($product && !$imagen) {
+        // Mantener la imagen existente si no se sube una nueva
+        $imagen = $product['imagen'];
     }
 
-    // Insertar o actualizar el producto en la base de datos
+    // Construir la consulta SQL según si se subió una imagen nueva o no
     if ($id) {
-        // Actualizar producto existente
-        $stmt = $conn->prepare("UPDATE productos SET name = :name, description = :description, characteristics = :characteristics, price = :price, stock = :stock, imagen = :imagen, datasheet = :datasheet, brand_id = :brand_id WHERE id = :id");
+        if ($imagen) {
+            // Actualizar producto existente incluyendo la imagen
+            $stmt = $conn->prepare("UPDATE productos SET name = :name, description = :description, characteristics = :characteristics, price = :price, stock = :stock, imagen = :imagen, datasheet = :datasheet, brand_id = :brand_id, category_id = :category_id WHERE id = :id");
+        } else {
+            // Actualizar producto existente sin modificar la imagen
+            $stmt = $conn->prepare("UPDATE productos SET name = :name, description = :description, characteristics = :characteristics, price = :price, stock = :stock, datasheet = :datasheet, brand_id = :brand_id, category_id = :category_id WHERE id = :id");
+        }
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
     } else {
-        // Insertar nuevo producto
-        $stmt = $conn->prepare("INSERT INTO productos (name, description, characteristics, price, stock, imagen, datasheet, brand_id) VALUES (:name, :description, :characteristics, :price, :stock, :imagen, :datasheet, :brand_id)");
+        // Insertar nuevo producto incluyendo la imagen
+        $stmt = $conn->prepare("INSERT INTO productos (name, description, characteristics, price, stock, imagen, datasheet, brand_id, category_id) VALUES (:name, :description, :characteristics, :price, :stock, :imagen, :datasheet, :brand_id, :category_id)");
     }
 
     $stmt->bindParam(':name', $name);
@@ -58,14 +81,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $stmt->bindParam(':characteristics', $characteristics_json);
     $stmt->bindParam(':price', $price);
     $stmt->bindParam(':stock', $stock);
-    $stmt->bindParam(':imagen', $imagen);
+    if ($imagen) {
+        $stmt->bindParam(':imagen', $imagen); // Solo enlaza la imagen si está presente
+    }
     $stmt->bindParam(':datasheet', $datasheet);
     $stmt->bindParam(':brand_id', $brand_id); // Agregar marca
-    $stmt->execute();
+    $stmt->bindParam(':category_id', $category_id); // Agregar categoría
 
-    echo "Producto guardado correctamente.";
+    if ($stmt->execute()) {
+        echo "Producto guardado correctamente.";
+    } else {
+        echo "Error al guardar el producto.";
+    }
+
+    header('Location: tabla_productos.php');
+    exit;
 }
 ?>
+
+
+
+
 
 <!DOCTYPE html>
 <html lang="es">
@@ -115,6 +151,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
 
             <div class="form-group">
+                <label for="category">Categoría:</label>
+                <select class="form-control" name="category" id="category" required>
+                    <?php foreach ($categories as $category): ?>
+                        <option value="<?php echo $category['id']; ?>" <?php echo (isset($product['category_id']) && $product['category_id'] == $category['id']) ? 'selected' : ''; ?>>
+                            <?php echo htmlspecialchars($category['name']); ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+
+            <div class="form-group">
                 <label for="imagen">Imagen:</label>
                 <input type="file" class="form-control-file" name="imagen" id="imagen">
                 <?php if (isset($product['imagen']) && $product['imagen']): ?>
@@ -155,19 +202,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </form>
     </div>
 
-    <!-- Incluir Bootstrap JS y dependencias de Popper.js -->
+    <!-- Incluir Bootstrap JS y jQuery -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
     <script>
         function addRow() {
             var table = document.getElementById('characteristics-table').getElementsByTagName('tbody')[0];
             var rowCount = table.rows.length;
-            var newRow = table.insertRow();
-            newRow.innerHTML = `
-                <td><input type="text" class="form-control" name="characteristics[${rowCount}][name]" placeholder="Nombre"></td>
-                <td><input type="text" class="form-control" name="characteristics[${rowCount}][value]" placeholder="Valor"></td>
+            var row = table.insertRow(rowCount);
+            row.innerHTML = `
+                <td><input type="text" class="form-control" name="characteristics[${rowCount}][name]"></td>
+                <td><input type="text" class="form-control" name="characteristics[${rowCount}][value]"></td>
                 <td><button type="button" class="btn btn-danger btn-sm" onclick="removeRow(this)">Eliminar</button></td>
             `;
         }
