@@ -1,6 +1,50 @@
+<?php
+include('config/database.php');
+
+// Consultar todas las categorías
+$stmt = $conn->prepare("SELECT name FROM categorias");
+$stmt->execute();
+$categorias = $stmt->fetchAll(PDO::FETCH_ASSOC);
+?>
+
+<!-- NEWSLETTER -->
+<div id="newsletter" class="section">
+			<!-- container -->
+			<div class="container">
+				<!-- row -->
+				<div class="row">
+					<div class="col-md-12">
+						<div class="newsletter">
+							<p>Sign Up for the <strong>NEWSLETTER</strong></p>
+							<form>
+								<input class="input" type="email" placeholder="Enter Your Email">
+								<button class="newsletter-btn"><i class="fa fa-envelope"></i> Subscribe</button>
+							</form>
+							<ul class="newsletter-follow">
+								<li>
+									<a href="#"><i class="fa fa-facebook"></i></a>
+								</li>
+								<li>
+									<a href="#"><i class="fa fa-twitter"></i></a>
+								</li>
+								<li>
+									<a href="#"><i class="fa fa-instagram"></i></a>
+								</li>
+								<li>
+									<a href="#"><i class="fa fa-pinterest"></i></a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<!-- /row -->
+			</div>
+			<!-- /container -->
+		</div>
+		<!-- /NEWSLETTER -->
 <footer id="footer">
 			<!-- pie de página superior -->
-			<div class="section">
+			<div class="section"  >
 				<!-- contenedor -->
 				<div class="container">
 					<!-- fila -->
@@ -10,25 +54,24 @@
 								<h3 class="footer-title">Sobre Nosotros</h3>
 								<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut.</p>
 								<ul class="footer-links">
-									<li><a href="#"><i class="fa fa-map-marker"></i>1734 Stonecoal Road</a></li>
-									<li><a href="#"><i class="fa fa-phone"></i>+021-95-51-84</a></li>
-									<li><a href="#"><i class="fa fa-envelope-o"></i>email@email.com</a></li>
+									<li><a href="#"><i class="fa fa-map-marker"></i>Av. Díaz Vélez 1240 (C.P. 1702)Ciudadela, Buenos Aires, Argentina</a></li>
+									<li><a href="#"><i class="fa fa-phone"></i>(+54)11 4488 4489</a></li>
+									<li><a href="#"><i class="fa fa-envelope-o"></i>ventas@sistemasenergeticos.com.ar</a></li>
 								</ul>
 							</div>
 						</div>
 
 						<div class="col-md-3 col-xs-6">
-							<div class="footer">
-								<h3 class="footer-title">Categorías</h3>
-								<ul class="footer-links">
-									<li><a href="#">Ofertas</a></li>
-									<li><a href="#">Laptops</a></li>
-									<li><a href="#">Smartphones</a></li>
-									<li><a href="#">Cámaras</a></li>
-									<li><a href="#">Accesorios</a></li>
-								</ul>
+								<div class="footer">
+									<h3 class="footer-title">Categorías</h3>
+									<ul class="footer-links">
+										<?php foreach ($categorias as $categoria): ?>
+											<li><a href="#"><?php echo htmlspecialchars($categoria['name']); ?></a></li>
+										<?php endforeach; ?>
+									</ul>
+								</div>
 							</div>
-						</div>
+
 
 						<div class="clearfix visible-xs"></div>
 
@@ -71,12 +114,6 @@
 					<div class="row">
 						<div class="col-md-12 text-center">
 							<ul class="footer-payments">
-								<li><a href="#"><i class="fa fa-cc-visa"></i></a></li>
-								<li><a href="#"><i class="fa fa-credit-card"></i></a></li>
-								<li><a href="#"><i class="fa fa-cc-paypal"></i></a></li>
-								<li><a href="#"><i class="fa fa-cc-mastercard"></i></a></li>
-								<li><a href="#"><i class="fa fa-cc-discover"></i></a></li>
-								<li><a href="#"><i class="fa fa-cc-amex"></i></a></li>
 							</ul>
 							<span class="copyright">
 								<!-- El enlace de vuelta a Colorlib no se puede eliminar. Esta plantilla está licenciada bajo CC BY 3.0. -->

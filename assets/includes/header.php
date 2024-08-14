@@ -25,8 +25,8 @@
 						<!-- LOGO -->
 						<div class="col-md-3">
 							<div class="header-logo">
-								<a href="#" class="logo">
-									<img src="./img/logomenu.png" alt="">
+								<a href="index.php" class="logo">
+									<img src="assets/images/logomenu.png" alt="">
 								</a>
 							</div>
 						</div>
@@ -61,48 +61,39 @@
 								</div>
 								<!-- /Wishlist -->
 
-								<!-- Cart -->
-								<div class="dropdown">
-									<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
-										<i class="fa fa-shopping-cart"></i>
-										<span>Tu carrito</span>
-										<div class="qty">3</div>
-									</a>
+									<!-- HTML para mostrar el carrito -->
 									<div class="cart-dropdown">
 										<div class="cart-list">
-											<div class="product-widget">
-												<div class="product-img">
-													<img src="./img/product01.png" alt="">
-												</div>
-												<div class="product-body">
-													<h3 class="product-name"><a href="#">product name goes here</a></h3>
-													<h4 class="product-price"><span class="qty">1x</span>$980.00</h4>
-												</div>
-												<button class="delete"><i class="fa fa-close"></i></button>
-											</div>
-
-											<div class="product-widget">
-												<div class="product-img">
-													<img src="./img/product02.png" alt="">
-												</div>
-												<div class="product-body">
-													<h3 class="product-name"><a href="#">product name goes here</a></h3>
-													<h4 class="product-price"><span class="qty">3x</span>$980.00</h4>
-												</div>
-												<button class="delete"><i class="fa fa-close"></i></button>
-											</div>
+											<?php if (!empty($carrito)): ?>
+												<?php foreach ($carrito as $item): ?>
+													<div class="product-widget">
+														<div class="product-img">
+															<img src="assets/images/<?php echo htmlspecialchars($item['imagen']); ?>" alt="<?php echo htmlspecialchars($item['name']); ?>">
+														</div>
+														<div class="product-body">
+															<h3 class="product-name"><a href="#"><?php echo htmlspecialchars($item['name']); ?></a></h3>
+															<h4 class="product-price"><span class="qty"><?php echo $item['quantity']; ?>x</span>$<?php echo number_format($item['price'], 2); ?></h4>
+														</div>
+														<form method="POST" action="eliminar_producto.php">
+															<input type="hidden" name="product_id" value="<?php echo $item['product_id']; ?>">
+															<button class="delete"><i class="fa fa-close"></i></button>
+														</form>
+													</div>
+												<?php endforeach; ?>
+											<?php else: ?>
+												<p>No hay productos en el carrito.</p>
+											<?php endif; ?>
 										</div>
 										<div class="cart-summary">
-											<small>3 Item(s) selected</small>
-											<h5>SUBTOTAL: $2940.00</h5>
+											<small><?php echo $totalCantidad; ?> Item(s) seleccionados</small>
+											<h5>SUBTOTAL: $<?php echo number_format($totalPrecio, 2); ?></h5>
 										</div>
 										<div class="cart-btns">
-											<a href="#">Ver carrito</a>
-											<a href="#">Finalizar <i class="fa fa-arrow-circle-right"></i></a>
+											<a href="ver_carrito.php">Ver carrito</a>
+											<a href="finalizar_compra.php">Finalizar <i class="fa fa-arrow-circle-right"></i></a>
 										</div>
 									</div>
-								</div>
-								<!-- /Cart -->
+
 
 								<!-- Menu Toogle -->
 								<div class="menu-toggle">

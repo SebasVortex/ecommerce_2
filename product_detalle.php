@@ -44,7 +44,7 @@ if ($product) {
         LEFT JOIN marcas m ON p.brand_id = m.id
         LEFT JOIN categorias c ON p.category_id = c.id
         WHERE p.id != :id
-        LIMIT 5
+        LIMIT 4
     ");
     $stmt->bindParam(':id', $id, PDO::PARAM_INT);
     $stmt->execute();
@@ -482,7 +482,6 @@ if ($product) {
                             </div>
                             <div class="product-btns">
                                 <button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">añadir a la lista de deseos</span></button>
-                                <button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">añadir para comparar</span></button>
                                 <button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">vista rápida</span></button>
                             </div>
                         </div>
@@ -504,42 +503,6 @@ if ($product) {
 </div>
 <!-- /Sección -->
 
-
-		<!-- BOLETÍN -->
-		<div id="newsletter" class="section">
-			<!-- contenedor -->
-			<div class="container">
-				<!-- fila -->
-				<div class="row">
-					<div class="col-md-12">
-						<div class="newsletter">
-							<p>Regístrate para el <strong>BOLETÍN</strong></p>
-							<form>
-								<input class="input" type="email" placeholder="Ingresa tu Correo Electrónico">
-								<button class="newsletter-btn"><i class="fa fa-envelope"></i> Suscribirse</button>
-							</form>
-							<ul class="newsletter-follow">
-								<li>
-									<a href="#"><i class="fa fa-facebook"></i></a>
-								</li>
-								<li>
-									<a href="#"><i class="fa fa-twitter"></i></a>
-								</li>
-								<li>
-									<a href="#"><i class="fa fa-instagram"></i></a>
-								</li>
-								<li>
-									<a href="#"><i class="fa fa-pinterest"></i></a>
-								</li>
-							</ul>
-						</div>
-					</div>
-				</div>
-				<!-- /fila -->
-			</div>
-			<!-- /contenedor -->
-		</div>
-		<!-- /BOLETÍN -->
 
 		<!-- PIE DE PÁGINA -->
 		<?php include 'assets/includes/footer.php';?>
