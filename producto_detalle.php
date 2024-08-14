@@ -39,14 +39,10 @@ if ($product) {
 }
 ?>
 
-<!DOCTYPE html>
-<html lang="es">
-<head>
+<?php include 'assets/includes/head.php';?>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo htmlspecialchars($product['name']); ?></title>
-    <!-- Bootstrap CSS -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <!-- Swiper CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css">
     <style>
@@ -119,7 +115,11 @@ if ($product) {
         }
     </style>
 </head>
-<body>
+	<body>
+		<!-- HEADER -->
+		<?php include 'assets/includes/header.php';?>
+		<!-- /HEADER -->
+
     <div class="container mt-4">
         <div class="row">
             <!-- Detalle del producto -->
