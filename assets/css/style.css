@@ -2105,7 +2105,10 @@ textarea.input {
 .slick-next {
   right: -20px;
 }
-
+.soporte{
+  width: 100% !important;
+  max-width: 150px !important;
+}
 /*----------------------------*\
 	Dots
 \*----------------------------*/

@@ -1,8 +1,8 @@
 <?php
 // Consultar todas las categorías
-$stmt = $conn->prepare("SELECT name FROM categorias");
-$stmt->execute();
-$categorias = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$stmt = $conn->prepare("SELECT name FROM categorias"); // Prepara una consulta SQL para seleccionar todas las categorías
+$stmt->execute(); // Ejecuta la consulta
+$categorias = $stmt->fetchAll(PDO::FETCH_ASSOC); // Obtiene todos los resultados en un array asociativo
 ?>
 
 <!-- NEWSLETTER -->
@@ -50,7 +50,7 @@ $categorias = $stmt->fetchAll(PDO::FETCH_ASSOC);
 						<div class="col-md-3 col-xs-6">
 							<div class="footer">
 								<h3 class="footer-title">Sobre Nosotros</h3>
-								<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut.</p>
+								<p>Desde 1991, dando servicios y cada vez mejores soluciones.</p>
 								<ul class="footer-links">
 									<li><a href="#"><i class="fa fa-map-marker"></i>Av. Díaz Vélez 1240 (C.P. 1702)Ciudadela, Buenos Aires, Argentina</a></li>
 									<li><a href="#"><i class="fa fa-phone"></i>(+54)11 4488 4489</a></li>
@@ -133,24 +133,32 @@ $categorias = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		<script src="./js/jquery.zoom.min.js"></script>
 		<script src="./js/main.js"></script>
 		<script>
-    document.querySelectorAll('.add-to-cart-btn').forEach(button => {
-        button.addEventListener('click', function() {
-            const productId = this.getAttribute('data-product-id');
+document.querySelectorAll('.add-to-cart-btn').forEach(button => {
+    button.addEventListener('click', function() {
+        console.log("Botón clickeado"); // Añadir un log para ver si el evento se dispara
+        const productId = this.getAttribute('data-product-id');
+        const quantity = 1;
 
-            fetch('addcarrito.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: 'product_id=' + productId
-            })
-            .then(response => response.text())
-            .then(data => {
-
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
+        // Solicitud fetch
+        fetch('addcarrito.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `product_id=${productId}&quantity=${quantity}`,
+        })
+        .then(response => response.text())
+        .then(data => {
+            if (data.includes('Error')) { // Verificar si la respuesta indica un error
+                window.location.href = 'login.php'; // Redirige al login en caso de error
+            } else {
+                alert(data); // Mostrar mensaje de éxito o manejar la respuesta
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            window.location.href = 'login.php'; // Redirige al login en caso de error en la solicitud
         });
     });
+});
 </script>

@@ -1,5 +1,5 @@
 <?php
-include('consultas/producto.php'); // Incluye el archivo que recupera los datos de los productos
+include('config/producto.php'); // Incluye el archivo que recupera los datos de los productos
 ?>
 <?php include 'assets/includes/head.php';?>
 </head>
@@ -148,9 +148,9 @@ include('consultas/producto.php'); // Incluye el archivo que recupera los datos 
 													<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
 												</div>
 											</div>
-										<div class="add-to-cart">
-											<button class="add-to-cart-btn" data-product-id="<?php echo $producto['id']; ?>">
-												<i class="fa fa-shopping-cart"></i> add to cart
+											<div class="add-to-cart">
+											<button class="add-to-cart-btn" data-product-id="<?php echo htmlspecialchars($producto['id']); ?>">
+												<i class="fa fa-shopping-cart"></i> Add to Cart
 											</button>
 										</div>
 									</div>
@@ -278,8 +278,10 @@ include('consultas/producto.php'); // Incluye el archivo que recupera los datos 
 												</div>
 											</div>
 											<div class="add-to-cart">
-												<button class="add-to-cart-btn" data-product-id="<?php echo $producto['id']; ?>"><i class="fa fa-shopping-cart"></i> add to cart</button>
-											</div>
+										<button class="add-to-cart-btn" data-product-id="<?php echo $producto['id']; ?>">
+											<i class="fa fa-shopping-cart"></i> Add to cart
+										</button>
+									</div>
 										</div>
 										<?php endforeach; ?>
 

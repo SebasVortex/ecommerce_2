@@ -1,43 +1,58 @@
 <?php
 session_start();
-include 'config/database.php';
 
-// Función para validar y limpiar entradas de usuario
-function sanitizeInput($input) {
-    return htmlspecialchars(strip_tags($input));
+// Generar un token CSRF si no existe
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
 
-// Procesa el formulario cuando se envía
+include 'config/database.php';
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Limpia y valida las entradas del usuario
-    $username = sanitizeInput(trim($_POST['username']));
-    $email = sanitizeInput(trim($_POST['email']));
-    $password = sanitizeInput(trim($_POST['password']));
-
-    // Verifica si el nombre de usuario o el email ya están registrados
-    $stmt = $conn->prepare("SELECT * FROM clientes WHERE username = :username OR email = :email LIMIT 1");
-    $stmt->bindParam(':username', $username);
-    $stmt->bindParam(':email', $email);
-    $stmt->execute();
-
-    if ($stmt->fetch(PDO::FETCH_ASSOC)) {
-        $_SESSION['error'] = 'El nombre de usuario o el email ya están registrados.';
+    // Verificar el token CSRF
+    if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+        $_SESSION['error'] = 'Token CSRF inválido.';
         header('Location: register.php');
         exit();
-    } else {
-        // Hashea la contraseña
-        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+    }
 
-        // Inserta el nuevo usuario en la base de datos
-        $stmt = $conn->prepare("INSERT INTO clientes (username, email, password) VALUES (:username, :email, :password)");
+    $username = trim($_POST['username']);
+    $email = trim($_POST['email']);
+    $password = trim($_POST['password']);
+
+    // Limpieza y validación de entradas
+    function sanitizeInput($input) {
+        return htmlspecialchars(strip_tags($input));
+    }
+
+    $username = sanitizeInput($username);
+    $email = sanitizeInput($email);
+    $password = sanitizeInput($password);
+
+    try {
+        $stmt = $conn->prepare("SELECT id FROM clientes WHERE username = :username OR email = :email");
         $stmt->bindParam(':username', $username);
         $stmt->bindParam(':email', $email);
-        $stmt->bindParam(':password', $hashedPassword);
         $stmt->execute();
 
-        // Redirige al login
-        header('Location: login.php');
-        exit();
+        if ($stmt->rowCount() > 0) {
+            $_SESSION['error'] = 'El nombre de usuario o el email ya están en uso.';
+        } else {
+            $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
+            $stmt = $conn->prepare("INSERT INTO clientes (username, email, password) VALUES (:username, :email, :password)");
+            $stmt->bindParam(':username', $username);
+            $stmt->bindParam(':email', $email);
+            $stmt->bindParam(':password', $hashedPassword);
+            if ($stmt->execute()) {
+                $_SESSION['success'] = 'Registro exitoso. Puedes iniciar sesión.';
+                header('Location: login.php');
+                exit();
+            } else {
+                $_SESSION['error'] = 'Error al registrar el usuario.';
+            }
+        }
+    } catch (PDOException $e) {
+        $_SESSION['error'] = 'Error de base de datos: ' . $e->getMessage();
     }
 }
 ?>
@@ -45,29 +60,75 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
+    <?php include 'assets/includes/head.php';?>
     <title>Registro</title>
-    <link rel="stylesheet" href="path_to_your_stylesheet.css"> <!-- Reemplaza con la ruta a tu archivo CSS -->
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .register-container {
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .register-header {
+            margin-bottom: 20px;
+        }
+        .register-header h2 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+        .register-footer {
+            margin-top: 20px;
+        }
+        .register-footer p {
+            margin-bottom: 0;
+        }
+    </style>
 </head>
 <body>
-    <h2>Registro</h2>
-    <?php if (isset($_SESSION['error'])): ?>
-        <p style="color: red;"><?php echo $_SESSION['error']; unset($_SESSION['error']); ?></p>
-    <?php endif; ?>
-    <form action="register.php" method="POST">
-        <div>
-            <label for="username">Nombre de Usuario:</label>
-            <input type="text" id="username" name="username" required>
+    <!-- HEADER -->
+    <?php include 'assets/includes/header.php';?>
+    <!-- HEADER -->
+
+    <?php
+    if (isset($_SESSION['error'])) {
+        echo '<p>' . $_SESSION['error'] . '</p>';
+        unset($_SESSION['error']);
+    }
+    ?>
+
+    <div class="container">
+        <div class="register-container">
+            <div class="register-header text-center">
+                <h2>Registro</h2>
+            </div>
+            <form action="register.php" method="post">
+                <div class="form-group">
+                    <label for="username">Nombre de Usuario:</label>
+                    <input type="text" class="form-control" id="username" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" class="form-control" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Contraseña:</label>
+                    <input type="password" class="form-control" id="password" name="password" required>
+                </div>
+                <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token']); ?>">
+                <button type="submit" class="btn btn-primary btn-block">Registrar</button>
+            </form>
+            <div class="register-footer text-center">
+                <p><a href="login.php">Ya tengo una cuenta. Iniciar sesión</a></p>
+            </div>
         </div>
-        <div>
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
-        </div>
-        <div>
-            <label for="password">Contraseña:</label>
-            <input type="password" id="password" name="password" required>
-        </div>
-        <button type="submit">Registrarse</button>
-    </form>
+    </div>
+    <!-- PIE DE PÁGINA -->
+    <?php include 'assets/includes/footer.php';?>
+    <!-- /PIE DE PÁGINA -->
 </body>
 </html>

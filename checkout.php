@@ -1,4 +1,5 @@
-<?php include 'assets/includes/head.php';?>
+<?php include 'assets/includes/head.php';
+?>
 </head>
 	<body>
 		<!-- HEADER -->

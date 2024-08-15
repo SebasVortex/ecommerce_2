@@ -1,12 +1,7 @@
 <?php
+
 include 'config/database.php'; // Asegúrate de incluir el archivo de configuración de la base de datos
-
-
-// Verificar si el usuario está logueado
-if (!isset($_SESSION['user_id'])) {
-    echo '<p>Debes iniciar sesión para ver el carrito.</p>';
-    exit;
-}
+include 'config/checksession.php';
 
 $user_id = $_SESSION['user_id'];
 
