@@ -52,7 +52,6 @@ if ($product) {
 }
 ?>
 
-
 <?php include 'assets/includes/head.php';?>
 <title><?php echo htmlspecialchars($product['category_name']); ?> - <?php echo htmlspecialchars($product['name']); ?></title>
 </head>
@@ -213,7 +212,7 @@ if ($product) {
 						<div id="product-tab">
 							<!-- navegación de pestañas del producto -->
 							<ul class="tab-nav">
-								<li class="active"><a data-toggle="tab" href="#tab1">Detalles</a></li>
+								<li class="active"><a data-toggle="tab" href="#tab1">Especificaciones</a></li>
 								<li><a data-toggle="tab" href="#tab2">Soporte</a></li>
 								<!-- <li><a data-toggle="tab" href="#tab3">Opiniones (3)</a></li> -->
 							</ul>
@@ -228,7 +227,7 @@ if ($product) {
 									            <table class="table table-striped">
 													<thead>
 														<tr>
-															<th>Características</th>
+															<th></th>
 															<th></th>
 														</tr>
 													</thead>
@@ -504,19 +503,8 @@ if ($product) {
     <!-- /contenedor -->
 </div>
 <!-- /Sección -->
-
-
 		<!-- PIE DE PÁGINA -->
 		<?php include 'assets/includes/footer.php';?>
 		<!-- /PIE DE PÁGINA -->
-
-		<!-- Plugins de jQuery -->
-		<script src="js/jquery.min.js"></script>
-		<script src="js/bootstrap.min.js"></script>
-		<script src="js/slick.min.js"></script>
-		<script src="js/nouislider.min.js"></script>
-		<script src="js/jquery.zoom.min.js"></script>
-		<script src="js/main.js"></script>
-
 	</body>
 </html>

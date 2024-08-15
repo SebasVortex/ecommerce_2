@@ -4,13 +4,13 @@
 			<div id="top-header">
 				<div class="container">
 					<ul class="header-links pull-left">
-						<li><a href="#"><i class="fa fa-phone"></i> (+54)11 4488 4489</a></li>
-						<li><a href="#"><i class="fa fa-envelope-o"></i> ventas@sistemasenergeticos.com.ar</a></li>
-						<li><a href="#"><i class="fa fa-map-marker"></i> Av. Díaz Vélez 1240 (C.P. 1702)
-						Ciudadela, Buenos Aires, Argentina</a></li>
+						<li><a href="#"><i class="fa fa-phone"></i> +021-95-51-84</a></li>
+						<li><a href="#"><i class="fa fa-envelope-o"></i> email@email.com</a></li>
+						<li><a href="#"><i class="fa fa-map-marker"></i> 1734 Stonecoal Road</a></li>
 					</ul>
 					<ul class="header-links pull-right">
-						<li><a href="#"><i class="fa fa-user-o"></i> Mi cuenta</a></li>
+							<!--  <li><a href="#"><i class="fa fa-dollar"></i> USD</a></li>   -->
+						<li><a href="#"><i class="fa fa-user-o"></i> My Account</a></li>
 					</ul>
 				</div>
 			</div>
@@ -26,7 +26,7 @@
 						<div class="col-md-3">
 							<div class="header-logo">
 								<a href="index.php" class="logo">
-									<img src="assets/images/logomenu.png" alt="">
+								<img src="assets/images/logomenu.png" alt="">
 								</a>
 							</div>
 						</div>
@@ -37,12 +37,12 @@
 							<div class="header-search">
 								<form>
 									<select class="input-select">
-										<option value="0">Categorias</option>
+										<option value="0">All Categories</option>
 										<option value="1">Category 01</option>
 										<option value="1">Category 02</option>
 									</select>
-									<input class="input" placeholder="Buscar productos">
-									<button class="search-btn">Buscar</button>
+									<input class="input" placeholder="Search here">
+									<button class="search-btn">Search</button>
 								</form>
 							</div>
 						</div>
@@ -55,45 +55,54 @@
 								<div>
 									<a href="#">
 										<i class="fa fa-heart-o"></i>
-										<span>Favoritos</span>
+										<span>Your Wishlist</span>
 										<div class="qty">2</div>
 									</a>
 								</div>
 								<!-- /Wishlist -->
 
-									<!-- HTML para mostrar el carrito -->
+								<!-- Cart -->
+								<div class="dropdown">
+									<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+										<i class="fa fa-shopping-cart"></i>
+										<span>Your Cart</span>
+										<div class="qty">3</div>
+									</a>
 									<div class="cart-dropdown">
 										<div class="cart-list">
-											<?php if (!empty($carrito)): ?>
-												<?php foreach ($carrito as $item): ?>
-													<div class="product-widget">
-														<div class="product-img">
-															<img src="assets/images/<?php echo htmlspecialchars($item['imagen']); ?>" alt="<?php echo htmlspecialchars($item['name']); ?>">
-														</div>
-														<div class="product-body">
-															<h3 class="product-name"><a href="#"><?php echo htmlspecialchars($item['name']); ?></a></h3>
-															<h4 class="product-price"><span class="qty"><?php echo $item['quantity']; ?>x</span>$<?php echo number_format($item['price'], 2); ?></h4>
-														</div>
-														<form method="POST" action="eliminar_producto.php">
-															<input type="hidden" name="product_id" value="<?php echo $item['product_id']; ?>">
-															<button class="delete"><i class="fa fa-close"></i></button>
-														</form>
-													</div>
-												<?php endforeach; ?>
-											<?php else: ?>
-												<p>No hay productos en el carrito.</p>
-											<?php endif; ?>
+											<div class="product-widget">
+												<div class="product-img">
+													<img src="./img/product01.png" alt="">
+												</div>
+												<div class="product-body">
+													<h3 class="product-name"><a href="#">product name goes here</a></h3>
+													<h4 class="product-price"><span class="qty">1x</span>$980.00</h4>
+												</div>
+												<button class="delete"><i class="fa fa-close"></i></button>
+											</div>
+
+											<div class="product-widget">
+												<div class="product-img">
+													<img src="./img/product02.png" alt="">
+												</div>
+												<div class="product-body">
+													<h3 class="product-name"><a href="#">product name goes here</a></h3>
+													<h4 class="product-price"><span class="qty">3x</span>$980.00</h4>
+												</div>
+												<button class="delete"><i class="fa fa-close"></i></button>
+											</div>
 										</div>
 										<div class="cart-summary">
-											<small><?php echo $totalCantidad; ?> Item(s) seleccionados</small>
-											<h5>SUBTOTAL: $<?php echo number_format($totalPrecio, 2); ?></h5>
+											<small>3 Item(s) selected</small>
+											<h5>SUBTOTAL: $2940.00</h5>
 										</div>
 										<div class="cart-btns">
-											<a href="ver_carrito.php">Ver carrito</a>
-											<a href="finalizar_compra.php">Finalizar <i class="fa fa-arrow-circle-right"></i></a>
+											<a href="#">View Cart</a>
+											<a href="#">Checkout  <i class="fa fa-arrow-circle-right"></i></a>
 										</div>
 									</div>
-
+								</div>
+								<!-- /Cart -->
 
 								<!-- Menu Toogle -->
 								<div class="menu-toggle">
