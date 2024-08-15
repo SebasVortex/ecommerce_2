@@ -1,47 +1,56 @@
 <?php
-session_start();
+include('config/database.php'); // Aquí se incluye la conexión a la base de datos y se inicia la sesión
 
-// Conectar a la base de datos
-include('config/database.php');
+session_start(); // Iniciar sesión
 
-// Verificar si se ha pasado un ID de producto
-if (isset($_GET['id'])) {
-    $productId = intval($_GET['id']);
-
-    // Verificar si el carrito ya existe en la sesión
-    if (!isset($_SESSION['carrito'])) {
-        $_SESSION['carrito'] = [];
-    }
-
-    // Verificar si el producto ya está en el carrito
-    if (isset($_SESSION['carrito'][$productId])) {
-        // Si ya está, incrementar la cantidad
-        $_SESSION['carrito'][$productId]['quantity'] += 1;
-    } else {
-        // Obtener los detalles del producto desde la base de datos
-        $stmt = $conn->prepare("SELECT * FROM productos WHERE id = :id LIMIT 1");
-        $stmt->bindParam(':id', $productId, PDO::PARAM_INT);
-        $stmt->execute();
-        $product = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        // Agregar el producto al carrito si se encontró en la base de datos
-        if ($product) {
-            $_SESSION['carrito'][$productId] = [
-                'id' => $product['id'],
-                'name' => $product['name'],
-                'price' => $product['price'],
-                'quantity' => 1,
-                'imagen' => $product['imagen']
-            ];
-        }
-    }
-
-    // Redirigir al usuario a la página anterior
-    header('Location: ' . $_SERVER['HTTP_REFERER']);
-    exit();
-} else {
-    // Redirigir a una página de error si no se pasó una ID válida
-    header('Location: error.php');
-    exit();
+// Verificar si el usuario está logueado
+if (!isset($_SESSION['user_id'])) {
+    // Si no está logueado, redirigir al login
+    header('Location: login.php');
+    exit;
 }
+
+// Verificar si product_id está definido en la solicitud
+if (!isset($_POST['product_id'])) {
+    die('Error: No se envió el ID del producto.');
+}
+
+$product_id = $_POST['product_id'];
+$user_id = $_SESSION['user_id'];
+
+// Comprobar si el producto ya está en el carrito del usuario
+$query = "SELECT id FROM carrito WHERE user_id = ? AND product_id = ?";
+$stmt = $conn->prepare($query);
+if ($stmt === false) {
+    die('Error en la preparación de la consulta: ' . $conn->errorInfo()[2]);
+}
+
+$stmt->execute([$user_id, $product_id]);
+if ($stmt->rowCount() > 0) {
+    // Si el producto ya está en el carrito, puedes actualizar la cantidad
+    $query = "UPDATE carrito SET quantity = quantity + 1 WHERE user_id = ? AND product_id = ?";
+    $stmt = $conn->prepare($query);
+    if ($stmt === false) {
+        die('Error en la preparación de la consulta: ' . $conn->errorInfo()[2]);
+    }
+    $stmt->execute([$user_id, $product_id]);
+} else {
+    // Si el producto no está en el carrito, agregarlo
+    $query = "INSERT INTO carrito (user_id, product_id, quantity) VALUES (?, ?, 1)";
+    $stmt = $conn->prepare($query);
+    if ($stmt === false) {
+        die('Error en la preparación de la consulta: ' . $conn->errorInfo()[2]);
+    }
+    $stmt->execute([$user_id, $product_id]);
+}
+
+// Redirigir al carrito o mostrar un mensaje de éxito
+if ($stmt) {
+
+} else {
+    // Manejar el error
+    echo "Error al agregar el producto al carrito: " . $stmt->errorInfo()[2];
+}
+
+$conn = null;
 ?>

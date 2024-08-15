@@ -132,3 +132,25 @@ $categorias = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		<script src="./js/nouislider.min.js"></script>
 		<script src="./js/jquery.zoom.min.js"></script>
 		<script src="./js/main.js"></script>
+		<script>
+    document.querySelectorAll('.add-to-cart-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const productId = this.getAttribute('data-product-id');
+
+            fetch('addcarrito.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'product_id=' + productId
+            })
+            .then(response => response.text())
+            .then(data => {
+
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    });
+</script>

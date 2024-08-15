@@ -1,5 +1,5 @@
 <?php
-include ('config/database.php');
+include ('./config/database.php');
 
 // Consultar productos con el nombre de la marca y de la categoría, en orden aleatorio
 $stmt = $conn->prepare("

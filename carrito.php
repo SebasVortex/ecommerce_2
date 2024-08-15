@@ -1,55 +1,25 @@
 <?php
-session_start();
-
-// Conectar a la base de datos
-include('config/database.php');
-
-// Verificar si se ha pasado un ID de producto
-if (isset($_GET['id'])) {
-    $productId = intval($_GET['id']);
-
-    // Verificar si el producto ya está en el carrito
-    if (!isset($_SESSION['carrito'])) {
-        $_SESSION['carrito'] = [];
-    }
-
-    // Añadir el producto al carrito (o actualizar la cantidad si ya está en el carrito)
-    if (isset($_SESSION['carrito'][$productId])) {
-        $_SESSION['carrito'][$productId]['quantity'] += 1;
-    } else {
-        // Obtener los detalles del producto
-        $stmt = $conn->prepare("SELECT * FROM productos WHERE id = :id");
-        $stmt->bindParam(':id', $productId, PDO::PARAM_INT);
-        $stmt->execute();
-        $product = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        // Agregar el producto al carrito
-        if ($product) {
-            $_SESSION['carrito'][$productId] = [
-                'id' => $product['id'],
-                'name' => $product['name'],
-                'price' => $product['price'],
-                'quantity' => 1,
-                'imagen' => $product['imagen']
-            ];
-        }
-    }
+include 'config/database.php'; // Asegúrate de incluir el archivo de configuración de la base de datos
 
 
-} else {
-    // Redirigir a una página de error si no se pasa ningún ID
-    header('Location: blank.php');
-    exit();
+// Verificar si el usuario está logueado
+if (!isset($_SESSION['user_id'])) {
+    echo '<p>Debes iniciar sesión para ver el carrito.</p>';
+    exit;
 }
+
+$user_id = $_SESSION['user_id'];
+
+// Obtener los productos en el carrito desde la base de datos
+$query = "SELECT p.id, p.name, p.price, p.imagen, c.quantity 
+          FROM carrito c 
+          JOIN productos p ON c.product_id = p.id 
+          WHERE c.user_id = ?";
+$stmt = $conn->prepare($query);
+$stmt->execute([$user_id]);
+$items = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carrito de Compras</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+<?php include 'assets/includes/head.php';?>
     <style>
         .cart-item img {
             max-width: 100px;
@@ -63,11 +33,14 @@ if (isset($_GET['id'])) {
     </style>
 </head>
 <body>
+		<!-- HEADER -->
+		<?php include 'assets/includes/header.php';?>
+		<!-- HEADER -->
     <div class="container mt-4">
         <h1>Carrito de Compras</h1>
-        <?php if (isset($_SESSION['carrito']) && !empty($_SESSION['carrito'])): ?>
+        <?php if (!empty($items)): ?>
             <div class="list-group">
-                <?php foreach ($_SESSION['carrito'] as $item): ?>
+                <?php foreach ($items as $item): ?>
                     <div class="cart-item">
                         <div class="row">
                             <div class="col-md-2">
@@ -93,5 +66,8 @@ if (isset($_GET['id'])) {
             <p>Tu carrito está vacío.</p>
         <?php endif; ?>
     </div>
+    		<!-- PIE DE PÁGINA -->
+		<?php include 'assets/includes/footer.php';?>
+		<!-- /PIE DE PÁGINA -->
 </body>
 </html>

@@ -14,7 +14,7 @@ include 'config/database.php';
         <p style="color: red;"><?php echo htmlspecialchars($_SESSION['error']); unset($_SESSION['error']); ?></p>
     <?php endif; ?>
 
-    <form action="processlogin.php" method="POST">
+    <form action="consultas/processlogin.php" method="POST">
         <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token']); ?>">
 
         <div>

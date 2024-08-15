@@ -1,5 +1,5 @@
 <?php
-include('producto.php'); // Incluye el archivo que recupera los datos de los productos
+include('consultas/producto.php'); // Incluye el archivo que recupera los datos de los productos
 ?>
 <?php include 'assets/includes/head.php';?>
 </head>
@@ -148,10 +148,12 @@ include('producto.php'); // Incluye el archivo que recupera los datos de los pro
 													<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
 												</div>
 											</div>
-											<div class="add-to-cart">
-												<button class="add-to-cart-btn" data-product-id="<?php echo $producto['id']; ?>"><i class="fa fa-shopping-cart"></i> add to cart</button>
-											</div>
+										<div class="add-to-cart">
+											<button class="add-to-cart-btn" data-product-id="<?php echo $producto['id']; ?>">
+												<i class="fa fa-shopping-cart"></i> add to cart
+											</button>
 										</div>
+									</div>
 										<?php endforeach; ?>
 
 									</div>
@@ -248,7 +250,9 @@ include('producto.php'); // Incluye el archivo que recupera los datos de los pro
 									<?php foreach ($productos as $producto): ?>
 										<div class="product">
 											<div class="product-img">
+											<a class="product-img" href="product_detalle.php?id=<?php echo $producto['id']; ?>">
 												<img src="assets/images/<?php echo htmlspecialchars($producto['imagen']); ?>" alt="<?php echo htmlspecialchars($producto['name']); ?>">
+											</a>
 												<div class="product-label">
 
 												</div>
