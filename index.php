@@ -4,7 +4,10 @@ include('producto.php'); // Incluye el archivo que recupera los datos de los pro
 <?php include 'assets/includes/head.php';?>
 </head>
 	<body>
-	<?php include 'assets/includes/header.php';?>
+		<!-- HEADER -->
+		<?php include 'assets/includes/header.php';?>
+		<!-- HEADER -->
+
 		<!-- NAVIGATION -->
 		<nav id="navigation">
 			<!-- container -->
@@ -39,11 +42,11 @@ include('producto.php'); // Incluye el archivo que recupera los datos de los pro
 					<div class="col-md-4 col-xs-6">
 						<div class="shop">
 							<div class="shop-img">
-								<img src="./img/shop01.png" alt="">
+							<img src="assets/images/A2_SOLUCIONES.png" alt="">
 							</div>
 							<div class="shop-body">
-								<h3>Laptop<br>Collection</h3>
-								<a href="#" class="cta-btn">Shop now <i class="fa fa-arrow-circle-right"></i></a>
+								<h3>Sistemas<br>hibridos</h3>
+								<a href="#" class="cta-btn">Ver mas <i class="fa fa-arrow-circle-right"></i></a>
 							</div>
 						</div>
 					</div>
@@ -53,11 +56,11 @@ include('producto.php'); // Incluye el archivo que recupera los datos de los pro
 					<div class="col-md-4 col-xs-6">
 						<div class="shop">
 							<div class="shop-img">
-								<img src="./img/shop03.png" alt="">
+								<img src="assets/images/A2_PRODUCTOS.png" alt="">
 							</div>
 							<div class="shop-body">
-								<h3>Accessories<br>Collection</h3>
-								<a href="#" class="cta-btn">Shop now <i class="fa fa-arrow-circle-right"></i></a>
+								<h3>Baterias</h3>
+								<a href="#" class="cta-btn">Ver mas <i class="fa fa-arrow-circle-right"></i></a>
 							</div>
 						</div>
 					</div>
@@ -67,11 +70,11 @@ include('producto.php'); // Incluye el archivo que recupera los datos de los pro
 					<div class="col-md-4 col-xs-6">
 						<div class="shop">
 							<div class="shop-img">
-								<img src="./img/shop02.png" alt="">
+								<img src="assets/images/A2_SOLUCIONES.png" alt="">
 							</div>
 							<div class="shop-body">
-								<h3>Cameras<br>Collection</h3>
-								<a href="#" class="cta-btn">Shop now <i class="fa fa-arrow-circle-right"></i></a>
+								<h3>Plantas<br>Modulares</h3>
+								<a href="#" class="cta-btn">Ver mas <i class="fa fa-arrow-circle-right"></i></a>
 							</div>
 						</div>
 					</div>
@@ -84,7 +87,7 @@ include('producto.php'); // Incluye el archivo que recupera los datos de los pro
 		<!-- /SECTION -->
 
 		<!-- SECTION -->
-		<div class="section">
+		<div class="section" >
 			<!-- container -->
 			<div class="container">
 				<!-- row -->
@@ -115,16 +118,20 @@ include('producto.php'); // Incluye el archivo que recupera los datos de los pro
 									<div class="products-slick" data-nav="#slick-nav-1">
 									<?php foreach ($productos as $producto): ?>
 										<div class="product">
+										<a class="product-img" href="product_detalle.php?id=<?php echo $producto['id']; ?>">
 											<div class="product-img">
+	
 												<img src="assets/images/<?php echo htmlspecialchars($producto['imagen']); ?>" alt="<?php echo htmlspecialchars($producto['name']); ?>">
+
 												<div class="product-label">
 
 												</div>
+												</a>
 											</div>
 											<div class="product-body">
 												<p class="product-category"><?php echo htmlspecialchars($producto['category_name']); ?></p>
 												<h3 class="product-name">
-													<a href="producto_detalle.php?id=<?php echo $producto['id']; ?>">
+													<a href="product_detalle.php?id=<?php echo $producto['id']; ?>">
 														<?php echo htmlspecialchars($producto['name']); ?>
 													</a>
 												</h3>
@@ -137,13 +144,12 @@ include('producto.php'); // Incluye el archivo que recupera los datos de los pro
 												</div>
 
 												<div class="product-btns">
-													<button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
-													<button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button>
+													<button class="add-to-wishlist"data-product-id="<?php echo $producto['id']; ?>"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
 													<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
 												</div>
 											</div>
 											<div class="add-to-cart">
-												<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
+												<button class="add-to-cart-btn" data-product-id="<?php echo $producto['id']; ?>"><i class="fa fa-shopping-cart"></i> add to cart</button>
 											</div>
 										</div>
 										<?php endforeach; ?>
@@ -164,7 +170,7 @@ include('producto.php'); // Incluye el archivo que recupera los datos de los pro
 		<!-- /SECTION -->
 
 		<!-- HOT DEAL SECTION -->
-		<div id="hot-deal" class="section">
+		<div id="hot-deal" class="section" >
 			<!-- container -->
 			<div class="container">
 				<!-- row -->
@@ -250,7 +256,7 @@ include('producto.php'); // Incluye el archivo que recupera los datos de los pro
 											<div class="product-body">
 												<p class="product-category"><?php echo htmlspecialchars($producto['category_name']); ?></p>
 												<h3 class="product-name">
-													<a href="producto_detalle.php?id=<?php echo $producto['id']; ?>">
+													<a href="product_detalle.php?id=<?php echo $producto['id']; ?>">
 														<?php echo htmlspecialchars($producto['name']); ?>
 													</a>
 												</h3>
@@ -263,13 +269,12 @@ include('producto.php'); // Incluye el archivo que recupera los datos de los pro
 												</div>
 
 												<div class="product-btns">
-													<button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
-													<button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button>
+													<button class="add-to-wishlist"data-product-id="<?php echo $producto['id']; ?>"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
 													<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
 												</div>
 											</div>
 											<div class="add-to-cart">
-												<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
+												<button class="add-to-cart-btn" data-product-id="<?php echo $producto['id']; ?>"><i class="fa fa-shopping-cart"></i> add to cart</button>
 											</div>
 										</div>
 										<?php endforeach; ?>
@@ -291,7 +296,7 @@ include('producto.php'); // Incluye el archivo que recupera los datos de los pro
 		<!-- /SECTION -->
 
 		<!-- SECTION -->
-		<div class="section">
+		<div class="section" style="padding-bottom: 0px;">
 			<!-- container -->
 			<div class="container">
 				<!-- row -->
@@ -306,13 +311,12 @@ include('producto.php'); // Incluye el archivo que recupera los datos de los pro
 
 						<div class="products-widget-slick" data-nav="#slick-nav-3">
 							<div>
-								<!-- Mostrar productos -->
-								<?php foreach ($productos as $producto):?>
-									
+								<!-- Mostrar productos de inversores -->
+								<?php foreach ($productos_inversores as $producto): ?>
 									<!-- product widget -->
 									<div class="product-widget">
 										<div class="product-img">
-											<img src="./img/<?php echo htmlspecialchars($producto['imagen']); ?>" alt="<?php echo htmlspecialchars($producto['name']); ?>" class="img-fluid">
+											<img src="assets/images/<?php echo htmlspecialchars($producto['imagen']); ?>" alt="<?php echo htmlspecialchars($producto['name']); ?>" class="img-fluid">
 										</div>
 										<div class="product-body">
 											<p class="product-category"><?php echo htmlspecialchars($producto['category_name']); ?></p>
@@ -327,6 +331,8 @@ include('producto.php'); // Incluye el archivo que recupera los datos de los pro
 									</div>
 									<!-- /product widget -->
 								<?php endforeach; ?>
+
+
 						
 							</div>
 						</div>
@@ -339,22 +345,28 @@ include('producto.php'); // Incluye el archivo que recupera los datos de los pro
 								<div id="slick-nav-4" class="products-slick-nav"></div>
 							</div>
 						</div>
-
-						<div class="products-widget-slick" data-nav="#slick-nav-4">
-							<div>
-								<!-- product widget -->
-								<div class="product-widget">
-									<div class="product-img">
-										<img src="./img/product04.png" alt="">
+						<div class="products-widget-slick" data-nav="#slick-nav-3">
+    <div>
+								<!-- Mostrar productos de baterías -->
+								<?php foreach ($productos_baterias as $producto): ?>
+									<!-- product widget -->
+									<div class="product-widget">
+										<div class="product-img">
+											<img src="assets/images/<?php echo htmlspecialchars($producto['imagen']); ?>" alt="<?php echo htmlspecialchars($producto['name']); ?>" class="img-fluid">
+										</div>
+										<div class="product-body">
+											<p class="product-category"><?php echo htmlspecialchars($producto['category_name']); ?></p>
+											<h3 class="product-name"><a href="#"><?php echo htmlspecialchars($producto['name']); ?></a></h3>
+											<h4 class="product-price">
+												$<?php echo number_format($producto['price'], 2); ?> 
+												<?php if ($producto['price'] > 990.00): ?>
+													<del class="product-old-price">$990.00</del>
+												<?php endif; ?>
+											</h4>
+										</div>
 									</div>
-									<div class="product-body">
-										<p class="product-category">Category</p>
-										<h3 class="product-name"><a href="#">product name goes here</a></h3>
-										<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
-									</div>
-								</div>
-								<!-- /product widget -->
-
+									<!-- /product widget -->
+								<?php endforeach; ?>
 							</div>
 						</div>
 					</div>
@@ -369,24 +381,30 @@ include('producto.php'); // Incluye el archivo que recupera los datos de los pro
 							</div>
 						</div>
 
-						<div class="products-widget-slick" data-nav="#slick-nav-5">
-							<div>
-								<!-- product widget -->
-								<div class="product-widget">
-									<div class="product-img">
-										<img src="./img/product01.png" alt="">
-									</div>
-									<div class="product-body">
-										<p class="product-category">Category</p>
-										<h3 class="product-name"><a href="#">product name goes here</a></h3>
-										<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
-									</div>
-								</div>
-								<!-- /product widget -->
-
-							</div>
-						</div>
-					</div>
+						<div class="products-widget-slick" data-nav="#slick-nav-3">
+    <div>
+        <!-- Mostrar productos de sistemas hibridos -->
+        <?php foreach ($productos_sistemas_hibridos as $producto): ?>
+            <!-- product widget -->
+            <div class="product-widget">
+                <div class="product-img">
+                    <img src="assets/images/<?php echo htmlspecialchars($producto['imagen']); ?>" alt="<?php echo htmlspecialchars($producto['name']); ?>" class="img-fluid">
+                </div>
+                <div class="product-body">
+                    <p class="product-category"><?php echo htmlspecialchars($producto['category_name']); ?></p>
+                    <h3 class="product-name"><a href="#"><?php echo htmlspecialchars($producto['name']); ?></a></h3>
+                    <h4 class="product-price">
+                        $<?php echo number_format($producto['price'], 2); ?> 
+                        <?php if ($producto['price'] > 990.00): ?>
+                            <del class="product-old-price">$990.00</del>
+                        <?php endif; ?>
+                    </h4>
+                </div>
+            </div>
+            <!-- /product widget -->
+        <?php endforeach; ?>
+    </div>
+</div>
 
 				</div>
 				<!-- /row -->
@@ -395,45 +413,9 @@ include('producto.php'); // Incluye el archivo que recupera los datos de los pro
 		</div>
 		<!-- /SECTION -->
 
-		<!-- NEWSLETTER -->
-		<div id="newsletter" class="section">
-			<!-- container -->
-			<div class="container">
-				<!-- row -->
-				<div class="row">
-					<div class="col-md-12">
-						<div class="newsletter">
-							<p>Sign Up for the <strong>NEWSLETTER</strong></p>
-							<form>
-								<input class="input" type="email" placeholder="Enter Your Email">
-								<button class="newsletter-btn"><i class="fa fa-envelope"></i> Subscribe</button>
-							</form>
-							<ul class="newsletter-follow">
-								<li>
-									<a href="#"><i class="fa fa-facebook"></i></a>
-								</li>
-								<li>
-									<a href="#"><i class="fa fa-twitter"></i></a>
-								</li>
-								<li>
-									<a href="#"><i class="fa fa-instagram"></i></a>
-								</li>
-								<li>
-									<a href="#"><i class="fa fa-pinterest"></i></a>
-								</li>
-							</ul>
-						</div>
-					</div>
-				</div>
-				<!-- /row -->
-			</div>
-			<!-- /container -->
-		</div>
-		<!-- /NEWSLETTER -->
-
-		<!-- FOOTER -->
+		<!-- PIE DE PÁGINA -->
 		<?php include 'assets/includes/footer.php';?>
-		<!-- /FOOTER -->
+		<!-- /PIE DE PÁGINA -->
 
 		<!-- jQuery Plugins -->
 		<script src="js/jquery.min.js"></script>

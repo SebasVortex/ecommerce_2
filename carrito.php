@@ -38,7 +38,7 @@ if (isset($_GET['id'])) {
 
 } else {
     // Redirigir a una página de error si no se pasa ningún ID
-    header('Location: error.php');
+    header('Location: blank.php');
     exit();
 }
 ?>

@@ -45,35 +45,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $characteristics = $_POST['characteristics'] ?? [];
     $characteristics_json = json_encode($characteristics);
 
-    // Manejar la imagen subida
-    if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
-        $imagen = $_FILES['imagen']['name'];
-        $tmpName = $_FILES['imagen']['tmp_name'];
-        $destination = '../assets/images/' . basename($imagen);
-
-        if (move_uploaded_file($tmpName, $destination)) {
-            echo "Imagen subida correctamente.";
-        } else {
-            echo "Error al mover la imagen al destino.";
-        }
-    } elseif ($product && !$imagen) {
-        // Mantener la imagen existente si no se sube una nueva
-        $imagen = $product['imagen'];
-    }
-
-    // Construir la consulta SQL según si se subió una imagen nueva o no
+    // Construir la consulta SQL para guardar o actualizar el producto
     if ($id) {
-        if ($imagen) {
-            // Actualizar producto existente incluyendo la imagen
-            $stmt = $conn->prepare("UPDATE productos SET name = :name, description = :description, characteristics = :characteristics, price = :price, stock = :stock, imagen = :imagen, datasheet = :datasheet, brand_id = :brand_id, category_id = :category_id WHERE id = :id");
-        } else {
-            // Actualizar producto existente sin modificar la imagen
-            $stmt = $conn->prepare("UPDATE productos SET name = :name, description = :description, characteristics = :characteristics, price = :price, stock = :stock, datasheet = :datasheet, brand_id = :brand_id, category_id = :category_id WHERE id = :id");
+        // Actualizar producto existente
+        $query = "
+            UPDATE productos 
+            SET name = :name, description = :description, characteristics = :characteristics, price = :price, stock = :stock, datasheet = :datasheet, brand_id = :brand_id, category_id = :category_id
+        ";
+        if (isset($_FILES['imagenes']['name'][0]) && !empty($_FILES['imagenes']['name'][0])) {
+            $query .= ", imagen = :imagen";
+        }
+        $query .= " WHERE id = :id";
+        $stmt = $conn->prepare($query);
+        if (isset($_FILES['imagenes']['name'][0]) && !empty($_FILES['imagenes']['name'][0])) {
+            $stmt->bindParam(':imagen', $_FILES['imagenes']['name'][0]);
         }
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
     } else {
-        // Insertar nuevo producto incluyendo la imagen
-        $stmt = $conn->prepare("INSERT INTO productos (name, description, characteristics, price, stock, imagen, datasheet, brand_id, category_id) VALUES (:name, :description, :characteristics, :price, :stock, :imagen, :datasheet, :brand_id, :category_id)");
+        // Insertar nuevo producto
+        $stmt = $conn->prepare("
+            INSERT INTO productos (name, description, characteristics, price, stock, imagen, datasheet, brand_id, category_id) 
+            VALUES (:name, :description, :characteristics, :price, :stock, :imagen, :datasheet, :brand_id, :category_id)
+        ");
     }
 
     $stmt->bindParam(':name', $name);
@@ -81,21 +74,40 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $stmt->bindParam(':characteristics', $characteristics_json);
     $stmt->bindParam(':price', $price);
     $stmt->bindParam(':stock', $stock);
-    if ($imagen) {
-        $stmt->bindParam(':imagen', $imagen); // Solo enlaza la imagen si está presente
-    }
     $stmt->bindParam(':datasheet', $datasheet);
     $stmt->bindParam(':brand_id', $brand_id); // Agregar marca
     $stmt->bindParam(':category_id', $category_id); // Agregar categoría
 
+    if (!$id && !empty($_FILES['imagenes']['name'][0])) {
+        $imagen = $_FILES['imagenes']['name'][0];
+        $stmt->bindParam(':imagen', $imagen);
+    }
+
     if ($stmt->execute()) {
+        $productId = $id ? $id : $conn->lastInsertId(); // Obtener el ID del producto insertado o actualizado
+
+        // Manejar múltiples imágenes subidas
+        if (isset($_FILES['imagenes']) && $_FILES['imagenes']['error'][0] === UPLOAD_ERR_OK) {
+            foreach ($_FILES['imagenes']['tmp_name'] as $key => $tmp_name) {
+                $imagen = $_FILES['imagenes']['name'][$key];
+                $destination = '../assets/images/' . basename($imagen);
+
+                if (move_uploaded_file($tmp_name, $destination)) {
+                    // Guardar la imagen en la base de datos
+                    $stmt = $conn->prepare("INSERT INTO productos_imagenes (producto_id, imagen) VALUES (:producto_id, :imagen)");
+                    $stmt->bindParam(':producto_id', $productId, PDO::PARAM_INT);
+                    $stmt->bindParam(':imagen', $imagen);
+                    $stmt->execute();
+                }
+            }
+        }
+
         echo "Producto guardado correctamente.";
+        header('Location: tabla_productos.php');
+        exit;
     } else {
         echo "Error al guardar el producto.";
     }
-
-    header('Location: tabla_productos.php');
-    exit;
 }
 ?>
 
@@ -136,7 +148,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             <div class="form-group">
                 <label for="stock">Stock:</label>
-                <input type="number" class="form-control" name="stock" id="stock" value="<?php echo htmlspecialchars($product['stock'] ?? ''); ?>">
+                <input type="text" class="form-control" name="stock" id="stock" value="<?php echo htmlspecialchars($product['stock'] ?? ''); ?>">
             </div>
 
             <div class="form-group">
@@ -162,12 +174,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
 
             <div class="form-group">
-                <label for="imagen">Imagen:</label>
-                <input type="file" class="form-control-file" name="imagen" id="imagen">
-                <?php if (isset($product['imagen']) && $product['imagen']): ?>
-                    <img src="../assets/images/<?php echo htmlspecialchars($product['imagen']); ?>" alt="Imagen del Producto" class="img-fluid mt-2" style="max-width: 200px;">
-                <?php endif; ?>
-            </div>
+                    <label for="imagenes">Imágenes:</label>
+                    <input type="file" class="form-control-file" name="imagenes[]" id="imagenes" multiple>
+                    <?php if (isset($product['id'])): ?>
+                        <?php
+                        // Obtener todas las imágenes existentes del producto
+                        $stmt = $conn->prepare("SELECT imagen FROM productos_imagenes WHERE producto_id = :id");
+                        $stmt->bindParam(':id', $product['id'], PDO::PARAM_INT);
+                        $stmt->execute();
+                        $imagenes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                        ?>
+                        <?php foreach ($imagenes as $imagen): ?>
+                            <img src="../assets/images/<?php echo htmlspecialchars($imagen['imagen']); ?>" alt="Imagen del Producto" class="img-fluid mt-2" style="max-width: 200px;">
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </div>
+
 
             <div class="form-group">
                 <label for="datasheet">Datasheet:</label>
