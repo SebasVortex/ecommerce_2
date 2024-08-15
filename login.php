@@ -8,7 +8,7 @@ include 'config/database.php';
     <!-- HEADER -->
     <?php include 'assets/includes/header.php';?>
     <!-- HEADER -->
-
+<div class="section">
     <h2>Iniciar Sesión</h2>
     <?php if (isset($_SESSION['error'])): ?>
         <p style="color: red;"><?php echo htmlspecialchars($_SESSION['error']); unset($_SESSION['error']); ?></p>
@@ -27,7 +27,7 @@ include 'config/database.php';
         </div>
         <button type="submit">Iniciar Sesión</button>
     </form>
-
+</div>
     <?php include 'assets/includes/footer.php';?>
 </body>
 </html>

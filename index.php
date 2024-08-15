@@ -416,13 +416,5 @@ include('producto.php'); // Incluye el archivo que recupera los datos de los pro
 		<!-- PIE DE PÁGINA -->
 		<?php include 'assets/includes/footer.php';?>
 		<!-- /PIE DE PÁGINA -->
-
-		<!-- jQuery Plugins -->
-		<script src="js/jquery.min.js"></script>
-		<script src="js/bootstrap.min.js"></script>
-		<script src="js/slick.min.js"></script>
-		<script src="js/nouislider.min.js"></script>
-		<script src="js/jquery.zoom.min.js"></script>
-		<script src="js/main.js"></script>
 	</body>
 </html>

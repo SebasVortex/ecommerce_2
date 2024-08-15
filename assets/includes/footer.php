@@ -1,6 +1,4 @@
 <?php
-include('config/database.php');
-
 // Consultar todas las categorías
 $stmt = $conn->prepare("SELECT name FROM categorias");
 $stmt->execute();
@@ -128,3 +126,9 @@ $categorias = $stmt->fetchAll(PDO::FETCH_ASSOC);
 			</div>
 			<!-- /pie de página inferior -->
 		</footer>
+		<script src="./js/jquery.min.js"></script>
+		<script src="./js/bootstrap.min.js"></script>
+		<script src="./js/slick.min.js"></script>
+		<script src="./js/nouislider.min.js"></script>
+		<script src="./js/jquery.zoom.min.js"></script>
+		<script src="./js/main.js"></script>
