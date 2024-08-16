@@ -77,10 +77,9 @@ $categorias = $stmt->fetchAll(PDO::FETCH_ASSOC); // Obtiene todos los resultados
 							<div class="footer">
 								<h3 class="footer-title">Información</h3>
 								<ul class="footer-links">
-									<li><a href="#">Sobre Nosotros</a></li>
-									<li><a href="#">Contáctanos</a></li>
-									<li><a href="#">Política de Privacidad</a></li>
-									<li><a href="#">Pedidos y Devoluciones</a></li>
+									<li><a href="https://www.sistemasenergeticos.com.ar/nosotros">Sobre Nosotros</a></li>
+									<li><a href="https://www.sistemasenergeticos.com.ar/contacto">Contáctanos</a></li>
+									<li><a href="https://www.sistemasenergeticos.com.ar/cookies.php">Política de Privacidad</a></li>
 									<li><a href="#">Términos y Condiciones</a></li>
 								</ul>
 							</div>
@@ -90,8 +89,8 @@ $categorias = $stmt->fetchAll(PDO::FETCH_ASSOC); // Obtiene todos los resultados
 							<div class="footer">
 								<h3 class="footer-title">Servicio</h3>
 								<ul class="footer-links">
-									<li><a href="#">Mi Cuenta</a></li>
-									<li><a href="#">Ver Carrito</a></li>
+									<li><a href="userpanel.php">Mi Cuenta</a></li>
+									<li><a href="carrito.php">Ver Carrito</a></li>
 									<li><a href="#">Lista de Deseos</a></li>
 									<li><a href="#">Rastrear mi Pedido</a></li>
 									<li><a href="#">Ayuda</a></li>

@@ -55,7 +55,7 @@ $items = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <?php endforeach; ?>
             </div>
             <div class="mt-3">
-                <a href="checkout.php" class="btn btn-primary">Proceder al Pago</a>
+                <a href="checkout.php" class="btn btn-primary">Finalizar pago</a>
             </div>
         <?php else: ?>
             <p>Tu carrito está vacío.</p>

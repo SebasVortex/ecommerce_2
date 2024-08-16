@@ -64,11 +64,12 @@ if (isset($_SESSION['error'])) {
             padding: 0;
             margin: 0;
         }
-         .container{
+         .container2{
           display: flex;
           justify-content: center;
           align-items: center;
           flex-direction: column;
+          padding: 5rem 0rem 8rem 0rem;
          }
         .btn-log {
             background-image: linear-gradient(to right, #cc3433 0%, #f74d61  51%, #cc3433  100%);
@@ -221,7 +222,7 @@ if (isset($_SESSION['error'])) {
         unset($_SESSION['error']);
     }
     ?>
-    <div class="container">
+    <div class="container2">
             <div class="login-header text-center">
                 <h2>Iniciar Sesión</h2>
             </div>
@@ -236,7 +237,7 @@ if (isset($_SESSION['error'])) {
                     <span class="show-password" onclick="togglePassword()"><img id="passwordIcon" src="assets/images/lock.png" alt="Toggle Password"></span>
                 </div>
                 <span id="errorpassword" style="display: none;">*Contraseña incorrecta</span>
-                    <input type="submit" value="LOGIN" class="btn-log">
+                    <input type="submit" value="Iniciar sesion" class="btn-log">
         </form>
             <div class="login-footer text-center">
                 <p><a href="register.php">Crear una cuenta</a></p>

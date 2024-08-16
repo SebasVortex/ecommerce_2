@@ -6,33 +6,6 @@
 	<body>
 		<!-- HEADER -->
 		<?php include 'assets/includes/header.php';?>
-		<!-- CABECERA -->
-
-		<!-- /CABECERA -->
-
-		<!-- NAVEGACIÓN -->
-		<nav id="navigation">
-			<!-- contenedor -->
-			<div class="container">
-				<!-- navegación responsiva -->
-				<div id="responsive-nav">
-					<!-- NAVEGACIÓN -->
-					<ul class="main-nav nav navbar-nav">
-						<li class="active"><a href="index.php">Inicio</a></li>
-						<li><a href="#">Ofertas</a></li>
-						<li><a href="#">Categorías</a></li>
-						<li><a href="#">Laptops</a></li>
-						<li><a href="#">Smartphones</a></li>
-						<li><a href="#">Cámaras</a></li>
-						<li><a href="#">Accesorios</a></li>
-					</ul>
-					<!-- /NAVEGACIÓN -->
-				</div>
-				<!-- /navegación responsiva -->
-			</div>
-			<!-- /contenedor -->
-		</nav>
-		<!-- /NAVEGACIÓN -->
 
 		<!-- MIGAS DE PAN -->
 		<div id="breadcrumb" class="section">

@@ -8,6 +8,7 @@ $stmt = $conn->prepare("
     LEFT JOIN marcas m ON p.brand_id = m.id
     LEFT JOIN categorias c ON p.category_id = c.id
     ORDER BY RAND()
+    LIMIT 5
 ");
 $stmt->execute();
 $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -50,5 +51,19 @@ $stmt_baterias = $conn->prepare("
 ");
 $stmt_baterias->execute();
 $productos_baterias = $stmt_baterias->fetchAll(PDO::FETCH_ASSOC);
+
+
+// Ejecutar la consulta para obtener productos, marcas y categorías en orden aleatorio
+$stmt_store = $conn->prepare("
+    SELECT p.*, m.name AS brand_name, c.name AS category_name
+    FROM productos p 
+    LEFT JOIN marcas m ON p.brand_id = m.id
+    LEFT JOIN categorias c ON p.category_id = c.id
+    ORDER BY RAND()
+");
+$stmt_store->execute();
+$productostore = $stmt_store->fetchAll(PDO::FETCH_ASSOC)
+
+
 
 ?>

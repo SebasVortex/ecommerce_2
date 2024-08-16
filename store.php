@@ -1,292 +1,280 @@
-<?php include 'assets/includes/head.php';?>
-	<body>
-		<!-- HEADER -->
-		<?php include 'assets/includes/header.php';?>
-			<!-- /MAIN HEADER -->
-		</header>
-		<!-- /HEADER -->
+<?php include 'config/producto.php'; 
+      include 'config/checksession.php';
+?>
+<?php
 
-		<!-- NAVIGATION -->
-		<nav id="navigation">
-			<!-- container -->
-			<div class="container">
-				<!-- responsive-nav -->
-				<div id="responsive-nav">
-					<!-- NAV -->
-					<ul class="main-nav nav navbar-nav">
-						<li class="active"><a href="#">Home</a></li>
-						<li><a href="#">Hot Deals</a></li>
-						<li><a href="#">Categories</a></li>
-						<li><a href="#">Laptops</a></li>
-						<li><a href="#">Smartphones</a></li>
-						<li><a href="#">Cameras</a></li>
-						<li><a href="#">Accessories</a></li>
-					</ul>
-					<!-- /NAV -->
-				</div>
-				<!-- /responsive-nav -->
-			</div>
-			<!-- /container -->
-		</nav>
-		<!-- /NAVIGATION -->
+// Obtener el precio máximo de la base de datos
+$queryMaxPrice = "SELECT MAX(price) FROM productos";
+$stmtMaxPrice = $conn->prepare($queryMaxPrice);
+$stmtMaxPrice->execute();
+$maxPrice = $stmtMaxPrice->fetchColumn();
 
-		<!-- BREADCRUMB -->
-		<div id="breadcrumb" class="section">
-			<!-- container -->
-			<div class="container">
-				<!-- row -->
-				<div class="row">
-					<div class="col-md-12">
-						<ul class="breadcrumb-tree">
-							<li><a href="#">Home</a></li>
-							<li><a href="#">All Categories</a></li>
-							<li><a href="#">Accessories</a></li>
-							<li class="active">Headphones (227,490 Results)</li>
-						</ul>
-					</div>
-				</div>
-				<!-- /row -->
-			</div>
-			<!-- /container -->
-		</div>
-		<!-- /BREADCRUMB -->
+// Obtener las marcas y los precios seleccionados desde el formulario
+$selectedBrands = isset($_GET['brand']) ? $_GET['brand'] : [];
+$selectedCategories = isset($_GET['category']) ? $_GET['category'] : [];
+$priceMin = isset($_GET['price_min']) ? $_GET['price_min'] : 0;
+$priceMax = isset($_GET['price_max']) ? $_GET['price_max'] : $maxPrice; // Usa $maxPrice obtenido anteriormente
 
-		<!-- SECTION -->
-		<div class="section">
-			<!-- container -->
-			<div class="container">
-				<!-- row -->
-				<div class="row">
-					<!-- ASIDE -->
-					<div id="aside" class="col-md-3">
-						<!-- aside Widget -->
-						<div class="aside">
-							<h3 class="aside-title">Categories</h3>
-							<div class="checkbox-filter">
+// Construir la consulta SQL
+$query = "SELECT p.*, m.name AS brand_name, c.name AS category_name
+          FROM productos p
+          LEFT JOIN marcas m ON p.brand_id = m.id
+          LEFT JOIN categorias c ON p.category_id = c.id";
 
-								<div class="input-checkbox">
-									<input type="checkbox" id="category-1">
-									<label for="category-1">
-										<span></span>
-										Laptops
-										<small>(120)</small>
-									</label>
-								</div>
+$conditions = [];
+$params = [];
 
-								<div class="input-checkbox">
-									<input type="checkbox" id="category-2">
-									<label for="category-2">
-										<span></span>
-										Smartphones
-										<small>(740)</small>
-									</label>
-								</div>
+// Añadir condiciones para marcas
+if (!empty($selectedBrands)) {
+    $placeholders = rtrim(str_repeat('?,', count($selectedBrands)), ',');
+    $conditions[] = "p.brand_id IN ($placeholders)";
+    $params = array_merge($params, $selectedBrands);
+}
 
-								<div class="input-checkbox">
-									<input type="checkbox" id="category-3">
-									<label for="category-3">
-										<span></span>
-										Cameras
-										<small>(1450)</small>
-									</label>
-								</div>
+// Añadir condiciones para categorías
+if (!empty($selectedCategories)) {
+    $placeholders = rtrim(str_repeat('?,', count($selectedCategories)), ',');
+    $conditions[] = "p.category_id IN ($placeholders)";
+    $params = array_merge($params, $selectedCategories);
+}
 
-								<div class="input-checkbox">
-									<input type="checkbox" id="category-4">
-									<label for="category-4">
-										<span></span>
-										Accessories
-										<small>(578)</small>
-									</label>
-								</div>
+// Añadir condiciones para precio
+if ($priceMin !== null) {
+    $conditions[] = "p.price >= ?";
+    $params[] = $priceMin;
+}
 
-								<div class="input-checkbox">
-									<input type="checkbox" id="category-5">
-									<label for="category-5">
-										<span></span>
-										Laptops
-										<small>(120)</small>
-									</label>
-								</div>
+if ($priceMax !== null) {
+    $conditions[] = "p.price <= ?";
+    $params[] = $priceMax;
+}
 
-								<div class="input-checkbox">
-									<input type="checkbox" id="category-6">
-									<label for="category-6">
-										<span></span>
-										Smartphones
-										<small>(740)</small>
-									</label>
-								</div>
-							</div>
-						</div>
-						<!-- /aside Widget -->
+if (!empty($conditions)) {
+    $query .= " WHERE " . implode(' AND ', $conditions);
+}
 
-						<!-- aside Widget -->
-						<div class="aside">
-							<h3 class="aside-title">Price</h3>
-							<div class="price-filter">
-								<div id="price-slider"></div>
-								<div class="input-number price-min">
-									<input id="price-min" type="number">
-									<span class="qty-up">+</span>
-									<span class="qty-down">-</span>
-								</div>
-								<span>-</span>
-								<div class="input-number price-max">
-									<input id="price-max" type="number">
-									<span class="qty-up">+</span>
-									<span class="qty-down">-</span>
-								</div>
-							</div>
-						</div>
-						<!-- /aside Widget -->
+// Ordenar los productos aleatoriamente
+$query .= " ORDER BY RAND()";
 
-						<!-- aside Widget -->
-						<div class="aside">
-							<h3 class="aside-title">Brand</h3>
-							<div class="checkbox-filter">
-								<div class="input-checkbox">
-									<input type="checkbox" id="brand-1">
-									<label for="brand-1">
-										<span></span>
-										SAMSUNG
-										<small>(578)</small>
-									</label>
-								</div>
-								<div class="input-checkbox">
-									<input type="checkbox" id="brand-2">
-									<label for="brand-2">
-										<span></span>
-										LG
-										<small>(125)</small>
-									</label>
-								</div>
-								<div class="input-checkbox">
-									<input type="checkbox" id="brand-3">
-									<label for="brand-3">
-										<span></span>
-										SONY
-										<small>(755)</small>
-									</label>
-								</div>
-								<div class="input-checkbox">
-									<input type="checkbox" id="brand-4">
-									<label for="brand-4">
-										<span></span>
-										SAMSUNG
-										<small>(578)</small>
-									</label>
-								</div>
-								<div class="input-checkbox">
-									<input type="checkbox" id="brand-5">
-									<label for="brand-5">
-										<span></span>
-										LG
-										<small>(125)</small>
-									</label>
-								</div>
-								<div class="input-checkbox">
-									<input type="checkbox" id="brand-6">
-									<label for="brand-6">
-										<span></span>
-										SONY
-										<small>(755)</small>
-									</label>
-								</div>
-							</div>
-						</div>
-						<!-- /aside Widget -->
+$stmt = $conn->prepare($query);
+$stmt->execute($params);
+$productostore = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-						<!-- aside Widget -->
-						<div class="aside">
-							<h3 class="aside-title">Top selling</h3>
-							<div class="product-widget">
-								<div class="product-img">
-									<img src="./img/product01.png" alt="">
-								</div>
-								<div class="product-body">
-									<p class="product-category">Category</p>
-									<h3 class="product-name"><a href="#">product name goes here</a></h3>
-									<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
-								</div>
-							</div>
+// Funciones para contar productos por marca y categoría
+function getProductCountByBrand($brandId) {
+    global $conn;
+    $query = "SELECT COUNT(*) FROM productos WHERE brand_id = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->execute([$brandId]);
+    return $stmt->fetchColumn();
+}
 
-							<div class="product-widget">
-								<div class="product-img">
-									<img src="./img/product02.png" alt="">
-								</div>
-								<div class="product-body">
-									<p class="product-category">Category</p>
-									<h3 class="product-name"><a href="#">product name goes here</a></h3>
-									<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
-								</div>
-							</div>
+function getProductCountByCategory($categoryId) {
+    global $conn;
+    $query = "SELECT COUNT(*) FROM productos WHERE category_id = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->execute([$categoryId]);
+    return $stmt->fetchColumn();
+}
+?>
 
-							<div class="product-widget">
-								<div class="product-img">
-									<img src="./img/product03.png" alt="">
-								</div>
-								<div class="product-body">
-									<p class="product-category">Category</p>
-									<h3 class="product-name"><a href="#">product name goes here</a></h3>
-									<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
-								</div>
-							</div>
-						</div>
-						<!-- /aside Widget -->
-					</div>
-					<!-- /ASIDE -->
+	<?php include 'assets/includes/head.php';?>
+		<body>
+			<!-- HEADER -->
+			<?php include 'assets/includes/header.php';?>
+				<!-- /MAIN HEADER -->
+			</header>
+			<!-- /HEADER -->
 
-					<!-- STORE -->
-					<div id="store" class="col-md-9">
-						<!-- store top filter -->
-						<div class="store-filter clearfix">
-							<div class="store-sort">
-								<label>
-									Sort By:
-									<select class="input-select">
-										<option value="0">Popular</option>
-										<option value="1">Position</option>
-									</select>
-								</label>
-
-								<label>
-									Show:
-									<select class="input-select">
-										<option value="0">20</option>
-										<option value="1">50</option>
-									</select>
-								</label>
-							</div>
-							<ul class="store-grid">
-								<li class="active"><i class="fa fa-th"></i></li>
-								<li><a href="#"><i class="fa fa-th-list"></i></a></li>
+			<!-- BREADCRUMB -->
+			<div id="breadcrumb" class="section">
+				<!-- container -->
+				<div class="container">
+					<!-- row -->
+					<div class="row">
+						<div class="col-md-12">
+							<ul class="breadcrumb-tree">
+								<li><a href="#">Home</a></li>
+								<li><a href="#">All Categories</a></li>
+								<li><a href="#">Accessories</a></li>
+								<li class="active">Headphones (227,490 Results)</li>
 							</ul>
 						</div>
-						<!-- /store top filter -->
+					</div>
+					<!-- /row -->
+				</div>
+				<!-- /container -->
+			</div>
+			<!-- /BREADCRUMB -->
 
-						<!-- store products -->
-						<div class="row">
+			<!-- SECTION -->
+			<div class="section">
+				<!-- container -->
+				<div class="container">
+					<!-- row -->
+					<div class="row">
+						<!-- ASIDE -->
+						<div id="aside" class="col-md-3">
+							<!-- aside Widget -->
+							<div class="aside">
+								<h3 class="aside-title">Categorías</h3>
+								<div class="checkbox-filter">
+									<form id="category-filter-form" method="GET" action="">
+										<?php
+										// Obtener las categorías desde la base de datos
+										$query = "SELECT id, name FROM categorias";
+										$stmt = $conn->prepare($query);
+										$stmt->execute();
+										$categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+										foreach ($categories as $category):
+											$categoryId = htmlspecialchars($category['id']);
+											$categoryName = htmlspecialchars($category['name']);
+										?>
+											<div class="input-checkbox">
+												<input type="checkbox" id="category-<?php echo $categoryId; ?>" name="category[]" value="<?php echo $categoryId; ?>" onchange="document.getElementById('category-filter-form').submit();">
+												<label for="category-<?php echo $categoryId; ?>">
+													<span></span>
+													<?php echo $categoryName; ?>
+													<small>(<?php echo getProductCountByCategory($categoryId); ?>)</small>
+												</label>
+											</div>
+										<?php endforeach; ?>
+									</form>
+								</div>
+							</div>
+							<!-- /aside Widget -->
+
+							<!-- aside Widget -->
+							<div class="aside">
+								<h3 class="aside-title">Price</h3>
+								<div class="price-filter">
+									<div id="price-slider"></div>
+									<form action="store.php" method="GET">
+										<?php
+										// Obtener el precio máximo de los productos
+										$queryMaxPrice = "SELECT MAX(price) AS max_price FROM productos";
+										$stmtMaxPrice = $conn->prepare($queryMaxPrice);
+										$stmtMaxPrice->execute();
+										$maxPrice = $stmtMaxPrice->fetchColumn();
+										?>
+
+										<div class="input-number price-min">
+											<input id="price-min" name="price_min" type="number" placeholder="Min Price" min="0">
+											<span class="qty-up">+</span>
+											<span class="qty-down">-</span>
+										</div>
+										<span>-</span>
+										<div class="input-number price-max">
+											<input id="price-max" name="price_max" type="number" placeholder="Max Price" min="0" max="<?php echo $maxPrice; ?>" value="<?php echo $maxPrice; ?>">
+											<span class="qty-up">+</span>
+											<span class="qty-down">-</span>
+										</div>
+										<button type="submit">Filter</button>
+									</form>
+								</div>
+							</div>
+							<!-- /aside Widget -->
+
+
+						<!-- aside Widget -->
+						<div class="aside">
+							<h3 class="aside-title">Marcas</h3>
+							<div class="checkbox-filter">
+								<form id="brand-filter-form" method="GET" action="">
+									<?php
+									// Obtener las marcas desde la base de datos
+									$query = "SELECT id, name FROM marcas";
+									$stmt = $conn->prepare($query);
+									$stmt->execute();
+									$brands = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+									foreach ($brands as $brand):
+										$brandId = htmlspecialchars($brand['id']);
+										$brandName = htmlspecialchars($brand['name']);
+									?>
+										<div class="input-checkbox">
+											<input type="checkbox" id="brand-<?php echo $brandId; ?>" name="brand[]" value="<?php echo $brandId; ?>" onchange="document.getElementById('brand-filter-form').submit();">
+											<label for="brand-<?php echo $brandId; ?>">
+												<span></span>
+												<?php echo $brandName; ?>
+												<small>(<?php echo getProductCountByBrand($brandId); ?>)</small>
+											</label>
+										</div>
+									<?php endforeach; ?>
+								</form>
+							</div>
+						</div>
+						<!-- /aside Widget -->
+								
+						</div>
+						<!-- /ASIDE -->
+
+						<!-- STORE -->
+						<div id="store" class="col-md-9">
+							<!-- store top filter -->
+							<div class="store-filter clearfix">
+								<div class="store-sort">
+									<label>
+										Sort By:
+										<select class="input-select">
+											<option value="0">Popular</option>
+											<option value="1">Position</option>
+										</select>
+									</label>
+
+									<label>
+										Show:
+										<select class="input-select">
+											<option value="0">20</option>
+											<option value="1">50</option>
+										</select>
+									</label>
+								</div>
+								<ul class="store-grid">
+									<li class="active"><i class="fa fa-th"></i></li>
+									<li><a href="#"><i class="fa fa-th-list"></i></a></li>
+								</ul>
+							</div>
+							<!-- /store top filter -->
+
+							<!-- store products -->
+							<div class="row">
+							<?php
+							$count = 0; // Contador de productos
+							foreach ($productostore as $producto):
+								// Si el precio viejo no existe, asigna 100 menos que el precio original
+								if (empty($producto['old_price'])) {
+									$producto['old_price'] = max(0, $producto['price'] - 100); // Asegura que no sea negativo
+								}
+
+								// Genera un rating aleatorio entre 4 y 5 si no existe un rating
+								$rating = rand(4, 5);
+							?>  
 							<!-- product -->
 							<div class="col-md-4 col-xs-6">
 								<div class="product">
 									<div class="product-img">
-										<img src="./img/product01.png" alt="">
+										<img src="assets/images/<?php echo htmlspecialchars($producto['imagen']); ?>" alt="<?php echo htmlspecialchars($producto['name']); ?>">
 										<div class="product-label">
-											<span class="sale">-30%</span>
-											<span class="new">NEW</span>
+											<?php if ($producto['discount'] > 0): ?>
+												<span class="sale">-<?php echo htmlspecialchars($producto['discount']); ?>%</span>
+											<?php endif; ?>
+											<?php if ($producto['new']): ?>
+												<span class="new">Nuevo!</span>
+											<?php endif; ?>
 										</div>
 									</div>
 									<div class="product-body">
-										<p class="product-category">Category</p>
-										<h3 class="product-name"><a href="#">product name goes here</a></h3>
-										<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
+										<p class="product-category"><?php echo htmlspecialchars($producto['category_name']); ?></p>
+										<h3 class="product-name"><a href="#"><?php echo htmlspecialchars($producto['name']); ?></a></h3>
+										<h4 class="product-price">$<?php echo number_format($producto['price'], 2); ?>
+											<del class="product-old-price">$<?php echo number_format($producto['old_price'], 2); ?></del>
+										</h4>
 										<div class="product-rating">
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
+											<?php for ($i = 0; $i < $rating; $i++): ?>
+												<i class="fa fa-star"></i>
+											<?php endfor; ?>
 										</div>
 										<div class="product-btns">
 											<button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
@@ -295,20 +283,29 @@
 										</div>
 									</div>
 									<div class="add-to-cart">
-										<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
+										<button class="add-to-cart-btn"  data-product-id="<?php echo $producto['id']; ?>"><i class="fa fa-shopping-cart"></i> add to cart</button>
 									</div>
 								</div>
 							</div>
 							<!-- /product -->
 
-							<div class="clearfix visible-sm visible-xs"></div>
-
-
-							<div class="clearfix visible-lg visible-md"></div>
-
+							<?php 
+							$count++;
+							// Insertar clearfix después de 2 productos en pantallas pequeñas y extra pequeñas
+							if ($count % 2 == 0): ?>
+								<div class="clearfix visible-sm visible-xs"></div>
+							<?php endif; ?>
 							
+							<?php 
+							// Insertar clearfix después de 3 productos en pantallas grandes y medianas
+							if ($count % 3 == 0): ?>
+								<div class="clearfix visible-lg visible-md"></div>
+							<?php endif; ?>
+
+						<?php endforeach; ?>
 						</div>
 						<!-- /store products -->
+
 
 						<!-- store bottom filter -->
 						<div class="store-filter clearfix">
@@ -331,145 +328,9 @@
 		</div>
 		<!-- /SECTION -->
 
-		<!-- NEWSLETTER -->
-		<div id="newsletter" class="section">
-			<!-- container -->
-			<div class="container">
-				<!-- row -->
-				<div class="row">
-					<div class="col-md-12">
-						<div class="newsletter">
-							<p>Sign Up for the <strong>NEWSLETTER</strong></p>
-							<form>
-								<input class="input" type="email" placeholder="Enter Your Email">
-								<button class="newsletter-btn"><i class="fa fa-envelope"></i> Subscribe</button>
-							</form>
-							<ul class="newsletter-follow">
-								<li>
-									<a href="#"><i class="fa fa-facebook"></i></a>
-								</li>
-								<li>
-									<a href="#"><i class="fa fa-twitter"></i></a>
-								</li>
-								<li>
-									<a href="#"><i class="fa fa-instagram"></i></a>
-								</li>
-								<li>
-									<a href="#"><i class="fa fa-pinterest"></i></a>
-								</li>
-							</ul>
-						</div>
-					</div>
-				</div>
-				<!-- /row -->
-			</div>
-			<!-- /container -->
-		</div>
-		<!-- /NEWSLETTER -->
-
-		<!-- FOOTER -->
-		<footer id="footer">
-			<!-- top footer -->
-			<div class="section">
-				<!-- container -->
-				<div class="container">
-					<!-- row -->
-					<div class="row">
-						<div class="col-md-3 col-xs-6">
-							<div class="footer">
-								<h3 class="footer-title">About Us</h3>
-								<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut.</p>
-								<ul class="footer-links">
-									<li><a href="#"><i class="fa fa-map-marker"></i>1734 Stonecoal Road</a></li>
-									<li><a href="#"><i class="fa fa-phone"></i>+021-95-51-84</a></li>
-									<li><a href="#"><i class="fa fa-envelope-o"></i>email@email.com</a></li>
-								</ul>
-							</div>
-						</div>
-
-						<div class="col-md-3 col-xs-6">
-							<div class="footer">
-								<h3 class="footer-title">Categories</h3>
-								<ul class="footer-links">
-									<li><a href="#">Hot deals</a></li>
-									<li><a href="#">Laptops</a></li>
-									<li><a href="#">Smartphones</a></li>
-									<li><a href="#">Cameras</a></li>
-									<li><a href="#">Accessories</a></li>
-								</ul>
-							</div>
-						</div>
-
-						<div class="clearfix visible-xs"></div>
-
-						<div class="col-md-3 col-xs-6">
-							<div class="footer">
-								<h3 class="footer-title">Information</h3>
-								<ul class="footer-links">
-									<li><a href="#">About Us</a></li>
-									<li><a href="#">Contact Us</a></li>
-									<li><a href="#">Privacy Policy</a></li>
-									<li><a href="#">Orders and Returns</a></li>
-									<li><a href="#">Terms & Conditions</a></li>
-								</ul>
-							</div>
-						</div>
-
-						<div class="col-md-3 col-xs-6">
-							<div class="footer">
-								<h3 class="footer-title">Service</h3>
-								<ul class="footer-links">
-									<li><a href="#">My Account</a></li>
-									<li><a href="#">View Cart</a></li>
-									<li><a href="#">Wishlist</a></li>
-									<li><a href="#">Track My Order</a></li>
-									<li><a href="#">Help</a></li>
-								</ul>
-							</div>
-						</div>
-					</div>
-					<!-- /row -->
-				</div>
-				<!-- /container -->
-			</div>
-			<!-- /top footer -->
-
-			<!-- bottom footer -->
-			<div id="bottom-footer" class="section">
-				<div class="container">
-					<!-- row -->
-					<div class="row">
-						<div class="col-md-12 text-center">
-							<ul class="footer-payments">
-								<li><a href="#"><i class="fa fa-cc-visa"></i></a></li>
-								<li><a href="#"><i class="fa fa-credit-card"></i></a></li>
-								<li><a href="#"><i class="fa fa-cc-paypal"></i></a></li>
-								<li><a href="#"><i class="fa fa-cc-mastercard"></i></a></li>
-								<li><a href="#"><i class="fa fa-cc-discover"></i></a></li>
-								<li><a href="#"><i class="fa fa-cc-amex"></i></a></li>
-							</ul>
-							<span class="copyright">
-								<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-								Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
-							<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-							</span>
-						</div>
-					</div>
-						<!-- /row -->
-				</div>
-				<!-- /container -->
-			</div>
-			<!-- /bottom footer -->
-		</footer>
-		<!-- /FOOTER -->
-
-		<!-- jQuery Plugins -->
-		<script src="js/jquery.min.js"></script>
-		<script src="js/bootstrap.min.js"></script>
-		<script src="js/slick.min.js"></script>
-		<script src="js/nouislider.min.js"></script>
-		<script src="js/jquery.zoom.min.js"></script>
-		<script src="js/main.js"></script>
+			<!-- PIE DE PÁGINA -->
+			<?php include 'assets/includes/footer.php';?>
+		<!-- /PIE DE PÁGINA -->
 
 	</body>
 </html>

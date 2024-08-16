@@ -41,6 +41,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $category_id = $_POST['category']; // Obtener la categoría seleccionada
     $datasheet = $_POST['datasheet'];
 
+    // Obtener descuento y estado de nuevo producto
+    $discount = isset($_POST['apply_discount']) ? $_POST['discount'] : 0; // Cambiar aquí
+    $is_new = isset($_POST['is_new']) ? 1 : 0;
+
     // Convertir características a formato JSON
     $characteristics = $_POST['characteristics'] ?? [];
     $characteristics_json = json_encode($characteristics);
@@ -50,22 +54,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Actualizar producto existente
         $query = "
             UPDATE productos 
-            SET name = :name, description = :description, characteristics = :characteristics, price = :price, stock = :stock, datasheet = :datasheet, brand_id = :brand_id, category_id = :category_id
+            SET name = :name, description = :description, characteristics = :characteristics, price = :price, stock = :stock, datasheet = :datasheet, brand_id = :brand_id, category_id = :category_id, discount = :discount, `new` = :is_new
         ";
         if (isset($_FILES['imagenes']['name'][0]) && !empty($_FILES['imagenes']['name'][0])) {
             $query .= ", imagen = :imagen";
         }
         $query .= " WHERE id = :id";
         $stmt = $conn->prepare($query);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         if (isset($_FILES['imagenes']['name'][0]) && !empty($_FILES['imagenes']['name'][0])) {
             $stmt->bindParam(':imagen', $_FILES['imagenes']['name'][0]);
         }
-        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
     } else {
         // Insertar nuevo producto
         $stmt = $conn->prepare("
-            INSERT INTO productos (name, description, characteristics, price, stock, imagen, datasheet, brand_id, category_id) 
-            VALUES (:name, :description, :characteristics, :price, :stock, :imagen, :datasheet, :brand_id, :category_id)
+            INSERT INTO productos (name, description, characteristics, price, stock, imagen, datasheet, brand_id, category_id, discount, `new`) 
+            VALUES (:name, :description, :characteristics, :price, :stock, :imagen, :datasheet, :brand_id, :category_id, :discount, :is_new)
         ");
     }
 
@@ -77,8 +81,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $stmt->bindParam(':datasheet', $datasheet);
     $stmt->bindParam(':brand_id', $brand_id); // Agregar marca
     $stmt->bindParam(':category_id', $category_id); // Agregar categoría
+    $stmt->bindParam(':discount', $discount);
+    $stmt->bindParam(':is_new', $is_new, PDO::PARAM_INT); // Agregar estado de nuevo producto
 
-    if (!$id && !empty($_FILES['imagenes']['name'][0])) {
+    if (isset($_FILES['imagenes']['name'][0]) && !empty($_FILES['imagenes']['name'][0])) {
         $imagen = $_FILES['imagenes']['name'][0];
         $stmt->bindParam(':imagen', $imagen);
     }
@@ -110,11 +116,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 ?>
-
-
-
-
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -150,6 +151,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <label for="stock">Stock:</label>
                 <input type="text" class="form-control" name="stock" id="stock" value="<?php echo htmlspecialchars($product['stock'] ?? ''); ?>">
             </div>
+            <div class="form-group">
+                <label for="apply_discount">Aplicar Descuento:</label>
+                <input type="checkbox" name="apply_discount" id="apply_discount" <?php echo isset($product['discount']) && $product['discount'] > 0 ? 'checked' : ''; ?>>
+            </div>
+
+            <div class="form-group">
+                <label for="discount">Descuento:</label>
+                <input type="number" class="form-control" name="discount" id="discount" value="<?php echo htmlspecialchars($product['discount'] ?? ''); ?>" step="1" min="0">
+            </div>
+
+
+
+            <div class="form-group">
+                <label for="is_new">Es un Producto Nuevo:</label>
+                <input type="checkbox" name="is_new" id="is_new" <?php echo isset($product['new']) && $product['new'] ? 'checked' : ''; ?>>
+            </div>
+
 
             <div class="form-group">
                 <label for="brand">Marca:</label>

@@ -40,9 +40,9 @@ if (isset($_SESSION['user_id'])) {
     <div id="top-header">
         <div class="container">
             <ul class="header-links pull-left">
-                <li><a href="#"><i class="fa fa-phone"></i> +021-95-51-84</a></li>
-                <li><a href="#"><i class="fa fa-envelope-o"></i> email@email.com</a></li>
-                <li><a href="#"><i class="fa fa-map-marker"></i> 1734 Stonecoal Road</a></li>
+                <li><a href="#"><i class="fa fa-phone"></i> (+54)11 4488 4489</a></li>
+                <li><a href="#"><i class="fa fa-envelope-o"></i> ventas@sistemasenergeticos.com.ar</a></li>
+                <li><a href="#"><i class="fa fa-map-marker"></i> Av. Díaz Vélez 1240 (C.P. 1702)Ciudadela, Buenos Aires, Argentina</a></li>
             </ul>
             <ul class="header-links pull-right">
                 <li><a href="userpanel.php"><i class="fa fa-user-o"></i> Mi cuenta</a></li>
@@ -87,7 +87,7 @@ if (isset($_SESSION['user_id'])) {
                 <!-- ACCOUNT -->
                 <div class="col-md-3 clearfix">
                     <div class="header-ctn">
-                        <!-- Wishlist -->
+                        <!-- Wishlist 
                         <div>
                             <a href="#">
                                 <i class="fa fa-heart-o"></i>
@@ -95,6 +95,7 @@ if (isset($_SESSION['user_id'])) {
                                 <div class="qty">2</div>
                             </a>
                         </div>
+                        -->
                         <!-- /Wishlist -->
 
 <!-- Cart -->
@@ -163,4 +164,28 @@ if (isset($_SESSION['user_id'])) {
     <!-- /MAIN HEADER -->
 </header>
 <!-- /HEADER -->
+ 
+ 		<!-- NAVIGATION -->
+         <nav id="navigation">
+			<!-- container -->
+			<div class="container">
+				<!-- responsive-nav -->
+				<div id="responsive-nav">
+					<!-- NAV -->
+					<ul class="main-nav nav navbar-nav">
+						<li class="active"><a href="#">Home</a></li>
+						<li><a href="#">Hot Deals</a></li>
+						<li><a href="#">Categories</a></li>
+						<li><a href="#">Laptops</a></li>
+						<li><a href="#">Smartphones</a></li>
+						<li><a href="#">Cameras</a></li>
+						<li><a href="#">Accessories</a></li>
+					</ul>
+					<!-- /NAV -->
+				</div>
+				<!-- /responsive-nav -->
+			</div>
+			<!-- /container -->
+		</nav>
+		<!-- /NAVIGATION -->
 
