@@ -286,7 +286,7 @@ if (isset($_GET['category_id'])) {
 									</div>
 									<div class="product-body">
 										<p class="product-category"><?php echo htmlspecialchars($producto['category_name']); ?></p>
-										<h3 class="product-name"><a href="#"><?php echo htmlspecialchars($producto['name']); ?></a></h3>
+										<h3 class="product-name"><a href="product_detalle.php?id=<?php echo $producto['id']; ?>"><?php echo htmlspecialchars($producto['name']); ?></a></h3>
 										<h4 class="product-price">$<?php echo number_format($producto['price'], 2); ?>
 											<del class="product-old-price">$<?php echo number_format($producto['old_price'], 2); ?></del>
 										</h4>

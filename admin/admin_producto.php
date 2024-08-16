@@ -42,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $datasheet = $_POST['datasheet'];
 
     // Obtener descuento y estado de nuevo producto
-    $discount = isset($_POST['apply_discount']) ? $_POST['discount'] : 0; // Cambiar aquí
+    $discount = isset($_POST['apply_discount']) ? $_POST['discount'] : 0;
     $is_new = isset($_POST['is_new']) ? 1 : 0;
 
     // Convertir características a formato JSON
@@ -61,31 +61,40 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
         $query .= " WHERE id = :id";
         $stmt = $conn->prepare($query);
-        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        // Bind parameters for update
+        $stmt->bindParam(':name', $name);
+        $stmt->bindParam(':description', $description);
+        $stmt->bindParam(':characteristics', $characteristics_json);
+        $stmt->bindParam(':price', $price);
+        $stmt->bindParam(':stock', $stock);
+        $stmt->bindParam(':datasheet', $datasheet);
+        $stmt->bindParam(':brand_id', $brand_id);
+        $stmt->bindParam(':category_id', $category_id);
+        $stmt->bindParam(':discount', $discount);
+        $stmt->bindParam(':is_new', $is_new, PDO::PARAM_INT);
         if (isset($_FILES['imagenes']['name'][0]) && !empty($_FILES['imagenes']['name'][0])) {
-            $stmt->bindParam(':imagen', $_FILES['imagenes']['name'][0]);
+            $imagen = $_FILES['imagenes']['name'][0];
+            $stmt->bindParam(':imagen', $imagen);
         }
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
     } else {
         // Insertar nuevo producto
         $stmt = $conn->prepare("
             INSERT INTO productos (name, description, characteristics, price, stock, imagen, datasheet, brand_id, category_id, discount, `new`) 
             VALUES (:name, :description, :characteristics, :price, :stock, :imagen, :datasheet, :brand_id, :category_id, :discount, :is_new)
         ");
-    }
-
-    $stmt->bindParam(':name', $name);
-    $stmt->bindParam(':description', $description);
-    $stmt->bindParam(':characteristics', $characteristics_json);
-    $stmt->bindParam(':price', $price);
-    $stmt->bindParam(':stock', $stock);
-    $stmt->bindParam(':datasheet', $datasheet);
-    $stmt->bindParam(':brand_id', $brand_id); // Agregar marca
-    $stmt->bindParam(':category_id', $category_id); // Agregar categoría
-    $stmt->bindParam(':discount', $discount);
-    $stmt->bindParam(':is_new', $is_new, PDO::PARAM_INT); // Agregar estado de nuevo producto
-
-    if (isset($_FILES['imagenes']['name'][0]) && !empty($_FILES['imagenes']['name'][0])) {
-        $imagen = $_FILES['imagenes']['name'][0];
+        // Bind parameters for insert
+        $stmt->bindParam(':name', $name);
+        $stmt->bindParam(':description', $description);
+        $stmt->bindParam(':characteristics', $characteristics_json);
+        $stmt->bindParam(':price', $price);
+        $stmt->bindParam(':stock', $stock);
+        $stmt->bindParam(':datasheet', $datasheet);
+        $stmt->bindParam(':brand_id', $brand_id);
+        $stmt->bindParam(':category_id', $category_id);
+        $stmt->bindParam(':discount', $discount);
+        $stmt->bindParam(':is_new', $is_new, PDO::PARAM_INT);
+        $imagen = $_FILES['imagenes']['name'][0] ?? null; // Default to null if not set
         $stmt->bindParam(':imagen', $imagen);
     }
 
@@ -116,6 +125,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
