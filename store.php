@@ -76,6 +76,25 @@ function getProductCountByCategory($categoryId) {
     $stmt->execute([$categoryId]);
     return $stmt->fetchColumn();
 }
+$productos = [];
+
+if (isset($_GET['category_id'])) {
+    $category_id = intval($_GET['category_id']);
+
+    // Consulta para obtener los productos de la categoría seleccionada
+    $sql = "SELECT * FROM productos WHERE category_id = :category_id";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':category_id', $category_id, PDO::PARAM_INT);
+    $stmt->execute();
+
+    $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} else {
+    // Si no se selecciona categoría, muestra todos los productos o maneja como desees
+    $sql = "SELECT * FROM productos";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+    $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
 ?>
 
 	<?php include 'assets/includes/head.php';?>

@@ -3,7 +3,7 @@
 ob_start();
 
 // Configura la duración de la sesión en segundos
-$session_lifetime = 1800; // 30 minutos en segundos
+$session_lifetime = 3600; // 1 hora en segundos
 
 // Configura los parámetros de la cookie de la sesión antes de iniciar la sesión
 ini_set('session.gc_maxlifetime', $session_lifetime);

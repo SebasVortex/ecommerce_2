@@ -1,10 +1,3 @@
-<?php
-// Consultar todas las categorías
-$stmt = $conn->prepare("SELECT name FROM categorias"); // Prepara una consulta SQL para seleccionar todas las categorías
-$stmt->execute(); // Ejecuta la consulta
-$categorias = $stmt->fetchAll(PDO::FETCH_ASSOC); // Obtiene todos los resultados en un array asociativo
-?>
-
 <!-- NEWSLETTER -->
 <div id="newsletter" class="section">
 			<!-- container -->

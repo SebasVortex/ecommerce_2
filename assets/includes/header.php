@@ -33,6 +33,10 @@ if (isset($_SESSION['user_id'])) {
     $cart_items = [];
     $total = 0;
 }
+// Consultar todas las categorías
+$stmt = $conn->prepare("SELECT name, id FROM categorias"); // Prepara una consulta SQL para seleccionar todas las categorías
+$stmt->execute(); // Ejecuta la consulta
+$categorias = $stmt->fetchAll(PDO::FETCH_ASSOC); // Obtiene todos los resultados en un array asociativo
 ?>
 <!-- HEADER -->
 <header>
@@ -71,11 +75,13 @@ if (isset($_SESSION['user_id'])) {
                 <!-- SEARCH BAR -->
                 <div class="col-md-6">
                     <div class="header-search">
-                        <form>
+                        <form style="display: flex;">
                             <select class="input-select">
-                                <option value="0">Categorias</option>
-                                <option value="1">Category 01</option>
-                                <option value="1">Category 02</option>
+                            <?php foreach ($categorias as $categoria): ?>
+                                <option value="<?= htmlspecialchars($categoria['id']); ?>">
+                                    <?= htmlspecialchars($categoria['name']); ?>
+                                </option>
+                            <?php endforeach; ?>
                             </select>
                             <input class="input" placeholder="Buscar productos...">
                             <button class="search-btn">Buscar</button>
@@ -98,52 +104,51 @@ if (isset($_SESSION['user_id'])) {
                         -->
                         <!-- /Wishlist -->
 
-<!-- Cart -->
-<div class="dropdown">
-    <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
-        <i class="fa fa-shopping-cart"></i>
-        <span>Carrito</span>
-        <div class="qty"><?php echo isset($_SESSION['user_id']) ? count($cart_items) : 0; ?></div>
-    </a>
-    <div class="cart-dropdown">
-        <div class="cart-list">
-            <?php if (isset($_SESSION['user_id'])): ?>
-                <?php if (!empty($cart_items)): ?>
-                    <?php foreach ($cart_items as $item): ?>
-                        <div class="product-widget">
-                            <div class="product-img">
-                                <img src="assets/images/<?php echo htmlspecialchars($item['imagen']); ?>" alt="">
+                        <!-- Cart -->
+                        <div class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                                <i class="fa fa-shopping-cart"></i>
+                                <span>Carrito</span>
+                                <div class="qty"><?php echo isset($_SESSION['user_id']) ? count($cart_items) : 0; ?></div>
+                            </a>
+                            <div class="cart-dropdown">
+                                <div class="cart-list">
+                                    <?php if (isset($_SESSION['user_id'])): ?>
+                                        <?php if (!empty($cart_items)): ?>
+                                            <?php foreach ($cart_items as $item): ?>
+                                                <div class="product-widget">
+                                                    <div class="product-img">
+                                                        <img src="assets/images/<?php echo htmlspecialchars($item['imagen']); ?>" alt="">
+                                                    </div>
+                                                    <div class="product-body">
+                                                        <h3 class="product-name"><a href="#"><?php echo htmlspecialchars($item['name']); ?></a></h3>
+                                                        <h4 class="product-price"><span class="qty"><?php echo htmlspecialchars($item['quantity']); ?>x</span>$<?php echo number_format($item['price'], 2); ?></h4>
+                                                    </div>
+                                                    <button class="delete"><i class="fa fa-close"></i></button>
+                                                </div>
+                                            <?php endforeach; ?>
+                                        <?php else: ?>
+                                            <p>Tu carrito está vacío</p>
+                                        <?php endif; ?>
+                                    <?php else: ?>
+                                        <p>Inicia sesión para ver los productos de tu carrito.</p>
+                                    <?php endif; ?>
+                                </div>
+                                <div class="cart-summary">
+                                    <small><?php echo isset($_SESSION['user_id']) ? count($cart_items) : 0; ?> Item(s) selected</small>
+                                    <h5>SUBTOTAL: $<?php echo isset($_SESSION['user_id']) ? number_format($total, 2) : '0.00'; ?></h5>
+                                </div>
+                                <div class="cart-btns">
+                                    <?php if (isset($_SESSION['user_id'])): ?>
+                                        <a href="carrito.php">Ver carrito</a>
+                                        <a href="checkout.php">Finalizar <i class="fa fa-arrow-circle-right"></i></a>
+                                    <?php else: ?>
+                                        <a href="login.php">Inicia sesión para finalizar compra</a>
+                                    <?php endif; ?>
+                                </div>
                             </div>
-                            <div class="product-body">
-                                <h3 class="product-name"><a href="#"><?php echo htmlspecialchars($item['name']); ?></a></h3>
-                                <h4 class="product-price"><span class="qty"><?php echo htmlspecialchars($item['quantity']); ?>x</span>$<?php echo number_format($item['price'], 2); ?></h4>
-                            </div>
-                            <button class="delete"><i class="fa fa-close"></i></button>
                         </div>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <p>Tu carrito está vacío</p>
-                <?php endif; ?>
-            <?php else: ?>
-                <p>Inicia sesión para ver los productos de tu carrito.</p>
-            <?php endif; ?>
-        </div>
-        <div class="cart-summary">
-            <small><?php echo isset($_SESSION['user_id']) ? count($cart_items) : 0; ?> Item(s) selected</small>
-            <h5>SUBTOTAL: $<?php echo isset($_SESSION['user_id']) ? number_format($total, 2) : '0.00'; ?></h5>
-        </div>
-        <div class="cart-btns">
-            <?php if (isset($_SESSION['user_id'])): ?>
-                <a href="carrito.php">Ver carrito</a>
-                <a href="checkout.php">Finalizar <i class="fa fa-arrow-circle-right"></i></a>
-            <?php else: ?>
-                <a href="login.php">Inicia sesión para finalizar compra</a>
-            <?php endif; ?>
-        </div>
-    </div>
-</div>
-<!-- /Cart -->
-
+                        <!-- /Cart -->
 
                         <!-- Menu Toggle -->
                         <div class="menu-toggle">
@@ -188,4 +193,3 @@ if (isset($_SESSION['user_id'])) {
 			<!-- /container -->
 		</nav>
 		<!-- /NAVIGATION -->
-

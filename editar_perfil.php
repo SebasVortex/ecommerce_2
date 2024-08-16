@@ -49,8 +49,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 echo "La imagen no se subió.";
             } else {
                 if (move_uploaded_file($_FILES["imagen_perfil"]["tmp_name"], $target_file)) {
+                    // Mensaje de éxito
                     echo "La imagen ". htmlspecialchars(basename($_FILES["imagen_perfil"]["name"])). " ha sido subida.";
-
+                
                     // Actualizar el nombre de la imagen en la base de datos
                     $stmt = $conn->prepare("UPDATE clientes SET username = :username, email = :email, imagen_perfil = :imagen_perfil WHERE id = :user_id");
                     $stmt->bindParam(':username', $username);
@@ -71,9 +72,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->execute();
         }
 
-        echo "Perfil actualizado con éxito.";
+        header("Location: editar_perfil.php?verificado=actualizado");
+        exit();
     } else {
-        echo "Error: datos del formulario incompletos.";
+        header("Location: editar_perfil.php?error=imcompletado");
+        exit();
     }
 }
 
@@ -91,37 +94,129 @@ try {
 
 <?php include 'assets/includes/head.php';?>
     <style>
-        /* Aquí va el código CSS proporcionado */
+        /* Estilo personalizado para el perfil */
+        .profile-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .profile-image-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .profile-image-container img {
+            border-radius: 50%;
+            max-width: 150px;
+            max-height: 150px;
+        }
+
+        .profile-image-container .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            border-radius: 50%;
+            transition: opacity 0.3s ease;
+            text-align: center;
+            cursor: pointer; /* Cambia el cursor para indicar que es clickeable */
+        }
+
+        .profile-image-container:hover .overlay {
+            opacity: 1;
+        }
+
+        .file-input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0; /* Oculta el input file */
+            cursor: pointer; /* Cambia el cursor para indicar que es clickeable */
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .btn-submit {
+            margin-top: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .profile-container {
+                padding: 15px;
+            }
+        }
     </style>
 </head>
 <body>
     <!-- HEADER -->
     <?php include 'assets/includes/header.php';?>
     <!-- HEADER -->
-    <div class="section">
+    <div class="container profile-container">
         <h1>Editar Perfil</h1>
         <?php if (isset($message)) { ?>
-            <div class="<?php echo $message['type'] === 'success' ? 'success-message' : 'error-message'; ?>">
+            <div class="<?php echo $message['type'] === 'success' ? 'alert alert-success' : 'alert alert-danger'; ?>">
                 <?php echo htmlspecialchars($message['text']); ?>
             </div>
         <?php } ?>
         <form action="editar_perfil.php" method="POST" enctype="multipart/form-data">
-            <label for="username">Nombre:</label>
-            <input type="text" id="username" name="username" value="<?php echo htmlspecialchars($user['username']); ?>" required>
-            
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($user['email']); ?>" required>
-            
-            <label for="imagen_perfil">Foto de Perfil:</label>
-            <input type="file" id="imagen_perfil" name="imagen_perfil">
-            
-            <button type="submit">Actualizar Perfil</button>
+            <div class="form-group">
+                <label for="username">Nombre:</label>
+                <input type="text" id="username" name="username" class="form-control" value="<?php echo htmlspecialchars($user['username']); ?>" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" class="form-control" value="<?php echo htmlspecialchars($user['email']); ?>" required>
+            </div>
+
+            <div class="form-group profile-image-container">
+                <!-- Mostrar imagen de perfil si está disponible -->
+                <img id="profileImage" src="assets/userimages/<?php echo !empty($user['imagen_perfil']) ? htmlspecialchars($user['imagen_perfil']) : 'default.png'; ?>" alt="Imagen de perfil" class="img-fluid rounded-circle">
+                <div class="overlay">Subir nueva imagen</div>
+                <input type="file" id="imagen_perfil" name="imagen_perfil" class="file-input" onchange="previewImage(event)">
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-submit">Actualizar Perfil</button>
         </form>
 
-        <a href="userpanel.php">Volver al Panel de Usuario</a>
+        <a href="userpanel.php" class="btn btn-secondary">Volver al Panel de Usuario</a>
     </div>
     <!-- PIE DE PÁGINA -->
     <?php include 'assets/includes/footer.php';?>
     <!-- /PIE DE PÁGINA -->
+
+    <script>
+        function previewImage(event) {
+            const input = event.target;
+            const file = input.files[0];
+            const img = document.getElementById('profileImage');
+
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    img.src = e.target.result;
+                };
+
+                reader.readAsDataURL(file);
+            }
+        }
+    </script>
 </body>
 </html>
