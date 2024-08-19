@@ -32,6 +32,9 @@ $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <body class="bg-light">
     <div class="container mt-5">
         <h1 class="text-center mb-4">Lista de Productos</h1>
+        <div class="text-right">
+            <button onclick="location.href='admin_producto.php'" class="btn btn-success">Agregar Nuevo Producto</button>
+        </div>
         <table class="table table-striped table-bordered">
             <thead class="thead-light">
                 <tr>
@@ -60,9 +63,6 @@ $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </tbody>
         </table>
 
-        <div class="text-center">
-            <button onclick="location.href='admin_producto.php'" class="btn btn-success">Agregar Nuevo Producto</button>
-        </div>
     </div>
 
     <!-- Incluir Bootstrap JS y dependencias de Popper.js -->

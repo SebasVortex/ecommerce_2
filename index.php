@@ -22,7 +22,7 @@ include('config/producto.php'); // Incluye el archivo que recupera los datos de 
 							</div>
 							<div class="shop-body">
 								<h3>Sistemas<br>hibridos</h3>
-								<a href="#" class="cta-btn">Ver mas <i class="fa fa-arrow-circle-right"></i></a>
+								<a href="store.php?category%5B%5D=1" class="cta-btn">Ver mas <i class="fa fa-arrow-circle-right"></i></a>
 							</div>
 						</div>
 					</div>
@@ -36,7 +36,7 @@ include('config/producto.php'); // Incluye el archivo que recupera los datos de 
 							</div>
 							<div class="shop-body">
 								<h3>Baterias</h3>
-								<a href="#" class="cta-btn">Ver mas <i class="fa fa-arrow-circle-right"></i></a>
+								<a href="store.php?category%5B%5D=9" class="cta-btn">Ver mas <i class="fa fa-arrow-circle-right"></i></a>
 							</div>
 						</div>
 					</div>
@@ -50,7 +50,7 @@ include('config/producto.php'); // Incluye el archivo que recupera los datos de 
 							</div>
 							<div class="shop-body">
 								<h3>Plantas<br>Modulares</h3>
-								<a href="#" class="cta-btn">Ver mas <i class="fa fa-arrow-circle-right"></i></a>
+								<a href="store.php?category%5B%5D=6" class="cta-btn">Ver mas <i class="fa fa-arrow-circle-right"></i></a>
 							</div>
 						</div>
 					</div>
@@ -72,7 +72,7 @@ include('config/producto.php'); // Incluye el archivo que recupera los datos de 
 					<!-- section title -->
 					<div class="col-md-12">
 						<div class="section-title">
-							<h3 class="title">New Products</h3>
+							<h3 class="title">Productos</h3>
 							<div class="section-nav">
 								<ul class="section-tab-nav tab-nav">
 									<li class="active"><a data-toggle="tab" href="#tab1">Laptops</a></li>
@@ -203,12 +203,12 @@ include('config/producto.php'); // Incluye el archivo que recupera los datos de 
 					<!-- section title -->
 					<div class="col-md-12">
 						<div class="section-title">
-							<h3 class="title">Top selling</h3>
+							<h3 class="title">Mas productos</h3>
 							<div class="section-nav">
 								<ul class="section-tab-nav tab-nav">
-									<li class="active"><a data-toggle="tab" href="#tab2">Laptops</a></li>
-									<li><a data-toggle="tab" href="#tab2">Smartphones</a></li>
-									<li><a data-toggle="tab" href="#tab2">Cameras</a></li>
+									<li class="active"><a data-toggle="tab" href="#tab2">Inversores</a></li>
+									<li><a data-toggle="tab" href="#tab2">Paneles Solares</a></li>
+									<li><a data-toggle="tab" href="#tab3">Cameras</a></li>
 									<li><a data-toggle="tab" href="#tab2">Accessories</a></li>
 								</ul>
 							</div>
@@ -285,7 +285,7 @@ include('config/producto.php'); // Incluye el archivo que recupera los datos de 
 				<div class="row">
 					<div class="col-md-4 col-xs-6">
 						<div class="section-title">
-							<h4 class="title">Top selling</h4>
+							<h4 class="title">Inversores</h4>
 							<div class="section-nav">
 								<div id="slick-nav-3" class="products-slick-nav"></div>
 							</div>
@@ -302,7 +302,7 @@ include('config/producto.php'); // Incluye el archivo que recupera los datos de 
 										</div>
 										<div class="product-body">
 											<p class="product-category"><?php echo htmlspecialchars($producto['category_name']); ?></p>
-											<h3 class="product-name"><a href="#"><?php echo htmlspecialchars($producto['name']); ?></a></h3>
+											<h3 class="product-name"><a href="product_detalle.php?id=<?php echo $producto['id']; ?>"><?php echo htmlspecialchars($producto['name']); ?></a></h3>
 											<h4 class="product-price">
 												$<?php echo number_format($producto['price'], 2); ?> 
 												<?php if ($producto['price'] > 990.00): ?>
@@ -313,22 +313,19 @@ include('config/producto.php'); // Incluye el archivo que recupera los datos de 
 									</div>
 									<!-- /product widget -->
 								<?php endforeach; ?>
-
-
-						
 							</div>
 						</div>
 					</div>
 
 					<div class="col-md-4 col-xs-6">
 						<div class="section-title">
-							<h4 class="title">Top selling</h4>
+							<h4 class="title">Baterías</h4>
 							<div class="section-nav">
 								<div id="slick-nav-4" class="products-slick-nav"></div>
 							</div>
 						</div>
 						<div class="products-widget-slick" data-nav="#slick-nav-3">
-    <div>
+                                                                            <div>
 								<!-- Mostrar productos de baterías -->
 								<?php foreach ($productos_baterias as $producto): ?>
 									<!-- product widget -->
@@ -338,7 +335,7 @@ include('config/producto.php'); // Incluye el archivo que recupera los datos de 
 										</div>
 										<div class="product-body">
 											<p class="product-category"><?php echo htmlspecialchars($producto['category_name']); ?></p>
-											<h3 class="product-name"><a href="#"><?php echo htmlspecialchars($producto['name']); ?></a></h3>
+											<h3 class="product-name"><a href="product_detalle.php?id=<?php echo $producto['id']; ?>"><?php echo htmlspecialchars($producto['name']); ?></a></h3>
 											<h4 class="product-price">
 												$<?php echo number_format($producto['price'], 2); ?> 
 												<?php if ($producto['price'] > 990.00): ?>
@@ -357,7 +354,7 @@ include('config/producto.php'); // Incluye el archivo que recupera los datos de 
 
 					<div class="col-md-4 col-xs-6">
 						<div class="section-title">
-							<h4 class="title">Top selling</h4>
+							<h4 class="title">Sistemas hibridos</h4>
 							<div class="section-nav">
 								<div id="slick-nav-5" class="products-slick-nav"></div>
 							</div>
@@ -374,7 +371,7 @@ include('config/producto.php'); // Incluye el archivo que recupera los datos de 
                 </div>
                 <div class="product-body">
                     <p class="product-category"><?php echo htmlspecialchars($producto['category_name']); ?></p>
-                    <h3 class="product-name"><a href="#"><?php echo htmlspecialchars($producto['name']); ?></a></h3>
+                    <h3 class="product-name"><a href="product_detalle.php?id=<?php echo $producto['id']; ?>"><?php echo htmlspecialchars($producto['name']); ?></a></h3>
                     <h4 class="product-price">
                         $<?php echo number_format($producto['price'], 2); ?> 
                         <?php if ($producto['price'] > 990.00): ?>

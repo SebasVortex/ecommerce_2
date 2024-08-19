@@ -3,6 +3,28 @@
 include 'config/database.php';
 include 'config/checksession.php';
 
+// Manejar la eliminación de productos del carrito
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id']) && isset($_SESSION['user_id'])) {
+    $delete_id = $_POST['delete_id'];
+    $user_id = $_SESSION['user_id'];
+
+    try {
+        // Eliminar el producto del carrito en la base de datos
+        $query = "DELETE FROM carrito WHERE user_id = :user_id AND product_id = :product_id";
+        $stmt = $conn->prepare($query);
+        $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+        $stmt->bindParam(':product_id', $delete_id, PDO::PARAM_INT);
+        $stmt->execute();
+
+        // Redirigir o recargar la página después de eliminar
+        header("Location: " . $_SERVER['PHP_SELF']);
+        exit;
+    } catch (PDOException $e) {
+        error_log('Error al eliminar el producto: ' . $e->getMessage());
+    }
+}
+
+// Código existente para obtener y mostrar los productos del carrito
 if (isset($_SESSION['user_id'])) {
     $user_id = $_SESSION['user_id'];
 
@@ -33,11 +55,13 @@ if (isset($_SESSION['user_id'])) {
     $cart_items = [];
     $total = 0;
 }
+
 // Consultar todas las categorías
-$stmt = $conn->prepare("SELECT name, id FROM categorias"); // Prepara una consulta SQL para seleccionar todas las categorías
-$stmt->execute(); // Ejecuta la consulta
-$categorias = $stmt->fetchAll(PDO::FETCH_ASSOC); // Obtiene todos los resultados en un array asociativo
+$stmt = $conn->prepare("SELECT name, id FROM categorias");
+$stmt->execute();
+$categorias = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
+
 <!-- HEADER -->
 <header>
     <!-- TOP HEADER -->
@@ -103,7 +127,6 @@ $categorias = $stmt->fetchAll(PDO::FETCH_ASSOC); // Obtiene todos los resultados
                         </div>
                         -->
                         <!-- /Wishlist -->
-
                         <!-- Cart -->
                         <div class="dropdown">
                             <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
@@ -121,10 +144,13 @@ $categorias = $stmt->fetchAll(PDO::FETCH_ASSOC); // Obtiene todos los resultados
                                                         <img src="assets/images/<?php echo htmlspecialchars($item['imagen']); ?>" alt="">
                                                     </div>
                                                     <div class="product-body">
-                                                        <h3 class="product-name"><a href="#"><?php echo htmlspecialchars($item['name']); ?></a></h3>
+                                                        <h3 class="product-name"><a href="product_detalle.php?id=<?php echo $item['id']; ?>"><?php echo htmlspecialchars($item['name']); ?></a></h3>
                                                         <h4 class="product-price"><span class="qty"><?php echo htmlspecialchars($item['quantity']); ?>x</span>$<?php echo number_format($item['price'], 2); ?></h4>
                                                     </div>
-                                                    <button class="delete"><i class="fa fa-close"></i></button>
+                                                    <form method="POST" action="">
+                                                        <input type="hidden" name="delete_id" value="<?php echo $item['id']; ?>">
+                                                        <button class="delete" type="submit"><i class="fa fa-close"></i></button>
+                                                    </form>
                                                 </div>
                                             <?php endforeach; ?>
                                         <?php else: ?>
@@ -135,7 +161,7 @@ $categorias = $stmt->fetchAll(PDO::FETCH_ASSOC); // Obtiene todos los resultados
                                     <?php endif; ?>
                                 </div>
                                 <div class="cart-summary">
-                                    <small><?php echo isset($_SESSION['user_id']) ? count($cart_items) : 0; ?> Item(s) selected</small>
+                                    <small><?php echo isset($_SESSION['user_id']) ? count($cart_items) : 0; ?> Item(s)</small>
                                     <h5>SUBTOTAL: $<?php echo isset($_SESSION['user_id']) ? number_format($total, 2) : '0.00'; ?></h5>
                                 </div>
                                 <div class="cart-btns">
@@ -149,6 +175,7 @@ $categorias = $stmt->fetchAll(PDO::FETCH_ASSOC); // Obtiene todos los resultados
                             </div>
                         </div>
                         <!-- /Cart -->
+
 
                         <!-- Menu Toggle -->
                         <div class="menu-toggle">
@@ -178,13 +205,12 @@ $categorias = $stmt->fetchAll(PDO::FETCH_ASSOC); // Obtiene todos los resultados
 				<div id="responsive-nav">
 					<!-- NAV -->
 					<ul class="main-nav nav navbar-nav">
-						<li class="active"><a href="#">Home</a></li>
-						<li><a href="#">Hot Deals</a></li>
-						<li><a href="#">Categories</a></li>
-						<li><a href="#">Laptops</a></li>
-						<li><a href="#">Smartphones</a></li>
-						<li><a href="#">Cameras</a></li>
-						<li><a href="#">Accessories</a></li>
+						<li class="active"><a href="index.php">Inicio</a></li>
+						<li><a href="#">Ofertas</a></li>
+						<li><a href="store.php">Categorias</a></li>
+						<li><a href="store.php?category%5B%5D=11">Paneles Solares</a></li>
+						<li><a href="store.php?category%5B%5D=9">Baterias de litio</a></li>
+						<li><a href="store.php?category%5B%5D=1">Sistemas hibridos</a></li>
 					</ul>
 					<!-- /NAV -->
 				</div>

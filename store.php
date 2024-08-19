@@ -1,7 +1,6 @@
-<?php include 'config/producto.php'; 
-      include 'config/checksession.php';
-?>
 <?php
+include 'config/database.php';
+include 'config/checksession.php';
 
 // Obtener el precio máximo de la base de datos
 $queryMaxPrice = "SELECT MAX(price) FROM productos";
@@ -13,7 +12,7 @@ $maxPrice = $stmtMaxPrice->fetchColumn();
 $selectedBrands = isset($_GET['brand']) ? $_GET['brand'] : [];
 $selectedCategories = isset($_GET['category']) ? $_GET['category'] : [];
 $priceMin = isset($_GET['price_min']) ? $_GET['price_min'] : 0;
-$priceMax = isset($_GET['price_max']) ? $_GET['price_max'] : $maxPrice; // Usa $maxPrice obtenido anteriormente
+$priceMax = isset($_GET['price_max']) ? $_GET['price_max'] : $maxPrice;
 
 // Construir la consulta SQL
 $query = "SELECT p.*, m.name AS brand_name, c.name AS category_name
@@ -76,27 +75,31 @@ function getProductCountByCategory($categoryId) {
     $stmt->execute([$categoryId]);
     return $stmt->fetchColumn();
 }
-$productos = [];
-
-if (isset($_GET['category_id'])) {
-    $category_id = intval($_GET['category_id']);
-
-    // Consulta para obtener los productos de la categoría seleccionada
-    $sql = "SELECT * FROM productos WHERE category_id = :category_id";
-    $stmt = $conn->prepare($sql);
-    $stmt->bindParam(':category_id', $category_id, PDO::PARAM_INT);
-    $stmt->execute();
-
-    $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
-} else {
-    // Si no se selecciona categoría, muestra todos los productos o maneja como desees
-    $sql = "SELECT * FROM productos";
-    $stmt = $conn->prepare($sql);
-    $stmt->execute();
-    $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
+?>
+<?php
+// Obtener los filtros aplicados
+$brandFilter = isset($_GET['brand']) ? $_GET['brand'] : [];
+$categoryFilter = isset($_GET['category']) ? $_GET['category'] : [];
 ?>
 
+<?php
+// Funciones para obtener el nombre de la categoría o la marca (debes definir estas funciones)
+function getCategoryName($categoryId) {
+    global $conn;
+    $query = "SELECT name FROM categorias WHERE id = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->execute([$categoryId]);
+    return $stmt->fetchColumn();
+}
+
+function getBrandName($brandId) {
+    global $conn;
+    $query = "SELECT name FROM marcas WHERE id = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->execute([$brandId]);
+    return $stmt->fetchColumn();
+}
+?>
 	<?php include 'assets/includes/head.php';?>
 		<body>
 			<!-- HEADER -->
@@ -113,10 +116,15 @@ if (isset($_GET['category_id'])) {
 					<div class="row">
 						<div class="col-md-12">
 							<ul class="breadcrumb-tree">
-								<li><a href="#">Home</a></li>
-								<li><a href="#">All Categories</a></li>
-								<li><a href="#">Accessories</a></li>
-								<li class="active">Headphones (227,490 Results)</li>
+								<li><a href="index.php">Inicio</a></li>
+								<li><a href="store.php">Categorias</a></li>
+								<?php if (!empty($categoryFilter)): ?>
+									<li><a href="productos.php?category[]=<?php echo implode('&category[]=', $categoryFilter); ?>"><?php echo htmlspecialchars(getCategoryName($categoryFilter[0])); ?></a></li>
+								<?php endif; ?>
+								<?php if (!empty($brandFilter)): ?>
+									<li><a href="productos.php?brand[]=<?php echo implode('&brand[]=', $brandFilter); ?>"><?php echo htmlspecialchars(getBrandName($brandFilter[0])); ?></a></li>
+								<?php endif; ?>
+								<li class="active">Productos</li>
 							</ul>
 						</div>
 					</div>
@@ -164,36 +172,25 @@ if (isset($_GET['category_id'])) {
 							</div>
 							<!-- /aside Widget -->
 
-							<!-- aside Widget -->
-							<div class="aside">
-								<h3 class="aside-title">Price</h3>
-								<div class="price-filter">
-									<div id="price-slider"></div>
-									<form action="store.php" method="GET">
-										<?php
-										// Obtener el precio máximo de los productos
-										$queryMaxPrice = "SELECT MAX(price) AS max_price FROM productos";
-										$stmtMaxPrice = $conn->prepare($queryMaxPrice);
-										$stmtMaxPrice->execute();
-										$maxPrice = $stmtMaxPrice->fetchColumn();
-										?>
-
-										<div class="input-number price-min">
-											<input id="price-min" name="price_min" type="number" placeholder="Min Price" min="0">
-											<span class="qty-up">+</span>
-											<span class="qty-down">-</span>
-										</div>
-										<span>-</span>
-										<div class="input-number price-max">
-											<input id="price-max" name="price_max" type="number" placeholder="Max Price" min="0" max="<?php echo $maxPrice; ?>" value="<?php echo $maxPrice; ?>">
-											<span class="qty-up">+</span>
-											<span class="qty-down">-</span>
-										</div>
-										<button type="submit">Filter</button>
-									</form>
+						<!-- aside Widget -->
+						<div class="aside">
+							<h3 class="aside-title">Price</h3>
+							<div class="price-filter">
+								<div id="price-slider"></div>
+								<div class="input-number price-min">
+									<input id="price-min" type="number">
+									<span class="qty-up">+</span>
+									<span class="qty-down">-</span>
+								</div>
+								<span>-</span>
+								<div class="input-number price-max">
+									<input id="price-max" type="number">
+									<span class="qty-up">+</span>
+									<span class="qty-down">-</span>
 								</div>
 							</div>
-							<!-- /aside Widget -->
+						</div>
+						<!-- /aside Widget -->
 
 
 						<!-- aside Widget -->
@@ -235,7 +232,7 @@ if (isset($_GET['category_id'])) {
 							<div class="store-filter clearfix">
 								<div class="store-sort">
 									<label>
-										Sort By:
+										Filtrar por:
 										<select class="input-select">
 											<option value="0">Popular</option>
 											<option value="1">Position</option>
@@ -252,7 +249,7 @@ if (isset($_GET['category_id'])) {
 								</div>
 								<ul class="store-grid">
 									<li class="active"><i class="fa fa-th"></i></li>
-									<li><a href="#"><i class="fa fa-th-list"></i></a></li>
+									<!--<li><a href="#"><i class="fa fa-th-list"></i></a></li>-->
 								</ul>
 							</div>
 							<!-- /store top filter -->

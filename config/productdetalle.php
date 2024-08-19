@@ -38,16 +38,17 @@ if (!empty($product['characteristics'])) {
 // Obtener productos adicionales
 $relatedProducts = [];
 if ($product) {
-    $stmt = $conn->prepare("
-        SELECT p.*, m.name AS brand_name, c.name AS category_name
-        FROM productos p
-        LEFT JOIN marcas m ON p.brand_id = m.id
-        LEFT JOIN categorias c ON p.category_id = c.id
-        WHERE p.id != :id
-        LIMIT 4
-    ");
-    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-    $stmt->execute();
-    $relatedProducts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+// Obtener productos aleatorios
+$stmt = $conn->prepare("
+    SELECT p.*, m.name AS brand_name, c.name AS category_name
+    FROM productos p
+    LEFT JOIN marcas m ON p.brand_id = m.id
+    LEFT JOIN categorias c ON p.category_id = c.id
+    ORDER BY RAND()
+    LIMIT 4
+");
+$stmt->execute();
+$relatedProducts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 }
 ?>

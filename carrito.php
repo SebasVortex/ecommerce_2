@@ -1,18 +1,52 @@
-<?php
-
-include 'config/database.php'; // Asegúrate de incluir el archivo de configuración de la base de datos
+<?php include 'config/database.php'; // Asegúrate de incluir el archivo de configuración de la base de datos
 include 'config/checksession.php';
 
 $user_id = $_SESSION['user_id'];
 
 // Obtener los productos en el carrito desde la base de datos
-$query = "SELECT p.id, p.name, p.price, p.imagen, c.quantity 
+$query = "SELECT p.id, p.name, p.price, p.imagen, m.name AS brand_name, c.quantity 
           FROM carrito c 
           JOIN productos p ON c.product_id = p.id 
+          LEFT JOIN marcas m ON p.brand_id = m.id 
           WHERE c.user_id = ?";
 $stmt = $conn->prepare($query);
 $stmt->execute([$user_id]);
 $items = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Manejar la actualización de la cantidad de productos en el carrito
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    if (isset($_POST['update_quantity'])) {
+        $product_id = $_POST['product_id'];
+        $new_quantity = $_POST['quantity'];
+        
+        if ($new_quantity > 0) {
+            $update_query = "UPDATE carrito SET quantity = ? WHERE user_id = ? AND product_id = ?";
+            $stmt = $conn->prepare($update_query);
+            $stmt->execute([$new_quantity, $user_id, $product_id]);
+        } else {
+            // Si la cantidad es 0, eliminar el producto del carrito
+            $delete_query = "DELETE FROM carrito WHERE user_id = ? AND product_id = ?";
+            $stmt = $conn->prepare($delete_query);
+            $stmt->execute([$user_id, $product_id]);
+        }
+        
+        // Redirigir para evitar reenvíos de formularios
+        header("Location: carrito.php");
+        exit();
+    }
+
+    // Manejar la eliminación directa del producto
+    if (isset($_POST['delete_product'])) {
+        $product_id = $_POST['product_id'];
+        $delete_query = "DELETE FROM carrito WHERE user_id = ? AND product_id = ?";
+        $stmt = $conn->prepare($delete_query);
+        $stmt->execute([$user_id, $product_id]);
+
+        // Redirigir para evitar reenvíos de formularios
+        header("Location: carrito.php");
+        exit();
+    }
+}
 ?>
 <?php include 'assets/includes/head.php';?>
     <style>
@@ -28,9 +62,10 @@ $items = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </style>
 </head>
 <body>
-		<!-- HEADER -->
-		<?php include 'assets/includes/header.php';?>
-		<!-- HEADER -->
+    <!-- HEADER -->
+    <?php include 'assets/includes/header.php';?>
+    <!-- HEADER -->
+     <div class="section">
     <div class="container mt-4">
         <h1>Carrito de Compras</h1>
         <?php if (!empty($items)): ?>
@@ -43,12 +78,28 @@ $items = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             </div>
                             <div class="col-md-6">
                                 <h4><?php echo htmlspecialchars($item['name']); ?></h4>
+                                <p>Marca: <?php echo htmlspecialchars($item['brand_name']); ?></p>
                                 <p>Precio: $<?php echo number_format($item['price'], 2); ?></p>
-                                <p>Cantidad: <?php echo htmlspecialchars($item['quantity']); ?></p>
+                                <form method="POST" action="carrito.php" class="form-inline d-inline">
+                                    <input type="hidden" name="product_id" value="<?php echo htmlspecialchars($item['id']); ?>">
+                                    <div class="input-group">
+                                        <span class="input-group-btn">
+                                            <button type="submit" name="update_quantity" class="btn btn-default" onclick="this.form.quantity.stepDown()">-</button>
+                                        </span>
+                                        <input type="number" name="quantity" class="form-control text-center" value="<?php echo htmlspecialchars($item['quantity']); ?>" min="0" max="99" readonly>
+                                        <span class="input-group-btn">
+                                            <button type="submit" name="update_quantity" class="btn btn-default" onclick="this.form.quantity.stepUp()">+</button>
+                                        </span>
+                                    </div>
+                                </form>
+                                <!-- Formulario para eliminar el producto -->
+                                <form method="POST" action="carrito.php" class="d-inline">
+                                    <input type="hidden" name="product_id" value="<?php echo htmlspecialchars($item['id']); ?>">
+                                    <button type="submit" name="delete_product" class="btn btn-danger ml-2">Eliminar</button>
+                                </form>
                             </div>
                             <div class="col-md-4 text-right">
                                 <p>Total: $<?php echo number_format($item['price'] * $item['quantity'], 2); ?></p>
-                                <!-- Aquí podrías añadir opciones para modificar la cantidad o eliminar el producto -->
                             </div>
                         </div>
                     </div>
@@ -61,8 +112,9 @@ $items = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <p>Tu carrito está vacío.</p>
         <?php endif; ?>
     </div>
-    		<!-- PIE DE PÁGINA -->
-		<?php include 'assets/includes/footer.php';?>
-		<!-- /PIE DE PÁGINA -->
+    </div>
+    <!-- PIE DE PÁGINA -->
+    <?php include 'assets/includes/footer.php';?>
+    <!-- /PIE DE PÁGINA -->
 </body>
 </html>

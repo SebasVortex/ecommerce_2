@@ -16,7 +16,7 @@
 					<div class="col-md-12">
 						<ul class="breadcrumb-tree">
 							<li><a href="index.php">Inicio</a></li>
-							<li><a href="#">Todas las Categorías</a></li>
+							<li><a href="store.php">Todas las Categorías</a></li>
 							<li><a href="store?=<?php echo htmlspecialchars($product['category_name']); ?>"><?php echo htmlspecialchars($product['category_name']); ?></a></li>
 							<li class="active"><?php echo htmlspecialchars($product['brand_name']); ?> - <?php echo htmlspecialchars($product['name']); ?></li>
 						</ul>
@@ -108,7 +108,7 @@
 							</div>
 
 							<ul class="product-btns">
-								<li><a href="#"><i class="fa fa-heart-o"></i> añadir a la lista de deseos</a></li>
+							<!--<li><a href="#"><i class="fa fa-heart-o"></i> añadir a la lista de deseos</a></li>-->
 							</ul>
 
 							<ul class="product-links">
@@ -373,48 +373,45 @@
 
             <div class="col-md-12">
                 <div class="section-title text-center">
-                    <h3 class="title">Productos Relacionados</h3>
+                    <h3 class="title">Productos Recomendados</h3>
                 </div>
             </div>
-
-            <?php foreach ($relatedProducts as $relatedProduct): ?>
-                <!-- producto -->
-                <div class="col-md-3 col-xs-6">
-                    <div class="product">
-                        <!-- Enlace a la página de detalles del producto -->
-                        <a class="product-img" href="product_detalle.php?id=<?php echo htmlspecialchars($relatedProduct['id']); ?>">
-                            <img src="assets/images/<?php echo htmlspecialchars($relatedProduct['imagen']); ?>" alt="<?php echo htmlspecialchars($relatedProduct['name']); ?>">
-                            <!-- Puedes eliminar el producto-label si no estás utilizando descuentos -->
-                            <?php if (isset($relatedProduct['discount']) && $relatedProduct['discount'] > 0): ?>
-                                <div class="product-label">
-                                    <span class="sale">-<?php echo htmlspecialchars($relatedProduct['discount']); ?>%</span>
-                                </div>
-                            <?php endif; ?>
-                        </a>
-                        <div class="product-body">
-                            <p class="product-category"><?php echo htmlspecialchars($relatedProduct['category_name']); ?></p>
-                            <h3 class="product-name"><a href="product_detalle.php?id=<?php echo htmlspecialchars($relatedProduct['id']); ?>"><?php echo htmlspecialchars($relatedProduct['name']); ?></a></h3>
-                            <h4 class="product-price">$<?php echo number_format($relatedProduct['price'], 2); ?>
-                                <?php if (isset($relatedProduct['old_price'])): ?>
-                                    <del class="product-old-price">$<?php echo number_format($relatedProduct['old_price'], 2); ?></del>
-                                <?php endif; ?>
-                            </h4>
-                            <div class="product-rating">
-                                <!-- Puedes agregar estrellas de calificación si tienes esos datos -->
-                            </div>
-                            <div class="product-btns">
-                                <button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">añadir a la lista de deseos</span></button>
-                                <button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">vista rápida</span></button>
-                            </div>
-                        </div>
-                        <div class="add-to-cart">
-                            <button class="add-to-cart-btn" data-product-id="<?php echo htmlspecialchars($relatedProduct['id']); ?>"><i class="fa fa-shopping-cart"></i> añadir al carrito</button>
-                        </div>
+			<?php foreach ($relatedProducts as $relatedProduct): ?>
+    <!-- producto -->
+    <div class="col-md-3 col-xs-6">
+        <div class="product">
+            <!-- Enlace a la página de detalles del producto -->
+            <a class="product-img" href="product_detalle.php?id=<?php echo htmlspecialchars($relatedProduct['id']); ?>">
+                <img src="assets/images/<?php echo htmlspecialchars($relatedProduct['imagen']); ?>" alt="<?php echo htmlspecialchars($relatedProduct['name']); ?>">
+                <?php if (isset($relatedProduct['discount']) && $relatedProduct['discount'] > 0): ?>
+                    <div class="product-label">
+                        <span class="sale">-<?php echo htmlspecialchars($relatedProduct['discount']); ?>%</span>
                     </div>
+                <?php endif; ?>
+            </a>
+            <div class="product-body">
+                <p class="product-category"><?php echo htmlspecialchars($relatedProduct['category_name']); ?></p>
+                <h3 class="product-name"><a href="product_detalle.php?id=<?php echo htmlspecialchars($relatedProduct['id']); ?>"><?php echo htmlspecialchars($relatedProduct['name']); ?></a></h3>
+                <h4 class="product-price">$<?php echo number_format($relatedProduct['price'], 2); ?>
+                    <?php if (isset($relatedProduct['old_price'])): ?>
+                        <del class="product-old-price">$<?php echo number_format($relatedProduct['old_price'], 2); ?></del>
+                    <?php endif; ?>
+                </h4>
+                <div class="product-rating">
+                    <!-- Puedes agregar estrellas de calificación si tienes esos datos -->
                 </div>
-                <!-- /producto -->
-
-            <?php endforeach; ?>
+                <div class="product-btns">
+                    <button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">añadir a la lista de deseos</span></button>
+                    <button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">vista rápida</span></button>
+                </div>
+            </div>
+            <div class="add-to-cart">
+                <button class="add-to-cart-btn" data-product-id="<?php echo htmlspecialchars($relatedProduct['id']); ?>"><i class="fa fa-shopping-cart"></i> añadir al carrito</button>
+            </div>
+        </div>
+    </div>
+    <!-- /producto -->
+<?php endforeach; ?>
 
             <div class="clearfix visible-sm visible-xs"></div>
 
