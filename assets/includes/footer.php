@@ -125,7 +125,7 @@
 		<script src="./js/jquery.zoom.min.js"></script>
 		<script src="./js/main.js"></script>
 		<script>
-document.querySelectorAll('.add-to-cart-btn').forEach(button => {
+document.querySelectorAll('.add-to-cart-btn, .add-to-wishlist').forEach(button => {
     button.addEventListener('click', function() {
         console.log("Botón clickeado"); // Añadir un log para ver si el evento se dispara
         const productId = this.getAttribute('data-product-id');
@@ -154,6 +154,7 @@ document.querySelectorAll('.add-to-cart-btn').forEach(button => {
     });
 });
 </script>
+
 
 <script>
 // Verificar si $fechaFin tiene un valor válido antes de pasar a JavaScript

@@ -287,15 +287,14 @@ function getBrandName($brandId) {
 										<h4 class="product-price">$<?php echo number_format($producto['price'], 2); ?>
 											<del class="product-old-price">$<?php echo number_format($producto['old_price'], 2); ?></del>
 										</h4>
-										<div class="product-rating">
+										<div class="product-rating" style="display: none;">
 											<?php for ($i = 0; $i < $rating; $i++): ?>
 												<i class="fa fa-star"></i>
 											<?php endfor; ?>
 										</div>
 										<div class="product-btns">
-											<button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
-											<button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button>
-											<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
+											<button class="add-to-wishlist" data-product-id="<?php echo $producto['id']; ?>"><i class="fa fa-heart-o"></i><span class="tooltipp">Añadir carrito</span></button>
+											<!--<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>-->
 										</div>
 									</div>
 									<div class="add-to-cart">

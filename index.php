@@ -59,10 +59,10 @@ if ($stmt->execute()) {
 					<div class="col-md-4 col-xs-6">
 						<div class="shop">
 							<div class="shop-img">
-								<img src="assets/images/A2_PRODUCTOS.png" alt="">
+								<img src="assets/images/BAT_200.png" alt="">
 							</div>
 							<div class="shop-body">
-								<h3>Baterias</h3>
+								<h3>Baterías de litio</h3>
 								<a href="store.php?category%5B%5D=9" class="cta-btn">Ver mas <i class="fa fa-arrow-circle-right"></i></a>
 							</div>
 						</div>
@@ -73,7 +73,7 @@ if ($stmt->execute()) {
 					<div class="col-md-4 col-xs-6">
 						<div class="shop">
 							<div class="shop-img">
-								<img src="assets/images/A2_SOLUCIONES.png" alt="">
+								<img src="assets/images/PM2.png" alt="">
 							</div>
 							<div class="shop-body">
 								<h3>Plantas<br>Modulares</h3>
@@ -102,10 +102,10 @@ if ($stmt->execute()) {
 							<h3 class="title">Productos</h3>
 							<div class="section-nav">
 								<ul class="section-tab-nav tab-nav">
-									<li class="active"><a data-toggle="tab" href="#tab1">Laptops</a></li>
-									<li><a data-toggle="tab" href="#tab1">Smartphones</a></li>
-									<li><a data-toggle="tab" href="#tab1">Cameras</a></li>
-									<li><a data-toggle="tab" href="#tab1">Accessories</a></li>
+								<li class="active"><a href="store.php">Inversores</a></li>
+									<li><a href="store.php?category%5B%5D=11">Paneles Solares</a></li>
+									<li><a href="store.php?category%5B%5D=9">Baterías</a></li>
+									<li><a href="store.php?category%5B%5D=6">Plantas Modulares</a></li>
 								</ul>
 							</div>
 						</div>
@@ -148,12 +148,12 @@ if ($stmt->execute()) {
 
 												<div class="product-btns">
 													<button class="add-to-wishlist"data-product-id="<?php echo $producto['id']; ?>"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
-													<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
+									<!--<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>-->
 												</div>
 											</div>
 											<div class="add-to-cart">
 											<button class="add-to-cart-btn" data-product-id="<?php echo htmlspecialchars($producto['id']); ?>">
-												<i class="fa fa-shopping-cart"></i> Add to Cart
+												<i class="fa fa-shopping-cart"></i>Añadir al carrito
 											</button>
 										</div>
 									</div>
@@ -233,10 +233,10 @@ if ($stmt->execute()) {
 							<h3 class="title">Mas productos</h3>
 							<div class="section-nav">
 								<ul class="section-tab-nav tab-nav">
-									<li class="active"><a data-toggle="tab" href="#tab2">Inversores</a></li>
-									<li><a data-toggle="tab" href="#tab2">Paneles Solares</a></li>
-									<li><a data-toggle="tab" href="#tab3">Baterías</a></li>
-									<li><a data-toggle="tab" href="#tab2">Plantas Modulares</a></li>
+									<li class="active"><a href="store.php">Inversores</a></li>
+									<li><a href="store.php?category%5B%5D=11">Paneles Solares</a></li>
+									<li><a href="store.php?category%5B%5D=9">Baterías</a></li>
+									<li><a href="store.php?category%5B%5D=6">Plantas Modulares</a></li>
 								</ul>
 							</div>
 						</div>
