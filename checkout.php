@@ -64,17 +64,17 @@ $items = $stmt->fetchAll(PDO::FETCH_ASSOC);
 						<!-- Billing Details -->
 						<div class="billing-details">
 							<div class="section-title">
-								<h3 class="title">Billing address</h3>
+								<h3 class="title">Datos Personales</h3>
 							</div>
 							<div class="form-group">
-								<input class="input" type="text" name="first-name" placeholder="First Name">
+								<input class="input" type="text" name="first-name" placeholder="Nombre">
 							</div>
 							<div class="form-group">
-								<input class="input" type="text" name="last-name" placeholder="Last Name">
+								<input class="input" type="text" name="last-name" placeholder="Apellido">
 							</div>
-							<div class="form-group">
-								<input class="input" type="email" name="email" placeholder="Email">
-							</div>
+
+								<input class="input" type="hidden" name="email" placeholder="Email">
+
 							<div class="form-group">
 								<input class="input" type="text" name="address" placeholder="Address">
 							</div>
@@ -91,6 +91,7 @@ $items = $stmt->fetchAll(PDO::FETCH_ASSOC);
 								<input class="input" type="tel" name="tel" placeholder="Telephone">
 							</div>
 							<div class="form-group">
+                              <!--
 								<div class="input-checkbox">
 									<input type="checkbox" id="create-account">
 									<label for="create-account">
@@ -101,7 +102,7 @@ $items = $stmt->fetchAll(PDO::FETCH_ASSOC);
 										<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt.</p>
 										<input class="input" type="password" name="password" placeholder="Enter Your Password">
 									</div>
-								</div>
+								</div>-->
 							</div>
 						</div>
 
@@ -151,7 +152,7 @@ $items = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 						<!-- Order notes -->
 						<div class="order-notes">
-							<textarea class="input" placeholder="Order Notes"></textarea>
+							<textarea class="input" placeholder="Notas de aclaracion"></textarea>
 						</div>
 						<!-- /Order notes -->
 					</div>
@@ -221,6 +222,7 @@ $items = $stmt->fetchAll(PDO::FETCH_ASSOC);
 							</div>
 						</div>
 						-->
+						<!--
 						<div class="input-checkbox">
 							<input type="checkbox" id="terms">
 							<label for="terms">
@@ -228,7 +230,8 @@ $items = $stmt->fetchAll(PDO::FETCH_ASSOC);
 								I've read and accept the <a href="#">terms & conditions</a>
 							</label>
 						</div>
-						<a href="#" class="primary-btn order-submit">Place order</a>
+							-->
+						<a href="#" class="primary-btn order-submit">Iniciar orden</a>
 					</div>
 					<!-- /Order Details -->
 				</div>
@@ -236,6 +239,14 @@ $items = $stmt->fetchAll(PDO::FETCH_ASSOC);
 			</div>
 			<!-- /container -->
 		</div>
+		<h1>Importante: Procedimiento de Compra</h1>
+		<p>Por razones de seguridad, no aceptamos pagos a través de medios electrónicos en nuestra tienda en línea. Sin embargo, le invitamos a completar el formulario de pedido para iniciar el proceso de compra.
+
+Una vez que haya enviado su formulario con los detalles de su pedido, uno de nuestros asistentes de ventas se pondrá en contacto con usted para finalizar la transacción y coordinar el pago y la entrega.
+
+Agradecemos su comprensión y esperamos poder asistirle personalmente para garantizar una experiencia de compra segura y satisfactoria.
+
+</p>
 		<!-- /SECTION -->
 
 		    		<!-- PIE DE PÁGINA -->

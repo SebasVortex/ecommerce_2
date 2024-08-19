@@ -1,6 +1,16 @@
-<?php include 'config/database.php'; // Asegúrate de incluir el archivo de configuración de la base de datos
+<?php
+// Incluir el archivo de configuración de la base de datos y verificación de sesión
+include 'config/database.php';
 include 'config/checksession.php';
 
+// Verificar si el usuario ha iniciado sesión
+if (!isset($_SESSION['user_id'])) {
+    // Redirigir a login.php si no se encuentra user_id en la sesión
+    header("Location: login.php");
+    exit();
+}
+
+// Obtener el user_id de la sesión
 $user_id = $_SESSION['user_id'];
 
 // Obtener los productos en el carrito desde la base de datos
@@ -48,18 +58,132 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 ?>
+
 <?php include 'assets/includes/head.php';?>
-    <style>
-        .cart-item img {
-            max-width: 100px;
-            height: auto;
-            border-radius: 5px;
-        }
+<style>
+    /* Estilos generales */
+    body {
+        background-color: #f8f9fa;
+        color: #333;
+    }
+
+    h1 {
+        font-weight: bold;
+        color: #343a40;
+        margin-bottom: 20px;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    /* Estilo del carrito */
+    .cart-item {
+        display: flex;
+        flex-wrap: wrap;
+        border-bottom: 1px solid #dee2e6;
+        padding: 15px 0;
+    }
+
+    .cart-item img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 5px;
+        margin-bottom: 10px;
+    }
+
+    .cart-item h4 {
+        font-size: 1.2rem;
+        margin-bottom: 10px;
+    }
+
+    .cart-item p {
+        margin: 0 0 5px;
+    }
+
+    .cart-item .form-inline {
+        display: flex;
+        align-items: center;
+    }
+
+    .cart-item .input-group {
+        display: flex;
+        align-items: center;
+    }
+
+    .cart-item .input-group input {
+        width: 50px;
+        text-align: center;
+        border: 1px solid #ced4da;
+        border-radius: 0.25rem;
+        margin: 0 5px;
+    }
+
+    .cart-item .btn {
+        padding: 5px 10px;
+    }
+
+    .cart-item .btn-default {
+        background-color: #e9ecef;
+        border: 1px solid #ced4da;
+    }
+
+    .cart-item .btn-danger {
+        background-color: #dc3545;
+        color: white;
+    }
+
+    .cart-item .text-right {
+        text-align: right;
+        margin-top: 10px;
+    }
+
+    .right {
+        text-align: right;
+    }
+
+    /* Botón de finalizar pago */
+    .btn-primary {
+        background-color: #007bff;
+        border: none;
+        padding: 10px 20px;
+        color: white;
+        text-transform: uppercase;
+        font-weight: bold;
+        border-radius: 0.25rem;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
+
+    /* Estilo responsivo */
+    @media (max-width: 768px) {
         .cart-item {
-            border-bottom: 1px solid #ddd;
-            padding: 10px 0;
+            flex-direction: column;
+            align-items: flex-start;
         }
-    </style>
+
+        .cart-item .col-md-6,
+        .cart-item .col-md-4 {
+            width: 100%;
+            text-align: left;
+        }
+
+        .cart-item .text-right {
+            text-align: left;
+            margin-top: 10px;
+        }
+
+        .cart-item .btn {
+            width: 100%;
+            margin-top: 5px;
+        }
+    }
+</style>
 </head>
 <body>
     <!-- HEADER -->
@@ -105,7 +229,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </div>
                 <?php endforeach; ?>
             </div>
-            <div class="mt-3">
+            <div class="mt-3 right">
                 <a href="checkout.php" class="btn btn-primary">Finalizar pago</a>
             </div>
         <?php else: ?>

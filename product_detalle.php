@@ -119,9 +119,9 @@
 							<ul class="product-links">
 								<li>Compartir:</li>
 								<li><a href="#"><i class="fa fa-facebook"></i></a></li>
-								<li><a href="#"><i class="fa fa-twitter"></i></a></li>
-								<li><a href="#"><i class="fa fa-google-plus"></i></a></li>
-								<li><a href="#"><i class="fa fa-envelope"></i></a></li>
+								<li><a href="#"><i class="fa fa-linkedin"></i></a></li>
+								<li><a href="#"><i class="fa fa-instagram"></i></a></li>
+								<li><a href="#"><i class="fa fa-youtube"></i></a></li>
 							</ul>
 
 						</div>
@@ -401,8 +401,8 @@
                     <!-- Puedes agregar estrellas de calificación si tienes esos datos -->
                 </div>
                 <div class="product-btns">
-                    <button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">añadir a la lista de deseos</span></button>
-                    <button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">vista rápida</span></button>
+                    <button class="add-to-wishlist" data-product-id="<?php echo htmlspecialchars($relatedProduct['id']); ?>"><i class="fa fa-heart-o"></i><span class="tooltipp">añadir a la lista de deseos</span></button>
+					<!--<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">vista rápida</span></button>-->
                 </div>
             </div>
             <div class="add-to-cart">
