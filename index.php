@@ -1,5 +1,32 @@
 <?php
 include('config/producto.php'); // Incluye el archivo que recupera los datos de los productos
+// Obtener la oferta activa desde la base de datos
+
+$query = "SELECT fecha_inicio, fecha_fin FROM ofertas WHERE id = 1"; // Ajusta la consulta según sea necesario
+$stmt = $conn->prepare($query);
+
+// Verificar si la consulta se ejecutó correctamente
+if ($stmt->execute()) {
+    // Verificar si se obtuvieron resultados
+    $oferta = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    // Comprobar si $oferta no es falso
+    if ($oferta !== false) {
+        $fechaInicio = $oferta['fecha_inicio'];
+        $fechaFin = $oferta['fecha_fin'];
+    } else {
+        // Manejo en caso de que no se encuentren resultados
+        echo "No se encontró ninguna oferta activa.";
+        // Definir valores predeterminados o manejar el error según sea necesario
+        $fechaInicio = null;
+        $fechaFin = null;
+    }
+} else {
+    // Manejo en caso de que la consulta falle
+    echo "Error al ejecutar la consulta.";
+    $fechaInicio = null;
+    $fechaFin = null;
+}
 ?>
 <?php include 'assets/includes/head.php';?>
 </head>
@@ -151,43 +178,43 @@ include('config/producto.php'); // Incluye el archivo que recupera los datos de 
 		<div id="hot-deal" class="section" >
 			<!-- container -->
 			<div class="container">
-				<!-- row -->
-				<div class="row">
-					<div class="col-md-12">
-						<div class="hot-deal">
-							<ul class="hot-deal-countdown">
-								<li>
-									<div>
-										<h3>02</h3>
-										<span>Days</span>
-									</div>
-								</li>
-								<li>
-									<div>
-										<h3>10</h3>
-										<span>Hours</span>
-									</div>
-								</li>
-								<li>
-									<div>
-										<h3>34</h3>
-										<span>Mins</span>
-									</div>
-								</li>
-								<li>
-									<div>
-										<h3>60</h3>
-										<span>Secs</span>
-									</div>
-								</li>
-							</ul>
-							<h2 class="text-uppercase">hot deal this week</h2>
-							<p>New Collection Up to 50% OFF</p>
-							<a class="primary-btn cta-btn" href="#">Shop now</a>
+					<!-- row -->
+					<div class="row">
+						<div class="col-md-12">
+							<div class="hot-deal">
+								<ul class="hot-deal-countdown">
+									<li>
+										<div>
+											<h3 id="days">00</h3>
+											<span>Días</span>
+										</div>
+									</li>
+									<li>
+										<div>
+											<h3 id="hours">00</h3>
+											<span>Horas</span>
+										</div>
+									</li>
+									<li>
+										<div>
+											<h3 id="mins">00</h3>
+											<span>Minutos</span>
+										</div>
+									</li>
+									<li>
+										<div>
+											<h3 id="secs">00</h3>
+											<span>Segundos</span>
+										</div>
+									</li>
+								</ul>
+								<h2 class="text-uppercase">Descuentazos esta semana!</h2>
+								<p>Nuevos Inversores 25% OFF</p>
+								<a class="primary-btn cta-btn" href="store.php?category%5B%5D=5">Comprar ahora</a>
+							</div>
 						</div>
 					</div>
-				</div>
-				<!-- /row -->
+					<!-- /row -->
 			</div>
 			<!-- /container -->
 		</div>
@@ -208,8 +235,8 @@ include('config/producto.php'); // Incluye el archivo que recupera los datos de 
 								<ul class="section-tab-nav tab-nav">
 									<li class="active"><a data-toggle="tab" href="#tab2">Inversores</a></li>
 									<li><a data-toggle="tab" href="#tab2">Paneles Solares</a></li>
-									<li><a data-toggle="tab" href="#tab3">Cameras</a></li>
-									<li><a data-toggle="tab" href="#tab2">Accessories</a></li>
+									<li><a data-toggle="tab" href="#tab3">Baterías</a></li>
+									<li><a data-toggle="tab" href="#tab2">Plantas Modulares</a></li>
 								</ul>
 							</div>
 						</div>
