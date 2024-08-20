@@ -81,8 +81,6 @@
 								<ul class="footer-links">
 									<li><a href="userpanel.php">Mi Cuenta</a></li>
 									<li><a href="carrito.php">Ver Carrito</a></li>
-									<li><a href="#">Lista de Deseos</a></li>
-									<li><a href="#">Rastrear mi Pedido</a></li>
 									<li><a href="#">Ayuda</a></li>
 								</ul>
 							</div>
@@ -122,11 +120,12 @@
 		<script src="./js/jquery.zoom.min.js"></script>
 		<script src="./js/main.js"></script>
 		<script>
-document.querySelectorAll('.add-to-cart-btn, .add-to-wishlist').forEach(button => {
+document.querySelectorAll('.add-to-cart-btn').forEach(button => {
     button.addEventListener('click', function() {
         console.log("Botón clickeado"); // Añadir un log para ver si el evento se dispara
         const productId = this.getAttribute('data-product-id');
-        const quantity = 1;
+        const quantityInput = document.getElementById(`quantity-${productId}`);
+        const quantity = quantityInput ? parseInt(quantityInput.value) : 1;
 
         // Solicitud fetch
         fetch('addcarrito.php', {

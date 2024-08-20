@@ -59,7 +59,7 @@ try {
 
                 <div class="d-flex justify-content-between">
                     <a href="editar_perfil.php" class="btn btn-primary">Editar Perfil</a>
-                    <a href="mis_pedidos.php" class="btn btn-secondary">Mis Pedidos</a>
+                    <a href="pedidos.php" class="btn btn-secondary">Mis Pedidos</a>
                     <a href="config/logout.php" class="btn btn-danger">Cerrar Sesión</a>
                 </div>
             </div>
