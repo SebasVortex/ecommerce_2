@@ -20,14 +20,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             die('Pedido no encontrado o no pertenece al usuario.');
         }
 
-        if ($pedido['status'] != 'pending') {
+        if ($pedido['status'] != 'pendiente') {
             die('El pedido no puede ser cancelado.');
         }
 
         // Iniciar una transacción
         $conn->beginTransaction();
 
-        // Actualizar el estado del pedido a 'cancelled'
+        // Actualizar el estado del pedido a 'cancelado'
         $stmt = $conn->prepare('UPDATE pedidos SET status = :status WHERE id = :pedido_id');
         $stmt->execute(['status' => 'Cancelado', 'pedido_id' => $pedidoId]);
 

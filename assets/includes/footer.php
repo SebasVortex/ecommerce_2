@@ -84,8 +84,6 @@
 								<ul class="footer-links">
 									<li><a href="userpanel.php">Mi Cuenta</a></li>
 									<li><a href="carrito.php">Ver Carrito</a></li>
-									<li><a href="#">Lista de Deseos</a></li>
-									<li><a href="#">Rastrear mi Pedido</a></li>
 									<li><a href="#">Ayuda</a></li>
 								</ul>
 							</div>

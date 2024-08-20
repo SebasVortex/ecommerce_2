@@ -48,6 +48,7 @@ try {
                 'product_name' => $pedido['product_name']
             ];
         }
+    }
         ?>
 <?php include 'assets/includes/head.php'; ?>
 </head>
@@ -63,15 +64,10 @@ try {
         <br>
         <br>
         <?php foreach ($pedidosAgrupados as $pedido): ?>
-            <hr>
+
             <div class="card mb-4">
-                <div class="card-header d-flex justify-content-between align-items-center">
+                <div class="card-header">
                     <h5 class="card-title mb-0">Pedido ID: <?php echo htmlspecialchars($pedido['pedido_id']); ?></h5>
-                    <?php if ($pedido['status'] == 'pending'): ?>
-                        <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#cancelModal<?php echo htmlspecialchars($pedido['pedido_id']); ?>">
-                            Cancelar Pedido
-                        </button>
-                    <?php endif; ?>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -81,11 +77,11 @@ try {
                         </div>
                         <div class="col-md-6">
                             <p><strong>Notas:</strong> <?php echo htmlspecialchars($pedido['notas']); ?></p>
-                            <p><strong>Status:</strong> <?php echo htmlspecialchars($pedido['status']); ?></p>
+                            <p><strong>Estado:</strong> <?php echo htmlspecialchars($pedido['status']); ?></p>
                             <p><strong>Total:</strong> $<?php echo number_format($pedido['total'], 2); ?></p>
                         </div>
                     </div>
-                    <div class="table-responsive">
+                    <div class="table-responsive mt-4">
                         <table class="table table-striped">
                             <thead>
                                 <tr>
@@ -107,18 +103,23 @@ try {
                             </tbody>
                         </table>
                     </div>
+                    <?php if ($pedido['status'] == 'pendiente'): ?>
+                        <div class="text-right mt-4">
+                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#cancelModal<?php echo htmlspecialchars($pedido['pedido_id']); ?>">
+                                Cancelar Pedido
+                            </button>
+                        </div>
+                    <?php endif; ?>
                 </div>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
             </div>
-            <br>
-            <br>
-            <br>
-            <br>
-        <?php endforeach; ?>
-    </div>
 
-    <!-- Modal para Confirmar Cancelación -->
-    <?php foreach ($pedidosAgrupados as $pedido): ?>
-        <?php if ($pedido['status'] == 'pending'): ?>
+            <!-- Modal para Confirmar Cancelación -->
             <div class="modal fade" id="cancelModal<?php echo htmlspecialchars($pedido['pedido_id']); ?>" tabindex="-1" role="dialog" aria-labelledby="cancelModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
@@ -135,22 +136,23 @@ try {
                             <form action="config/cancelarpedido.php" method="POST">
                                 <input type="hidden" name="pedido_id" value="<?php echo htmlspecialchars($pedido['pedido_id']); ?>">
                                 <button type="submit" class="btn btn-danger">Sí, cancelar</button>
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                             </form>
                         </div>
                     </div>
                 </div>
             </div>
-        <?php endif; ?>
-    <?php endforeach; ?>
+            <!-- /Modal para Confirmar Cancelación -->
+        <?php endforeach; ?>
+    </div>
 
     <!-- PIE DE PÁGINA -->
     <?php include 'assets/includes/footer.php'; ?>
     <!-- /PIE DE PÁGINA -->
 
     <?php
+    } catch (PDOException $e) {
+        echo '<div class="alert alert-danger" role="alert">Error al obtener los pedidos: ' . htmlspecialchars($e->getMessage()) . '</div>';
     }
-} catch (PDOException $e) {
-    echo '<div class="alert alert-danger" role="alert">Error al obtener los pedidos: ' . htmlspecialchars($e->getMessage()) . '</div>';
-}
-?>
+    ?>
+

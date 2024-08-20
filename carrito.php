@@ -230,7 +230,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <?php endforeach; ?>
             </div>
             <div class="mt-3 right">
-                <a href="checkout.php" class="btn btn-primary">Finalizar pago</a>
+                <a href="checkout.php" class="btn btn-primary">Completar compra</a>
             </div>
         <?php else: ?>
             <p>Tu carrito está vacío.</p>
