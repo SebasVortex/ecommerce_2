@@ -142,10 +142,12 @@ if (isset($_SESSION['user_id'])) {
                         <?php else: ?>
                             Tu carrito está vacío
                         <?php endif; ?>
+                        <!--
                         <div class="order-col">
                             <div>Envío</div>
                             <div><strong>GRATIS</strong></div>
                         </div>
+                        -->
                         <div class="order-col">
                             <div><strong>TOTAL</strong></div>
                             <div><strong class="order-total">$<?php echo isset($_SESSION['user_id']) ? number_format($total, 2) : '0.00'; ?></strong></div>
