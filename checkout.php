@@ -55,189 +55,92 @@ $items = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 		<!-- SECTION -->
 		<div class="section">
-			<!-- container -->
-			<div class="container">
-				<!-- row -->
-				<div class="row">
+<!-- container -->
+<div class="container">
+    <!-- row -->
+    <div class="row">
+        <div class="col-md-7">
+            <!-- Billing Details -->
+            <div class="billing-details">
+                <div class="section-title">
+                    <h3 class="title">Datos Personales</h3>
+                </div>
+                <form action="config/processcheckoutt.php" method="POST">
+                    <div class="form-group">
+                        <input class="input" type="text" name="first-name" placeholder="Nombre" required>
+                    </div>
+                    <div class="form-group">
+                        <input class="input" type="text" name="last-name" placeholder="Apellido" required>
+                    </div>
+                    <div class="form-group">
+                        <input class="input" type="email" name="email" placeholder="Email" required>
+                    </div>
+                    <div class="form-group">
+                        <input class="input" type="text" name="address" placeholder="Dirección" required>
+                    </div>
+                    <div class="form-group">
+                        <input class="input" type="text" name="city" placeholder="Ciudad" required>
+                    </div>
+                    <div class="form-group">
+                        <input class="input" type="text" name="country" placeholder="País" required>
+                    </div>
+                    <div class="form-group">
+                        <input class="input" type="text" name="zip-code" placeholder="Código Postal" required>
+                    </div>
+                    <div class="form-group">
+                        <input class="input" type="tel" name="tel" placeholder="Teléfono" required>
+                    </div>
+					
+            <!-- Order notes -->
+                    <div class="form-group">
+                        <textarea class="input" name="notas" placeholder="Notas de Aclaración" rows="4"></textarea>
+                    </div>
+            <!-- /Order notes -->
+            </div>
+        </div>
 
-					<div class="col-md-7">
-						<!-- Billing Details -->
-						<div class="billing-details">
-							<div class="section-title">
-								<h3 class="title">Datos Personales</h3>
-							</div>
-							<div class="form-group">
-								<input class="input" type="text" name="first-name" placeholder="Nombre">
-							</div>
-							<div class="form-group">
-								<input class="input" type="text" name="last-name" placeholder="Apellido">
-							</div>
+        <!-- Order Details -->
+        <div class="col-md-5 order-details">
+            <div class="section-title text-center">
+                <h3 class="title">Tu orden</h3>
+            </div>
+            <div class="order-summary">
+                <div class="order-col">
+                    <div><strong>PRODUCTO</strong></div>
+                    <div><strong>TOTAL</strong></div>
+                </div>
+                <?php if (!empty($items)): ?>
+                <div class="order-products">
+                <?php foreach ($items as $item): ?>
+                    <div class="order-col">
+                        <div><?php echo htmlspecialchars($item['quantity']); ?>x <?php echo htmlspecialchars($item['name']); ?></div>
+                        <div>$<?php echo number_format($item['price'], 2); ?></div>
+                    </div>
+                    <?php endforeach; ?>
+                </div>
+                <?php else: ?>
+                    Tu carrito está vacío
+                    <?php endif; ?>
+                <div class="order-col">
+                    <div>Envío</div>
+                    <div><strong>GRATIS</strong></div>
+                </div>
+                <div class="order-col">
+                    <div><strong>TOTAL</strong></div>
+                    <div><strong class="order-total">$<?php echo isset($_SESSION['user_id']) ? number_format($total, 2) : '0.00'; ?></strong></div>
+                </div>
+            </div>
 
-								<input class="input" type="hidden" name="email" placeholder="Email">
+            <!-- Moved the submit button to the checkout section -->
+			<button type="submit" class="primary-btn order-submit">Finalizar Compra</button>
+			</form>
+        </div>
+        <!-- /Order Details -->
+    </div>
+    <!-- /row -->
+</div>
+<!-- /container -->
 
-							<div class="form-group">
-								<input class="input" type="text" name="address" placeholder="Address">
-							</div>
-							<div class="form-group">
-								<input class="input" type="text" name="city" placeholder="City">
-							</div>
-							<div class="form-group">
-								<input class="input" type="text" name="country" placeholder="Country">
-							</div>
-							<div class="form-group">
-								<input class="input" type="text" name="zip-code" placeholder="ZIP Code">
-							</div>
-							<div class="form-group">
-								<input class="input" type="tel" name="tel" placeholder="Telephone">
-							</div>
-							<div class="form-group">
-                              <!--
-								<div class="input-checkbox">
-									<input type="checkbox" id="create-account">
-									<label for="create-account">
-										<span></span>
-										Create Account?
-									</label>
-									<div class="caption">
-										<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt.</p>
-										<input class="input" type="password" name="password" placeholder="Enter Your Password">
-									</div>
-								</div>-->
-							</div>
-						</div>
-
-						<!-- /Billing Details -->
-
-						<!-- Shiping Details 
-						<div class="shiping-details">
-							<div class="section-title">
-								<h3 class="title">Shiping address</h3>
-							</div>
-							<div class="input-checkbox">
-								<input type="checkbox" id="shiping-address">
-								<label for="shiping-address">
-									<span></span>
-									Ship to a diffrent address?
-								</label>
-								<div class="caption">
-									<div class="form-group">
-										<input class="input" type="text" name="first-name" placeholder="First Name">
-									</div>
-									<div class="form-group">
-										<input class="input" type="text" name="last-name" placeholder="Last Name">
-									</div>
-									<div class="form-group">
-										<input class="input" type="email" name="email" placeholder="Email">
-									</div>
-									<div class="form-group">
-										<input class="input" type="text" name="address" placeholder="Address">
-									</div>
-									<div class="form-group">
-										<input class="input" type="text" name="city" placeholder="City">
-									</div>
-									<div class="form-group">
-										<input class="input" type="text" name="country" placeholder="Country">
-									</div>
-									<div class="form-group">
-										<input class="input" type="text" name="zip-code" placeholder="ZIP Code">
-									</div>
-									<div class="form-group">
-										<input class="input" type="tel" name="tel" placeholder="Telephone">
-									</div>
-								</div>
-							</div>
-						</div>
-						-->
-						<!-- /Shiping Details -->
-
-						<!-- Order notes -->
-						<div class="order-notes">
-							<textarea class="input" placeholder="Notas de aclaracion"></textarea>
-						</div>
-						<!-- /Order notes -->
-					</div>
-
-					<!-- Order Details -->
-					<div class="col-md-5 order-details">
-						<div class="section-title text-center">
-							<h3 class="title">Tu orden</h3>
-						</div>
-						<div class="order-summary">
-							<div class="order-col">
-								<div><strong>PRODUCTO</strong></div>
-								<div><strong>TOTAL</strong></div>
-							</div>
-							<?php if (!empty($items)): ?>
-							<div class="order-products">
-							<?php foreach ($items as $item): ?>
-								<div class="order-col">
-									<div><?php echo htmlspecialchars($item['quantity']); ?>x <?php echo htmlspecialchars($item['name']); ?></div>
-									<div>$<?php echo number_format($item['price'], 2); ?></div>
-								</div>
-								<?php endforeach; ?>
-							</div>
-							<?php else: ?>
-								Tu carrito esta vacio
-								<?php endif; ?>
-							<div class="order-col">
-								<div>Shiping</div>
-								<div><strong>FREE</strong></div>
-							</div>
-							<div class="order-col">
-								<div><strong>TOTAL</strong></div>
-								<div><strong class="order-total">$<?php echo isset($_SESSION['user_id']) ? number_format($total, 2) : '0.00'; ?></strong></div>
-							</div>
-						</div>
-							<!-- 
-						<div class="payment-method">
-							<div class="input-radio">
-								<input type="radio" name="payment" id="payment-1">
-								<label for="payment-1">
-									<span></span>
-									Direct Bank Transfer
-								</label>
-								<div class="caption">
-									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-								</div>
-							</div>
-							<div class="input-radio">
-								<input type="radio" name="payment" id="payment-2">
-								<label for="payment-2">
-									<span></span>
-									Cheque Payment
-								</label>
-								<div class="caption">
-									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-								</div>
-							</div>
-							<div class="input-radio">
-								<input type="radio" name="payment" id="payment-3">
-								<label for="payment-3">
-									<span></span>
-									Paypal System
-								</label>
-								<div class="caption">
-									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-								</div>
-							</div>
-						</div>
-						-->
-						<!--
-						<div class="input-checkbox">
-							<input type="checkbox" id="terms">
-							<label for="terms">
-								<span></span>
-								I've read and accept the <a href="#">terms & conditions</a>
-							</label>
-						</div>
-							-->
-						<a href="#" class="primary-btn order-submit">Iniciar orden</a>
-					</div>
-					<!-- /Order Details -->
-				</div>
-				<!-- /row -->
-			</div>
-			<!-- /container -->
 		</div>
 		<h1>Importante: Procedimiento de Compra</h1>
 		<p>Por razones de seguridad, no aceptamos pagos a través de medios electrónicos en nuestra tienda en línea. Sin embargo, le invitamos a completar el formulario de pedido para iniciar el proceso de compra.
