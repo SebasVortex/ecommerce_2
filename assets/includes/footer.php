@@ -13,9 +13,6 @@
 							</form>
 							<ul class="newsletter-follow">
 								<li>
-									<a href="https://www.facebook.com/SISTEMAS1991/?locale=es_LA"><i class="fa fa-facebook"></i></a>
-								</li>
-								<li>
 									<a href="https://www.youtube.com/@sistemasenergeticos"><i class="fa fa-youtube"></i></a>
 								</li>
 								<li>
