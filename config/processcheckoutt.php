@@ -1,7 +1,6 @@
 <?php
 include 'database.php'; // Incluye tu archivo de configuración con PDO
-
-session_start();
+include 'checksession.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Recoger los datos del formulario
@@ -10,13 +9,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $email = $_POST['email'];
     $address = $_POST['address'];
     $city = $_POST['city'];
-    $country = $_POST['country'];
+    // Remueve la línea que recoge el país
+    // $country = $_POST['country'];
     $zipCode = $_POST['zip-code'];
     $tel = $_POST['tel'];
     $notas = $_POST['notas'];
 
     // Verificar que todos los campos estén completos
-    if (empty($firstName) || empty($lastName) || empty($email) || empty($address) || empty($city) || empty($country) || empty($zipCode) || empty($tel)) {
+    if (empty($firstName) || empty($lastName) || empty($email) || empty($address) || empty($city) || empty($zipCode) || empty($tel)) {
         die('Por favor, complete todos los campos obligatorios.');
     }
 
@@ -40,10 +40,29 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Iniciar una transacción
         $conn->beginTransaction();
 
+        // Calcular el total del pedido
+        $total = 0;
+        if (isset($_SESSION['cart_items']) && is_array($_SESSION['cart_items'])) {
+            foreach ($_SESSION['cart_items'] as $item) {
+                // Consultar el precio del producto en la base de datos
+                $stmt = $conn->prepare('SELECT price FROM productos WHERE id = :product_id');
+                $stmt->execute(['product_id' => $item['product_id']]);
+                $price = $stmt->fetchColumn();
+                
+                if ($price === false) {
+                    throw new Exception('No se encontró el precio para el producto con ID: ' . $item['product_id']);
+                }
+                
+                // Calcular el subtotal para este artículo
+                $total += $price * $item['quantity'];
+            }
+        } else {
+            throw new Exception('El carrito está vacío o no está definido.');
+        }
+
         // Insertar el pedido
         $stmt = $conn->prepare('INSERT INTO pedidos (user_id, total, status, nombre, apellido, telefono, notas) VALUES (:user_id, :total, :status, :nombre, :apellido, :telefono, :notas)');
-        $total = 0; // Asegúrate de calcular el total correctamente
-        $status = 'pending';
+        $status = 'pendiente';
         $stmt->execute([
             'user_id' => $userId,
             'total' => $total,
@@ -57,34 +76,43 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Obtener el ID del pedido recién creado
         $orderId = $conn->lastInsertId();
 
-        // Verificar si hay artículos en el carrito
-        if (isset($_SESSION['cart_items']) && is_array($_SESSION['cart_items'])) {
-            // Insertar los items del pedido
-            foreach ($_SESSION['cart_items'] as $item) {
-                $stmt = $conn->prepare('INSERT INTO pedidos_items (order_id, product_id, quantity, price) VALUES (:order_id, :product_id, :quantity, :price)');
-                $stmt->execute([
-                    'order_id' => $orderId,
-                    'product_id' => $item['product_id'],
-                    'quantity' => $item['quantity'],
-                    'price' => $item['price']
-                ]);
+        // Insertar los items del pedido
+        foreach ($_SESSION['cart_items'] as $item) {
+            // Consultar el precio del producto en la base de datos
+            $stmt = $conn->prepare('SELECT price FROM productos WHERE id = :product_id');
+            $stmt->execute(['product_id' => $item['product_id']]);
+            $price = $stmt->fetchColumn();
+            
+            if ($price === false) {
+                throw new Exception('No se encontró el precio para el producto con ID: ' . $item['product_id']);
             }
-        } else {
-            // Manejar el caso en que el carrito esté vacío o no esté definido
-            throw new Exception('El carrito está vacío o no está definido.');
+            
+            // Insertar en pedidos_items
+            $stmt = $conn->prepare('INSERT INTO pedidos_items (order_id, product_id, quantity, price) VALUES (:order_id, :product_id, :quantity, :price)');
+            $stmt->execute([
+                'order_id' => $orderId,
+                'product_id' => $item['product_id'],
+                'quantity' => $item['quantity'],
+                'price' => $price
+            ]);
         }
 
         // Insertar en el historial de pedidos
         $stmt = $conn->prepare('INSERT INTO pedidos_historial (order_id, status) VALUES (:order_id, :status)');
         $stmt->execute(['order_id' => $orderId, 'status' => $status]);
 
+        // Eliminar los elementos del carrito del usuario
+        $stmt = $conn->prepare('DELETE FROM carrito WHERE user_id = :user_id');
+        $stmt->execute(['user_id' => $userId]);
+
         // Confirmar la transacción
         $conn->commit();
 
-        // Limpiar el carrito
+        // Limpiar el carrito de la sesión
         unset($_SESSION['cart_items']);
 
-        echo 'Pedido realizado con éxito.';
+        header("Location: ../index.php?pedido=realizado");
+        exit();
 
     } catch (Exception $e) {
         // Deshacer la transacción en caso de error
@@ -93,5 +121,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 } else {
     echo 'Solicitud inválida.';
+    header("Location: ../index.php?pedido=invalido");
+    exit();
 }
 ?>

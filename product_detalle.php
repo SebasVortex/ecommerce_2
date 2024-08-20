@@ -99,12 +99,12 @@
 								<div class="qty-label">
 									Cantidad
 									<div class="input-number">
-										<input type="number">
+										<input type="number" id="quantity-<?php echo htmlspecialchars($product['id']); ?>" value="1" min="1">
 										<span class="qty-up">+</span>
 										<span class="qty-down">-</span>
 									</div>
 								</div>
-								<button class="add-to-cart-btn" data-product-id="<?php echo htmlspecialchars($product['id']); ?>"><i class="fa fa-shopping-cart"></i> añadir al carrito</button>
+								<button class="add-to-cart-btn" data-product-id="<?php echo htmlspecialchars($product['id']); ?>"><i class="fa fa-shopping-cart"></i> Añadir al carrito</button>
 							</div>
 
 							<ul class="product-btns">

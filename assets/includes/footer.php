@@ -125,11 +125,12 @@
 		<script src="./js/jquery.zoom.min.js"></script>
 		<script src="./js/main.js"></script>
 		<script>
-document.querySelectorAll('.add-to-cart-btn, .add-to-wishlist').forEach(button => {
+document.querySelectorAll('.add-to-cart-btn').forEach(button => {
     button.addEventListener('click', function() {
         console.log("Botón clickeado"); // Añadir un log para ver si el evento se dispara
         const productId = this.getAttribute('data-product-id');
-        const quantity = 1;
+        const quantityInput = document.getElementById(`quantity-${productId}`);
+        const quantity = quantityInput ? parseInt(quantityInput.value) : 1;
 
         // Solicitud fetch
         fetch('addcarrito.php', {

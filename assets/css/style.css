@@ -86,6 +86,8 @@ ul, ol {
   list-style: none
 }
 
+
+
 /*----------------------------*\
 	Buttons
 \*----------------------------*/
@@ -2186,6 +2188,13 @@ textarea.input {
 }
 .cart-dropdown{
   right: -125% !important;
+}
+.important-heading {
+  font-size: 1.9rem;
+}
+
+.important-text {
+  font-size: 1.2rem;
 }
 }
 
