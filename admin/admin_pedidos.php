@@ -3,10 +3,6 @@ include '../config/database.php'; // Incluye tu archivo de configuración con PD
 include '../config/checksession.php';
 
 
-// Verificar que el usuario es administrador
-if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] != 'admin') {
-    die('Acceso denegado.');
-}
 
 try {
     // Consultar todos los pedidos

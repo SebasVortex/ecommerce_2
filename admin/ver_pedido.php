@@ -2,10 +2,7 @@
 include '../config/database.php'; // Incluye tu archivo de configuración con PDO
 include '../config/checksession.php';
 
-// Verificar que el usuario es administrador
-if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] != 'admin') {
-    die('Acceso denegado.');
-}
+
 
 if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
     die('ID de pedido inválido.');
