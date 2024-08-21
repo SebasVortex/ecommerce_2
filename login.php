@@ -74,7 +74,7 @@ if (isset($_SESSION['error'])) {
         }
         .btn-log {
             background-color: #D10024;
-            transition: 0.5s;
+            transition: background-color 0.3s, box-shadow 0.2s; 
             box-shadow: 0 7px 11px #a0a0a0;
             border: none;
             color: #fff;
@@ -82,8 +82,18 @@ if (isset($_SESSION['error'])) {
             width: 50%;
             margin-top: 55px;
             height: 50px;
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 600;
+        }
+        .btn-log:hover {
+            background-color: #B31920; /* Un verde ligeramente más oscuro para el hover */
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2); /* Sombra para dar sensación de elevación */
+        }
+
+        /* Estilo para cuando el botón está enfocado o activo */
+        .btn-log:focus, .btn-log:active {
+            outline: none; /* Elimina el outline que algunos navegadores añaden */
+            background-color: #8E171C; /* Un verde aún más oscuro para el focus/active */
         }
         .img-log {
             width: 50%;
@@ -137,7 +147,7 @@ if (isset($_SESSION['error'])) {
         .password-input {
             width: 100%;
             padding: 1rem;
-            font-size: 21px;
+            font-size: 18px;
             background-color: transparent;
             border: none;
             border-bottom: 1px solid #ccc;
@@ -166,6 +176,8 @@ if (isset($_SESSION['error'])) {
         @media (max-width: 768px) {
             .container-inside {
                 flex-direction: column;
+                box-shadow: none;
+                background-color: transparent;
             }
             .img-log {
                 width: 100%;
@@ -206,22 +218,23 @@ if (isset($_SESSION['error'])) {
                     <input type="submit" value="Iniciar sesión" class="btn-log">
                 </form>
                 <p><a href="register.php">¿No tenés una cuenta? <span class="register">Registrate acá</span></a></p>
+                <p><a href="register.php">¿Olvidaste tu contraseña?</a></p>
             </div>    
         </div>
     </div>
-<script>
-    function togglePassword() {
-        var passwordField = document.getElementById('password');
-        var passwordIcon = document.getElementById('passwordIcon');
-        if (passwordField.type === 'password') {
-            passwordField.type = 'text';
-            passwordIcon.src = 'assets/images/unlock.png';
-        } else {
-            passwordField.type = 'password';
-            passwordIcon.src = 'assets/images/lock.png';
+    <?php include 'assets/includes/footer.php';?>
+    <script>
+        function togglePassword() {
+            var passwordField = document.getElementById('password');
+            var passwordIcon = document.getElementById('passwordIcon');
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+                passwordIcon.src = 'assets/images/unlock.png';
+            } else {
+                passwordField.type = 'password';
+                passwordIcon.src = 'assets/images/lock.png';
+            }
         }
-    }
-</script>
-<?php include 'assets/includes/footer.php';?>
+    </script>
 </body>
 </html>
