@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             die('Pedido no encontrado o no pertenece al usuario.');
         }
 
-        if ($pedido['status'] != 'pending') {
+        if ($pedido['status'] != 'pendiente') {
             die('El pedido no puede ser cancelado.');
         }
 
