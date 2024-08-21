@@ -130,7 +130,7 @@ try {
                             </button>
                         </div>
                         <div class="modal-body">
-                            ¿Estás seguro de que deseas cancelar este pedido?
+                            ¿ Estás seguro de que deseas cancelar este pedido ?
                         </div>
                         <div class="modal-footer">
                             <form action="config/cancelarpedido.php" method="POST">

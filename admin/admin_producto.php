@@ -268,7 +268,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <td><button type="button" class="btn btn-danger btn-sm" onclick="removeRow(this)">Eliminar</button></td>
             `;
         }
-
         function removeRow(button) {
             var row = button.parentNode.parentNode;
             row.parentNode.removeChild(row);

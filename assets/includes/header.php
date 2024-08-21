@@ -178,11 +178,11 @@ $productostore = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <div class="col-md-6">
                 <div class="header-search">
                     <form style="display: flex;">
-                        <input id="search-input" style=" width: 100%;" name="search" class="input" placeholder="Buscar productos...">
+                        <input id="search-input" style=" width: 100%; border-radius: 25px;" name="search" class="input" placeholder="Buscar productos...">
                     </form>
                 </div>
                 <!-- Resultados de búsqueda -->
-                <div id="results-container" style=" max-height: 500px;overflow-y: auto; position: absolute; background: white; z-index: 9999;"></div>
+                <div id="results-container" style=" max-height: 500px;overflow-y: auto; position: absolute; background: white; z-index: 9999; margin-left: auto; margin-right: auto;"></div>
             </div>
            <!-- /SEARCH BAR -->
 

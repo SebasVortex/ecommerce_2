@@ -42,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Confirmar la transacción
         $conn->commit();
 
-        echo '<div class="alert alert-success" role="alert">Pedido cancelado con éxito.</div>';
+        echo '<div class="alert alert-success" role="alert">Pedido cancelado con éxito</div>';
         header('Location: ../pedidos.php'); // Redirige de vuelta a la página de pedidos
 
     } catch (Exception $e) {

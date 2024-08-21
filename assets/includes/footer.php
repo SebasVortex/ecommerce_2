@@ -213,7 +213,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 data.forEach(item => {
                     const productHtml = `
-                        <div class="result-item" style="padding: 1.5rem; border-bottom: 1px solid #ccc; max-width: 555px;">
+                        <div class="result-item" style="padding: 1.5rem; border-bottom: 1px solid #ccc; max-width: 535px;">
                             <h3><a href="product_detalle.php?id=${item.id}">${item.brand_name} - ${item.name}</a></h3>
                             <p>Categoria: ${item.category_name}</p>
                             <p>$${parseFloat(item.price).toFixed(2)}</p>
