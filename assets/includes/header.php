@@ -60,83 +60,6 @@ if (isset($_SESSION['user_id'])) {
 $stmt = $conn->prepare("SELECT name, id FROM categorias");
 $stmt->execute();
 $categorias = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-
-
-// Obtener el precio máximo de la base de datos
-$queryMaxPrice = "SELECT MAX(price) FROM productos";
-$stmtMaxPrice = $conn->prepare($queryMaxPrice);
-$stmtMaxPrice->execute();
-$maxPrice = $stmtMaxPrice->fetchColumn();
-
-// Obtener las marcas y las categorías disponibles
-$queryBrands = "SELECT * FROM marcas";
-$stmtBrands = $conn->prepare($queryBrands);
-$stmtBrands->execute();
-$brands = $stmtBrands->fetchAll(PDO::FETCH_ASSOC);
-
-$queryCategories = "SELECT * FROM categorias";
-$stmtCategories = $conn->prepare($queryCategories);
-$stmtCategories->execute();
-$categorias = $stmtCategories->fetchAll(PDO::FETCH_ASSOC);
-
-// Obtener las marcas, categorías y precios seleccionados desde el formulario
-$selectedBrands = isset($_GET['brand']) ? $_GET['brand'] : [];
-$selectedCategories = isset($_GET['category']) ? $_GET['category'] : [];
-$priceMin = isset($_GET['price_min']) ? $_GET['price_min'] : 0;
-$priceMax = isset($_GET['price_max']) ? $_GET['price_max'] : $maxPrice;
-$searchTerm = isset($_GET['search']) ? $_GET['search'] : '';
-
-// Construir la consulta SQL
-$query = "SELECT p.*, m.name AS brand_name, c.name AS category_name
-          FROM productos p
-          LEFT JOIN marcas m ON p.brand_id = m.id
-          LEFT JOIN categorias c ON p.category_id = c.id";
-
-$conditions = [];
-$params = [];
-
-// Añadir condiciones para búsqueda de texto
-if (!empty($searchTerm)) {
-    $conditions[] = "p.name LIKE ?";
-    $params[] = '%' . $searchTerm . '%';
-}
-
-// Añadir condiciones para marcas
-if (!empty($selectedBrands)) {
-    $placeholders = rtrim(str_repeat('?,', count($selectedBrands)), ',');
-    $conditions[] = "p.brand_id IN ($placeholders)";
-    $params = array_merge($params, $selectedBrands);
-}
-
-// Añadir condiciones para categorías
-if (!empty($selectedCategories)) {
-    $placeholders = rtrim(str_repeat('?,', count($selectedCategories)), ',');
-    $conditions[] = "p.category_id IN ($placeholders)";
-    $params = array_merge($params, $selectedCategories);
-}
-
-// Añadir condiciones para precio
-if ($priceMin !== null) {
-    $conditions[] = "p.price >= ?";
-    $params[] = $priceMin;
-}
-
-if ($priceMax !== null) {
-    $conditions[] = "p.price <= ?";
-    $params[] = $priceMax;
-}
-
-if (!empty($conditions)) {
-    $query .= " WHERE " . implode(' AND ', $conditions);
-}
-
-// Ordenar los productos aleatoriamente
-$query .= " ORDER BY RAND()";
-
-$stmt = $conn->prepare($query);
-$stmt->execute($params);
-$productostore = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!-- HEADER -->
@@ -176,16 +99,15 @@ $productostore = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <!-- SEARCH BAR -->
                 <div class="col-md-6">
                     <div class="header-search">
-                        <form style="display: flex;" method="GET" action="store.php">
-                            <select name="category[]" class="input-select">
-                                <option value="">Todas las Categorías</option>
-                                <?php foreach ($categorias as $categoria): ?>
-                                    <option value="<?= htmlspecialchars($categoria['id']); ?>" <?= in_array($categoria['id'], $selectedCategories) ? 'selected' : ''; ?>>
-                                        <?= htmlspecialchars($categoria['name']); ?>
-                                    </option>
-                                <?php endforeach; ?>
+                        <form style="display: flex;">
+                            <select class="input-select">
+                            <?php foreach ($categorias as $categoria): ?>
+                                <option value="<?= htmlspecialchars($categoria['id']); ?>">
+                                    <?= htmlspecialchars($categoria['name']); ?>
+                                </option>
+                            <?php endforeach; ?>
                             </select>
-                            <input name="search" class="input" placeholder="Buscar productos..." value="<?= htmlspecialchars($searchTerm); ?>">
+                            <input class="input" placeholder="Buscar productos...">
                             <button class="search-btn">Buscar</button>
                         </form>
                     </div>
