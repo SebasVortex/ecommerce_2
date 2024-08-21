@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         // Insertar en el historial de pedidos
         $stmt = $conn->prepare('INSERT INTO pedidos_historial (order_id, status) VALUES (:order_id, :status)');
-        $stmt->execute(['order_id' => $pedidoId, 'status' => 'cancelled']);
+        $stmt->execute(['order_id' => $pedidoId, 'status' => 'cancelado']);
 
         // Eliminar los elementos del carrito del usuario
         $stmt = $conn->prepare('DELETE FROM carrito WHERE user_id = :user_id');

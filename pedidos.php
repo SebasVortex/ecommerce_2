@@ -67,11 +67,6 @@ try {
             <div class="card mb-4">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h5 class="card-title mb-0">Pedido ID: <?php echo htmlspecialchars($pedido['pedido_id']); ?></h5>
-                    <?php if ($pedido['status'] == 'pendiente'): ?>
-                        <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#cancelModal<?php echo htmlspecialchars($pedido['pedido_id']); ?>">
-                            Cancelar Pedido
-                        </button>
-                    <?php endif; ?>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -107,6 +102,11 @@ try {
                             </tbody>
                         </table>
                     </div>
+                    <?php if ($pedido['status'] == 'pendiente'): ?>
+                        <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#cancelModal<?php echo htmlspecialchars($pedido['pedido_id']); ?>">
+                            Cancelar Pedido
+                        </button>
+                    <?php endif; ?>
                 </div>
             </div>
             <br>
@@ -154,3 +154,4 @@ try {
     echo '<div class="alert alert-danger" role="alert">Error al obtener los pedidos: ' . htmlspecialchars($e->getMessage()) . '</div>';
 }
 ?>
+
