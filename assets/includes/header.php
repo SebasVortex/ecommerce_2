@@ -173,24 +173,19 @@ $productostore = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </div>
                 <!-- /LOGO -->
 
-                <!-- SEARCH BAR -->
-                <div class="col-md-6">
-                    <div class="header-search">
-                        <form style="display: flex;" method="GET" action="store.php">
-                            <select name="category[]" class="input-select">
-                                <option value="">Todas las Categorías</option>
-                                <?php foreach ($categorias as $categoria): ?>
-                                    <option value="<?= htmlspecialchars($categoria['id']); ?>" <?= in_array($categoria['id'], $selectedCategories) ? 'selected' : ''; ?>>
-                                        <?= htmlspecialchars($categoria['name']); ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
-                            <input name="search" class="input" placeholder="Buscar productos..." value="<?= htmlspecialchars($searchTerm); ?>">
-                            <button class="search-btn">Buscar</button>
-                        </form>
-                    </div>
+
+            <!-- SEARCH BAR -->
+            <div class="col-md-6">
+                <div class="header-search">
+                    <form style="display: flex;">
+                        <input id="search-input" style=" width: 100%;" name="search" class="input" placeholder="Buscar productos...">
+                    </form>
                 </div>
-                <!-- /SEARCH BAR -->
+                <!-- Resultados de búsqueda -->
+                <div id="results-container" style=" max-height: 500px;overflow-y: auto; position: absolute; background: white; z-index: 9999;"></div>
+            </div>
+           <!-- /SEARCH BAR -->
+
 
                 <!-- ACCOUNT -->
                 <div class="col-md-3 clearfix">
@@ -297,3 +292,4 @@ $productostore = $stmt->fetchAll(PDO::FETCH_ASSOC);
 			<!-- /container -->
 		</nav>
 		<!-- /NAVIGATION -->
+         

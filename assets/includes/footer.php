@@ -119,39 +119,41 @@
 		<script src="./js/nouislider.min.js"></script>
 		<script src="./js/jquery.zoom.min.js"></script>
 		<script src="./js/main.js"></script>
-		<script>
-document.querySelectorAll('.add-to-cart-btn').forEach(button => {
-    button.addEventListener('click', function() {
-        console.log("Botón clickeado"); // Añadir un log para ver si el evento se dispara
-        const productId = this.getAttribute('data-product-id');
-        const quantityInput = document.getElementById(`quantity-${productId}`);
-        const quantity = quantityInput ? parseInt(quantityInput.value) : 1;
 
-        // Solicitud fetch
-        fetch('addcarrito.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: `product_id=${productId}&quantity=${quantity}`,
-        })
-        .then(response => response.text())
-        .then(data => {
-            if (data.includes('Error')) { // Verificar si la respuesta indica un error
-                window.location.href = 'login.php'; // Redirige al login en caso de error
-            } else {
-                alert(data); // Mostrar mensaje de éxito o manejar la respuesta
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            window.location.href = 'login.php'; // Redirige al login en caso de error en la solicitud
-        });
-    });
-});
+					<!-- carrito agregar -->
+		<script>
+			document.querySelectorAll('.add-to-cart-btn').forEach(button => {
+				button.addEventListener('click', function() {
+					console.log("Botón clickeado"); // Añadir un log para ver si el evento se dispara
+					const productId = this.getAttribute('data-product-id');
+					const quantityInput = document.getElementById(`quantity-${productId}`);
+					const quantity = quantityInput ? parseInt(quantityInput.value) : 1;
+
+					// Solicitud fetch
+					fetch('addcarrito.php', {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/x-www-form-urlencoded',
+						},
+						body: `product_id=${productId}&quantity=${quantity}`,
+					})
+					.then(response => response.text())
+					.then(data => {
+						if (data.includes('Error')) { // Verificar si la respuesta indica un error
+							window.location.href = 'login.php'; // Redirige al login en caso de error
+						} else {
+							alert(data); // Mostrar mensaje de éxito o manejar la respuesta
+						}
+					})
+					.catch(error => {
+						console.error('Error:', error);
+						window.location.href = 'login.php'; // Redirige al login en caso de error en la solicitud
+					});
+				});
+			});
 </script>
 
-
+			<!-- Temporizador index principal -->
 <script>
 // Verificar si $fechaFin tiene un valor válido antes de pasar a JavaScript
 <?php if ($fechaFin): ?>
@@ -182,3 +184,58 @@ var x = setInterval(function() {
     }
 }, 1000);
 </script>
+
+
+
+
+
+			<!-- codigo para la busqueda -->
+			<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const resultsContainer = document.getElementById('results-container');
+    const searchInput = document.getElementById('search-input');
+
+    if (!resultsContainer || !searchInput) {
+        console.error('Elementos necesarios no encontrados en el DOM.');
+        return;
+    }
+
+    function searchProducts(searchTerm) {
+        fetch(`config/buscar_productos.php?search=${encodeURIComponent(searchTerm)}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                resultsContainer.innerHTML = '';
+
+                data.forEach(item => {
+                    const productHtml = `
+                        <div class="result-item" style="padding: 1.5rem; border-bottom: 1px solid #ccc; max-width: 555px;">
+                            <h3><a href="product_detalle.php?id=${item.id}">${item.brand_name} - ${item.name}</a></h3>
+                            <p>Categoria: ${item.category_name}</p>
+                            <p>$${parseFloat(item.price).toFixed(2)}</p>
+                        </div>
+                    `;
+
+                    resultsContainer.innerHTML += productHtml;
+                });
+            })
+            .catch(error => console.error('Error al buscar productos:', error));
+    }
+
+    searchInput.addEventListener('input', () => {
+        const searchTerm = searchInput.value.trim();
+        if (searchTerm) {
+            searchProducts(searchTerm);
+        } else {
+            resultsContainer.innerHTML = ''; // Limpiar resultados si no hay término de búsqueda
+        }
+    });
+});
+
+</script>
+
+
