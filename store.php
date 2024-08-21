@@ -8,11 +8,12 @@ $stmtMaxPrice = $conn->prepare($queryMaxPrice);
 $stmtMaxPrice->execute();
 $maxPrice = $stmtMaxPrice->fetchColumn();
 
-// Obtener las marcas y los precios seleccionados desde el formulario
+// Obtener las marcas, categorías y precios seleccionados desde el formulario
 $selectedBrands = isset($_GET['brand']) ? $_GET['brand'] : [];
 $selectedCategories = isset($_GET['category']) ? $_GET['category'] : [];
 $priceMin = isset($_GET['price_min']) ? $_GET['price_min'] : 0;
 $priceMax = isset($_GET['price_max']) ? $_GET['price_max'] : $maxPrice;
+$searchTerm = isset($_GET['search']) ? '%' . $_GET['search'] . '%' : '';
 
 // Construir la consulta SQL
 $query = "SELECT p.*, m.name AS brand_name, c.name AS category_name
@@ -48,6 +49,13 @@ if ($priceMax !== null) {
     $params[] = $priceMax;
 }
 
+// Añadir condición para búsqueda por similitud en nombre y descripción
+if (!empty($searchTerm)) {
+    $conditions[] = "(p.name LIKE ? OR p.description LIKE ?)";
+    $params[] = $searchTerm;
+    $params[] = $searchTerm;
+}
+
 if (!empty($conditions)) {
     $query .= " WHERE " . implode(' AND ', $conditions);
 }
@@ -55,9 +63,27 @@ if (!empty($conditions)) {
 // Ordenar los productos aleatoriamente
 $query .= " ORDER BY RAND()";
 
+// Agregar paginación
+$productos_por_pagina = 20; // Número de productos por página
+$pagina_actual = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
+$offset = ($pagina_actual - 1) * $productos_por_pagina;
+
+$query .= " LIMIT $productos_por_pagina OFFSET $offset";
+
 $stmt = $conn->prepare($query);
 $stmt->execute($params);
 $productostore = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Obtener el total de productos para la paginación
+$queryTotal = "SELECT COUNT(*) FROM productos p";
+if (!empty($conditions)) {
+    $queryTotal .= " WHERE " . implode(' AND ', $conditions);
+}
+$stmtTotal = $conn->prepare($queryTotal);
+$stmtTotal->execute($params);
+$total_productos = $stmtTotal->fetchColumn();
+
+$total_paginas = ceil($total_productos / $productos_por_pagina);
 
 // Funciones para contar productos por marca y categoría
 function getProductCountByBrand($brandId) {
@@ -75,15 +101,8 @@ function getProductCountByCategory($categoryId) {
     $stmt->execute([$categoryId]);
     return $stmt->fetchColumn();
 }
-?>
-<?php
-// Obtener los filtros aplicados
-$brandFilter = isset($_GET['brand']) ? $_GET['brand'] : [];
-$categoryFilter = isset($_GET['category']) ? $_GET['category'] : [];
-?>
 
-<?php
-// Funciones para obtener el nombre de la categoría o la marca (debes definir estas funciones)
+// Funciones para obtener el nombre de la categoría o la marca
 function getCategoryName($categoryId) {
     global $conn;
     $query = "SELECT name FROM categorias WHERE id = ?";
@@ -100,6 +119,7 @@ function getBrandName($brandId) {
     return $stmt->fetchColumn();
 }
 ?>
+
 	<?php include 'assets/includes/head.php';?>
 		<body>
 			<!-- HEADER -->
@@ -322,18 +342,25 @@ function getBrandName($brandId) {
 						<!-- /store products -->
 
 
-						<!-- store bottom filter -->
 						<div class="store-filter clearfix">
-							<span class="store-qty">Showing 20-100 products</span>
+							<span class="store-qty">Showing <?php echo ($offset + 1); ?>-<?php echo min($offset + $productos_por_pagina, $total_productos); ?> of <?php echo $total_productos; ?> products</span>
 							<ul class="store-pagination">
-								<li class="active">1</li>
-								<li><a href="#">2</a></li>
-								<li><a href="#">3</a></li>
-								<li><a href="#">4</a></li>
-								<li><a href="#"><i class="fa fa-angle-right"></i></a></li>
+								<?php if ($pagina_actual > 1): ?>
+									<li><a href="?pagina=<?php echo $pagina_actual - 1; ?>"><i class="fa fa-angle-left"></i></a></li>
+								<?php endif; ?>
+								
+								<?php for ($i = 1; $i <= $total_paginas; $i++): ?>
+									<li class="<?php echo ($i == $pagina_actual) ? 'active' : ''; ?>">
+										<a href="?pagina=<?php echo $i; ?>"><?php echo $i; ?></a>
+									</li>
+								<?php endfor; ?>
+								
+								<?php if ($pagina_actual < $total_paginas): ?>
+									<li><a href="?pagina=<?php echo $pagina_actual + 1; ?>"><i class="fa fa-angle-right"></i></a></li>
+								<?php endif; ?>
 							</ul>
 						</div>
-						<!-- /store bottom filter -->
+
 					</div>
 					<!-- /STORE -->
 				</div>
