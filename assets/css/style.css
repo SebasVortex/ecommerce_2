@@ -1334,9 +1334,12 @@ textarea.input {
   color: #FFF;
   cursor: default;
 }
-
+.store-grid li.active a{
+  color: #FFF !important;
+}
 .store-grid li a {
   display: block;
+
 }
 
 /*-- Store Pagination --*/

@@ -9,11 +9,16 @@ $stmtMaxPrice->execute();
 $maxPrice = $stmtMaxPrice->fetchColumn();
 
 // Obtener las marcas, categorías y precios seleccionados desde el formulario
-$selectedBrands = isset($_GET['brand']) ? $_GET['brand'] : [];
-$selectedCategories = isset($_GET['category']) ? $_GET['category'] : [];
-$priceMin = isset($_GET['price_min']) ? $_GET['price_min'] : 0;
-$priceMax = isset($_GET['price_max']) ? $_GET['price_max'] : $maxPrice;
-$searchTerm = isset($_GET['search']) ? '%' . $_GET['search'] . '%' : '';
+$selectedBrands = isset($_GET['brand']) ? array_map('intval', $_GET['brand']) : [];
+$selectedCategories = isset($_GET['category']) ? array_map('intval', $_GET['category']) : [];
+$priceMin = isset($_GET['price_min']) ? intval($_GET['price_min']) : 0;
+$priceMax = isset($_GET['price_max']) ? intval($_GET['price_max']) : $maxPrice;
+$searchTerm = isset($_GET['search']) ? '%' . htmlspecialchars($_GET['search']) . '%' : '';
+
+// Obtener el número de productos por página del parámetro, por defecto es 15
+$productos_por_pagina = isset($_GET['items_per_page']) ? intval($_GET['items_per_page']) : 20;
+$pagina_actual = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
+$offset = ($pagina_actual - 1) * $productos_por_pagina;
 
 // Construir la consulta SQL
 $query = "SELECT p.*, m.name AS brand_name, c.name AS category_name
@@ -60,30 +65,30 @@ if (!empty($conditions)) {
     $query .= " WHERE " . implode(' AND ', $conditions);
 }
 
-// Ordenar los productos aleatoriamente
+// Ordenar los productos aleatoriamente (considera cambiar esto si es lento)
 $query .= " ORDER BY RAND()";
 
 // Agregar paginación
-$productos_por_pagina = 20; // Número de productos por página
-$pagina_actual = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
-$offset = ($pagina_actual - 1) * $productos_por_pagina;
-
 $query .= " LIMIT $productos_por_pagina OFFSET $offset";
 
-$stmt = $conn->prepare($query);
-$stmt->execute($params);
-$productostore = $stmt->fetchAll(PDO::FETCH_ASSOC);
+try {
+    $stmt = $conn->prepare($query);
+    $stmt->execute($params);
+    $productostore = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Obtener el total de productos para la paginación
-$queryTotal = "SELECT COUNT(*) FROM productos p";
-if (!empty($conditions)) {
-    $queryTotal .= " WHERE " . implode(' AND ', $conditions);
+    // Obtener el total de productos para la paginación
+    $queryTotal = "SELECT COUNT(*) FROM productos p";
+    if (!empty($conditions)) {
+        $queryTotal .= " WHERE " . implode(' AND ', $conditions);
+    }
+    $stmtTotal = $conn->prepare($queryTotal);
+    $stmtTotal->execute($params);
+    $total_productos = $stmtTotal->fetchColumn();
+
+    $total_paginas = ceil($total_productos / $productos_por_pagina);
+} catch (PDOException $e) {
+    echo "Error: " . $e->getMessage();
 }
-$stmtTotal = $conn->prepare($queryTotal);
-$stmtTotal->execute($params);
-$total_productos = $stmtTotal->fetchColumn();
-
-$total_paginas = ceil($total_productos / $productos_por_pagina);
 
 // Funciones para contar productos por marca y categoría
 function getProductCountByBrand($brandId) {
@@ -119,6 +124,7 @@ function getBrandName($brandId) {
     return $stmt->fetchColumn();
 }
 ?>
+
 
 	<?php include 'assets/includes/head.php';?>
 		<body>
@@ -196,21 +202,18 @@ function getBrandName($brandId) {
 						<div class="aside">
 							<h3 class="aside-title">Price</h3>
 							<div class="price-filter">
-								<div id="price-slider"></div>
+								<div id="price-slider" class="noUi-connect"></div>
 								<div class="input-number price-min">
-									<input id="price-min" type="number">
-									<span class="qty-up">+</span>
-									<span class="qty-down">-</span>
+									<input id="price-min" type="number" readonly>
 								</div>
 								<span>-</span>
 								<div class="input-number price-max">
-									<input id="price-max" type="number">
-									<span class="qty-up">+</span>
-									<span class="qty-down">-</span>
+									<input id="price-max" type="number" readonly>
 								</div>
 							</div>
 						</div>
 						<!-- /aside Widget -->
+
 
 
 						<!-- aside Widget -->
@@ -249,33 +252,31 @@ function getBrandName($brandId) {
 						<!-- STORE -->
 						<div id="store" class="col-md-9">
 							<!-- store top filter -->
-							<div class="store-filter clearfix">
-								<div class="store-sort">
-									<label>
-										Filtrar por:
-										<select class="input-select">
-											<option value="0">Popular</option>
-											<option value="1">Position</option>
-										</select>
-									</label>
+								<div class="store-filter clearfix">
+									<div class="store-sort">
+										<form method="GET" action="">
 
-									<label>
-										Show:
-										<select class="input-select">
-											<option value="0">20</option>
-											<option value="1">50</option>
-										</select>
-									</label>
+											<label>
+												Mostrar: 
+												<select class="input-select" name="items_per_page">
+													<option value="20" <?php echo (isset($_GET['items_per_page']) && $_GET['items_per_page'] == '20') ? 'selected' : ''; ?>>20</option>
+													<option value="50" <?php echo (isset($_GET['items_per_page']) && $_GET['items_per_page'] == '50') ? 'selected' : ''; ?>>50</option>
+												</select>
+											</label>
+
+											<button type="submit" class="primary-btn">Filtrar</button>
+										</form>
+									</div>
+									<ul class="store-grid">
+										<li class="active"><i class="fa fa-th"></i></li>
+										<!--<li><a href="#"><i class="fa fa-th-list"></i></a></li>-->
+									</ul>
 								</div>
-								<ul class="store-grid">
-									<li class="active"><i class="fa fa-th"></i></li>
-									<!--<li><a href="#"><i class="fa fa-th-list"></i></a></li>-->
-								</ul>
-							</div>
-							<!-- /store top filter -->
+								<!-- /store top filter -->
+
 
 							<!-- store products -->
-							<div class="row">
+							<div class="row" id="product-list">
 							<?php
 							$count = 0; // Contador de productos
 							foreach ($productostore as $producto):
@@ -289,7 +290,7 @@ function getBrandName($brandId) {
 							?>  
 							<!-- product -->
 							<div class="col-md-4 col-xs-6">
-								<div class="product">
+								<div class="product"  data-price="<?php echo htmlspecialchars($producto['price']); ?>">
 									<div class="product-img">
 										<img src="assets/images/<?php echo htmlspecialchars($producto['imagen']); ?>" alt="<?php echo htmlspecialchars($producto['name']); ?>">
 										<div class="product-label">
@@ -342,24 +343,24 @@ function getBrandName($brandId) {
 						<!-- /store products -->
 
 
-						<div class="store-filter clearfix">
-							<span class="store-qty">Showing <?php echo ($offset + 1); ?>-<?php echo min($offset + $productos_por_pagina, $total_productos); ?> of <?php echo $total_productos; ?> products</span>
-							<ul class="store-pagination">
-								<?php if ($pagina_actual > 1): ?>
-									<li><a href="?pagina=<?php echo $pagina_actual - 1; ?>"><i class="fa fa-angle-left"></i></a></li>
-								<?php endif; ?>
-								
-								<?php for ($i = 1; $i <= $total_paginas; $i++): ?>
-									<li class="<?php echo ($i == $pagina_actual) ? 'active' : ''; ?>">
-										<a href="?pagina=<?php echo $i; ?>"><?php echo $i; ?></a>
-									</li>
-								<?php endfor; ?>
-								
-								<?php if ($pagina_actual < $total_paginas): ?>
-									<li><a href="?pagina=<?php echo $pagina_actual + 1; ?>"><i class="fa fa-angle-right"></i></a></li>
-								<?php endif; ?>
-							</ul>
-						</div>
+							<div class="store-filter clearfix">
+								<span class="store-qty">Mostrando <?php echo min($offset + $productos_por_pagina, $total_productos); ?> de <?php echo $total_productos; ?> productos</span>
+								<ul class="store-pagination">
+									<?php if ($pagina_actual > 1): ?>
+										<li><a href="?pagina=<?php echo $pagina_actual - 1; ?>"><i class="fa fa-angle-left"></i></a></li>
+									<?php endif; ?>
+									
+									<?php for ($i = 1; $i <= $total_paginas; $i++): ?>
+										<li class="<?php echo ($i == $pagina_actual) ? 'active' : ''; ?>">
+											<a href="?pagina=<?php echo $i; ?>"><?php echo $i; ?></a>
+										</li>
+									<?php endfor; ?>
+									
+									<?php if ($pagina_actual < $total_paginas): ?>
+										<li><a href="?pagina=<?php echo $pagina_actual + 1; ?>"><i class="fa fa-angle-right"></i></a></li>
+									<?php endif; ?>
+								</ul>
+							</div>
 
 					</div>
 					<!-- /STORE -->

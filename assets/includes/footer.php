@@ -121,37 +121,38 @@
 		<script src="./js/main.js"></script>
 
 					<!-- carrito agregar -->
-		<script>
-			document.querySelectorAll('.add-to-cart-btn').forEach(button => {
-				button.addEventListener('click', function() {
-					console.log("Botón clickeado"); // Añadir un log para ver si el evento se dispara
-					const productId = this.getAttribute('data-product-id');
-					const quantityInput = document.getElementById(`quantity-${productId}`);
-					const quantity = quantityInput ? parseInt(quantityInput.value) : 1;
+					<script>
+document.querySelectorAll('.add-to-cart-btn, .add-to-wishlist').forEach(button => {
+    button.addEventListener('click', function() {
+        console.log("Botón clickeado"); // Añadir un log para ver si el evento se dispara
+        const productId = this.getAttribute('data-product-id');
+        const quantityInput = document.getElementById(`quantity-${productId}`);
+        const quantity = quantityInput ? parseInt(quantityInput.value) : 1;
 
-					// Solicitud fetch
-					fetch('addcarrito.php', {
-						method: 'POST',
-						headers: {
-							'Content-Type': 'application/x-www-form-urlencoded',
-						},
-						body: `product_id=${productId}&quantity=${quantity}`,
-					})
-					.then(response => response.text())
-					.then(data => {
-						if (data.includes('Error')) { // Verificar si la respuesta indica un error
-							window.location.href = 'login.php'; // Redirige al login en caso de error
-						} else {
-							alert(data); // Mostrar mensaje de éxito o manejar la respuesta
-						}
-					})
-					.catch(error => {
-						console.error('Error:', error);
-						window.location.href = 'login.php'; // Redirige al login en caso de error en la solicitud
-					});
-				});
-			});
+        // Solicitud fetch
+        fetch('addcarrito.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `product_id=${productId}&quantity=${quantity}`,
+        })
+        .then(response => response.text())
+        .then(data => {
+            if (data.includes('Error')) { // Verificar si la respuesta indica un error
+                window.location.href = 'login.php'; // Redirige al login en caso de error
+            } else {
+                alert(data); // Mostrar mensaje de éxito o manejar la respuesta
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            window.location.href = 'login.php'; // Redirige al login en caso de error en la solicitud
+        });
+    });
+});
 </script>
+
 
 			<!-- Temporizador index principal -->
 <script>
@@ -238,4 +239,51 @@ document.addEventListener('DOMContentLoaded', () => {
 
 </script>
 
+<script>
+// Configuración del control deslizante
+$(function() {
+    var maxPrice = <?php echo json_encode($maxPrice); ?>; // Asegúrate de tener el precio máximo disponible en el script
 
+    $("#price-slider").slider({
+        range: true,
+        min: 0,
+        max: maxPrice,
+        values: [0, maxPrice],
+        slide: function(event, ui) {
+            $("#price-min").val(ui.values[0]);
+            $("#price-max").val(ui.values[1]);
+            filterProducts();
+        }
+    });
+
+    $("#price-min").val($("#price-slider").slider("values", 0));
+    $("#price-max").val($("#price-slider").slider("values", 1));
+});
+
+// Filtrar productos según el rango de precios
+function filterProducts() {
+    var minPrice = $("#price-min").val();
+    var maxPrice = $("#price-max").val();
+
+    $(".product").each(function() {
+        var productPrice = $(this).data("price");
+
+        if (productPrice >= minPrice && productPrice <= maxPrice) {
+            $(this).show();
+        } else {
+            $(this).hide();
+        }
+    });
+}
+
+// Configuración inicial de productos
+$(document).ready(function() {
+    filterProducts(); // Asegúrate de mostrar/ocultar productos al cargar la página
+});
+</script>
+
+
+<!-- Incluye jQuery UI para el control deslizante -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
