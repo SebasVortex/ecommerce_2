@@ -63,29 +63,134 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <?php include 'assets/includes/head.php';?>
     <title>Registro</title>
     <style>
-        body {
-            background-color: #f8f9fa;
+       .container-reg {
+            padding: 5rem 0rem 8rem 0rem;
+            display: flex;
+            justify-content: center;
+            height: 800px;
         }
         .register-container {
-            max-width: 500px;
-            margin: 50px auto;
-            padding: 20px;
-            background: #fff;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            background-color: #ffffff;
+            box-shadow: 10px 10px 15px rgba(0, 0, 0, 0.3);
+            max-width: 900px;
         }
-        .register-header {
-            margin-bottom: 20px;
+        .btn-reg {
+            background-color: #D10024;
+            transition: background-color 0.3s, box-shadow 0.2s; 
+            box-shadow: 0 7px 11px #a0a0a0;
+            border: none;
+            color: #fff;
+            border-radius: 35px;
+            width: 50%;
+            margin-top: 55px;
+            height: 50px;
+            font-size: 18px;
+            font-weight: 600;
         }
-        .register-header h2 {
-            font-size: 1.5rem;
-            margin-bottom: 10px;
+        .btn-reg:hover {
+            background-color: #B31920; /* Un verde ligeramente más oscuro para el hover */
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2); /* Sombra para dar sensación de elevación */
         }
-        .register-footer {
-            margin-top: 20px;
+
+        /* Estilo para cuando el botón está enfocado o activo */
+        .btn-reg:focus, .btn-reg:active {
+            outline: none; /* Elimina el outline que algunos navegadores añaden */
+            background-color: #8E171C; /* Un verde aún más oscuro para el focus/active */
         }
-        .register-footer p {
-            margin-bottom: 0;
+        .img-reg {
+            width: 50%;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .img-reg::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('assets/images/register.png');
+            background-size: cover;
+            background-position: center;
+            filter: blur(5px);
+            z-index: 1;
+        }
+        .img-int {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+        }
+        .img-int img {
+            width: 50%;
+        }
+        .form-reg {
+            width: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 50px;
+            padding: 35px;
+        }
+        h2 {
+            margin-top: 50px;
+            margin-bottom: 30px;
+            font-weight: 400;
+            color: #616161;
+        }
+        .password-container {
+            width: 100%;
+            display: flex;
+            align-items: flex-end;
+            margin-top: 25px;
+        }
+        .password-input {
+            width: 100%;
+            padding: 1rem;
+            font-size: 18px;
+            background-color: transparent;
+            border: none;
+            border-bottom: 1px solid #ccc;
+        }
+        .password-input:focus {
+            outline: none;
+        }
+        .show-password {
+            cursor: pointer;
+        }
+        .register-user {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .password-container span img {
+            width: 35px;
+            margin-left: 15px;
+        }
+        span.register {
+            text-decoration: underline;
+            color: #D10024;
+            font-weight: 500;
+        }
+        @media (max-width: 768px) {
+            .register-container {
+                flex-direction: column;
+                box-shadow: none;
+                background-color: transparent;
+            }
+            .img-reg {
+                width: 100%;
+                height: 200px;
+            }
+            .form-reg {
+                width: 100%;
+                padding: 20px;
+            }
         }
     </style>
 </head>
@@ -101,34 +206,50 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
     ?>
 
-    <div class="container">
+    <div class="container-reg">
         <div class="register-container">
-            <div class="register-header text-center">
-                <h2>Registro</h2>
+            <div class="img-reg">
+                <div class="img-int">
+                    <img src="assets/images/logo-login.png" alt="Logo">
+                </div>
             </div>
-            <form action="register.php" method="post">
-                <div class="form-group">
-                    <label for="username">Nombre de Usuario:</label>
-                    <input type="text" class="form-control" id="username" name="username" required>
-                </div>
-                <div class="form-group">
-                    <label for="email">Email:</label>
-                    <input type="email" class="form-control" id="email" name="email" required>
-                </div>
-                <div class="form-group">
-                    <label for="password">Contraseña:</label>
-                    <input type="password" class="form-control" id="password" name="password" required>
-                </div>
-                <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token']); ?>">
-                <button type="submit" class="btn btn-primary btn-block">Registrar</button>
-            </form>
-            <div class="register-footer text-center">
-                <p><a href="login.php">Ya tengo una cuenta. Iniciar sesión</a></p>
+            <div class="form-reg">
+                <form action="register.php" method="post" class="register-user">
+                    <h2>Crear Cuenta</h2>
+                    <div class="password-container">
+                        <input type="text" class="password-input" id="username" name="username" placeholder="Nombre de Usuario" required>
+                        <span><img src="assets/images/person.png" alt="User Icon"></span>
+                    </div>
+                    <div class="password-container">
+                        <input type="email" class="password-input" id="email" name="email" placeholder="Email" required>
+                        <span><img src="assets/images/email2.png" alt="Email Icon"></span>
+                    </div>
+                    <div class="password-container">
+                        <input type="password" class="password-input" id="password" name="password" placeholder="Contraseña" required>
+                        <span class="show-password" onclick="togglePassword()"><img id="passwordIcon" src="assets/images/lock.png" alt="Toggle Password"></span>
+                    </div>
+                    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token']); ?>">
+                    <button type="submit" class="btn-reg">Registrarme</button>
+                </form>
+                <p><a href="login.php">¿Ya tenés una cuenta?<span class="register"> Iniciar sesión</span></a></p>
             </div>
         </div>
     </div>
     <!-- PIE DE PÁGINA -->
     <?php include 'assets/includes/footer.php';?>
     <!-- /PIE DE PÁGINA -->
+    <script>
+    function togglePassword() {
+        var passwordField = document.getElementById('password');
+        var passwordIcon = document.getElementById('passwordIcon');
+        if (passwordField.type === 'password') {
+            passwordField.type = 'text';
+            passwordIcon.src = 'assets/images/unlock.png';
+        } else {
+            passwordField.type = 'password';
+            passwordIcon.src = 'assets/images/lock.png';
+        }
+    }
+</script>
 </body>
 </html>
