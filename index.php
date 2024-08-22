@@ -34,6 +34,7 @@ if ($stmt->execute()) {
 		<!-- HEADER -->
 		<?php include 'assets/includes/header.php';?>
 		<!-- HEADER -->
+		 
 
 		<!-- SECTION -->
 		<div class="section">
@@ -125,9 +126,13 @@ if ($stmt->execute()) {
 											<div class="product-img">
 	
 												<img src="assets/images/<?php echo htmlspecialchars($producto['imagen']); ?>" alt="<?php echo htmlspecialchars($producto['name']); ?>">
-
 												<div class="product-label">
-
+													<?php if ($producto['discount'] > 0): ?>
+														<span class="sale">-<?php echo htmlspecialchars($producto['discount']); ?>%</span>
+													<?php endif; ?>
+													<?php if ($producto['new']): ?>
+														<span class="new">Nuevo!</span>
+													<?php endif; ?>
 												</div>
 												</a>
 											</div>
@@ -135,6 +140,7 @@ if ($stmt->execute()) {
 												<p class="product-category"><?php echo htmlspecialchars($producto['category_name']); ?></p>
 												<h3 class="product-name">
 													<a href="product_detalle.php?id=<?php echo $producto['id']; ?>">
+													<?php echo htmlspecialchars($producto['brand_name']); ?> -
 														<?php echo htmlspecialchars($producto['name']); ?>
 													</a>
 												</h3>
@@ -256,14 +262,20 @@ if ($stmt->execute()) {
 											<a class="product-img" href="product_detalle.php?id=<?php echo $producto['id']; ?>">
 												<img src="assets/images/<?php echo htmlspecialchars($producto['imagen']); ?>" alt="<?php echo htmlspecialchars($producto['name']); ?>">
 											</a>
-												<div class="product-label">
-
+											<div class="product-label">
+													<?php if ($producto['discount'] > 0): ?>
+														<span class="sale">-<?php echo htmlspecialchars($producto['discount']); ?>%</span>
+													<?php endif; ?>
+													<?php if ($producto['new']): ?>
+														<span class="new">Nuevo!</span>
+													<?php endif; ?>
 												</div>
 											</div>
 											<div class="product-body">
 												<p class="product-category"><?php echo htmlspecialchars($producto['category_name']); ?></p>
 												<h3 class="product-name">
 													<a href="product_detalle.php?id=<?php echo $producto['id']; ?>">
+													<?php echo htmlspecialchars($producto['brand_name']); ?> -
 														<?php echo htmlspecialchars($producto['name']); ?>
 													</a>
 												</h3>
@@ -329,7 +341,7 @@ if ($stmt->execute()) {
 										</div>
 										<div class="product-body">
 											<p class="product-category"><?php echo htmlspecialchars($producto['category_name']); ?></p>
-											<h3 class="product-name"><a href="product_detalle.php?id=<?php echo $producto['id']; ?>"><?php echo htmlspecialchars($producto['name']); ?></a></h3>
+											<h3 class="product-name"><a href="product_detalle.php?id=<?php echo $producto['id']; ?>"><?php echo htmlspecialchars($producto['brand_name']); ?> - <?php echo htmlspecialchars($producto['name']); ?></a></h3>
 											<h4 class="product-price">
 												$<?php echo number_format($producto['price'], 2); ?> 
 												<?php if ($producto['price'] > 990.00): ?>
@@ -362,7 +374,7 @@ if ($stmt->execute()) {
 										</div>
 										<div class="product-body">
 											<p class="product-category"><?php echo htmlspecialchars($producto['category_name']); ?></p>
-											<h3 class="product-name"><a href="product_detalle.php?id=<?php echo $producto['id']; ?>"><?php echo htmlspecialchars($producto['name']); ?></a></h3>
+											<h3 class="product-name"><a href="product_detalle.php?id=<?php echo $producto['id']; ?>"> <?php echo htmlspecialchars($producto['brand_name']); ?> - <?php echo htmlspecialchars($producto['name']); ?></a></h3>
 											<h4 class="product-price">
 												$<?php echo number_format($producto['price'], 2); ?> 
 												<?php if ($producto['price'] > 990.00): ?>
@@ -398,7 +410,7 @@ if ($stmt->execute()) {
                 </div>
                 <div class="product-body">
                     <p class="product-category"><?php echo htmlspecialchars($producto['category_name']); ?></p>
-                    <h3 class="product-name"><a href="product_detalle.php?id=<?php echo $producto['id']; ?>"><?php echo htmlspecialchars($producto['name']); ?></a></h3>
+                    <h3 class="product-name"><a href="product_detalle.php?id=<?php echo $producto['id']; ?>"> <?php echo htmlspecialchars($producto['brand_name']); ?> - <?php echo htmlspecialchars($producto['name']); ?></a></h3>
                     <h4 class="product-price">
                         $<?php echo number_format($producto['price'], 2); ?> 
                         <?php if ($producto['price'] > 990.00): ?>

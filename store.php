@@ -198,7 +198,7 @@ function getBrandName($brandId) {
 							</div>
 							<!-- /aside Widget -->
 
-						<!-- aside Widget -->
+						<!-- aside Widget 
 						<div class="aside">
 							<h3 class="aside-title">Price</h3>
 							<div class="price-filter">
@@ -212,6 +212,7 @@ function getBrandName($brandId) {
 								</div>
 							</div>
 						</div>
+						-->
 						<!-- /aside Widget -->
 
 
@@ -276,71 +277,72 @@ function getBrandName($brandId) {
 
 
 							<!-- store products -->
-							<div class="row" id="product-list">
-							<?php
-							$count = 0; // Contador de productos
-							foreach ($productostore as $producto):
-								// Si el precio viejo no existe, asigna 100 menos que el precio original
-								if (empty($producto['old_price'])) {
-									$producto['old_price'] = max(0, $producto['price'] - 100); // Asegura que no sea negativo
-								}
+<div class="row" id="product-list">
+    <?php
+    $count = 0; // Contador de productos
+    foreach ($productostore as $producto):
+        // Si el precio viejo no existe, asigna 100 menos que el precio original
+        if (empty($producto['old_price'])) {
+            $producto['old_price'] = max(0, $producto['price'] - 100); // Asegura que no sea negativo
+        }
 
-								// Genera un rating aleatorio entre 4 y 5 si no existe un rating
-								$rating = rand(4, 5);
-							?>  
-							<!-- product -->
-							<div class="col-md-4 col-xs-6">
-								<div class="product"  data-price="<?php echo htmlspecialchars($producto['price']); ?>">
-									<div class="product-img">
-										<img src="assets/images/<?php echo htmlspecialchars($producto['imagen']); ?>" alt="<?php echo htmlspecialchars($producto['name']); ?>">
-										<div class="product-label">
-											<?php if ($producto['discount'] > 0): ?>
-												<span class="sale">-<?php echo htmlspecialchars($producto['discount']); ?>%</span>
-											<?php endif; ?>
-											<?php if ($producto['new']): ?>
-												<span class="new">Nuevo!</span>
-											<?php endif; ?>
-										</div>
-									</div>
-									<div class="product-body">
-										<p class="product-category"><?php echo htmlspecialchars($producto['category_name']); ?></p>
-										<h3 class="product-name"><a href="product_detalle.php?id=<?php echo $producto['id']; ?>"><?php echo htmlspecialchars($producto['name']); ?></a></h3>
-										<h4 class="product-price">$<?php echo number_format($producto['price'], 2); ?>
-											<del class="product-old-price">$<?php echo number_format($producto['old_price'], 2); ?></del>
-										</h4>
-										<div class="product-rating" style="display: none;">
-											<?php for ($i = 0; $i < $rating; $i++): ?>
-												<i class="fa fa-star"></i>
-											<?php endfor; ?>
-										</div>
-										<div class="product-btns">
-											<button class="add-to-wishlist" data-product-id="<?php echo $producto['id']; ?>"><i class="fa fa-heart-o"></i><span class="tooltipp">Añadir carrito</span></button>
-											<!--<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>-->
-										</div>
-									</div>
-									<div class="add-to-cart">
-										<button class="add-to-cart-btn"  data-product-id="<?php echo $producto['id']; ?>"><i class="fa fa-shopping-cart"></i> add to cart</button>
-									</div>
-								</div>
-							</div>
-							<!-- /product -->
+        // Genera un rating aleatorio entre 4 y 5 si no existe un rating
+        $rating = rand(4, 5);
+    ?>  
+    <!-- product -->
+    <div class="col-md-4 col-xs-6">
+        <div class="product" data-price="<?php echo htmlspecialchars($producto['price']); ?>">
+            <div class="product-img">
+                <img src="assets/images/<?php echo htmlspecialchars($producto['imagen']); ?>" alt="<?php echo htmlspecialchars($producto['name']); ?>">
+                <div class="product-label">
+                    <?php if ($producto['discount'] > 0): ?>
+                        <span class="sale">-<?php echo htmlspecialchars($producto['discount']); ?>%</span>
+                    <?php endif; ?>
+                    <?php if ($producto['new']): ?>
+                        <span class="new">Nuevo!</span>
+                    <?php endif; ?>
+                </div>
+            </div>
+            <div class="product-body">
+                <p class="product-category"><?php echo htmlspecialchars($producto['category_name']); ?></p>
+                <h3 class="product-name"><a href="product_detalle.php?id=<?php echo $producto['id']; ?>"><?php echo htmlspecialchars($producto['brand_name']); ?> - <?php echo htmlspecialchars($producto['name']); ?></a></h3>
+                <h4 class="product-price">$<?php echo number_format($producto['price'], 2); ?>
+                    <del class="product-old-price">$<?php echo number_format($producto['old_price'], 2); ?></del>
+                </h4>
+                <div class="product-rating" style="display: none;">
+                    <?php for ($i = 0; $i < $rating; $i++): ?>
+                        <i class="fa fa-star"></i>
+                    <?php endfor; ?>
+                </div>
+                <div class="product-btns">
+                    <button class="add-to-wishlist" data-product-id="<?php echo $producto['id']; ?>"><i class="fa fa-heart-o"></i><span class="tooltipp">Añadir carrito</span></button>
+                    <!--<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>-->
+                </div>
+            </div>
+            <div class="add-to-cart">
+                <button class="add-to-cart-btn" data-product-id="<?php echo $producto['id']; ?>"><i class="fa fa-shopping-cart"></i> Añadir al carrito</button>
+            </div>
+        </div>
+    </div>
+    <!-- /product -->
 
-							<?php 
-							$count++;
-							// Insertar clearfix después de 2 productos en pantallas pequeñas y extra pequeñas
-							if ($count % 2 == 0): ?>
-								<div class="clearfix visible-sm visible-xs"></div>
-							<?php endif; ?>
-							
-							<?php 
-							// Insertar clearfix después de 3 productos en pantallas grandes y medianas
-							if ($count % 3 == 0): ?>
-								<div class="clearfix visible-lg visible-md"></div>
-							<?php endif; ?>
+    <?php 
+    $count++;
+    // Insertar clearfix después de 2 productos en pantallas pequeñas y extra pequeñas
+    if ($count % 2 == 0): ?>
+        <div class="clearfix visible-sm visible-xs"></div>
+    <?php endif; ?>
+    
+    <?php 
+    // Insertar clearfix después de 3 productos en pantallas grandes y medianas
+    if ($count % 3 == 0): ?>
+        <div class="clearfix visible-lg visible-md"></div>
+    <?php endif; ?>
 
-						<?php endforeach; ?>
-						</div>
-						<!-- /store products -->
+    <?php endforeach; ?>
+</div>
+<!-- /store products -->
+
 
 
 							<div class="store-filter clearfix">
