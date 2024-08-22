@@ -239,48 +239,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 </script>
 
-<script>
-// Configuración del control deslizante
-$(function() {
-    var maxPrice = <?php echo json_encode($maxPrice); ?>; // Asegúrate de tener el precio máximo disponible en el script
 
-    $("#price-slider").slider({
-        range: true,
-        min: 0,
-        max: maxPrice,
-        values: [0, maxPrice],
-        slide: function(event, ui) {
-            $("#price-min").val(ui.values[0]);
-            $("#price-max").val(ui.values[1]);
-            filterProducts();
-        }
-    });
-
-    $("#price-min").val($("#price-slider").slider("values", 0));
-    $("#price-max").val($("#price-slider").slider("values", 1));
-});
-
-// Filtrar productos según el rango de precios
-function filterProducts() {
-    var minPrice = $("#price-min").val();
-    var maxPrice = $("#price-max").val();
-
-    $(".product").each(function() {
-        var productPrice = $(this).data("price");
-
-        if (productPrice >= minPrice && productPrice <= maxPrice) {
-            $(this).show();
-        } else {
-            $(this).hide();
-        }
-    });
-}
-
-// Configuración inicial de productos
-$(document).ready(function() {
-    filterProducts(); // Asegúrate de mostrar/ocultar productos al cargar la página
-});
-</script>
 
 
 <!-- Incluye jQuery UI para el control deslizante -->

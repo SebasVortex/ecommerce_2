@@ -165,22 +165,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <label for="stock">Stock:</label>
                 <input type="text" class="form-control" name="stock" id="stock" value="<?php echo htmlspecialchars($product['stock'] ?? ''); ?>">
             </div>
-            <div class="form-group">
-                <label for="apply_discount">Aplicar Descuento:</label>
-                <input type="checkbox" name="apply_discount" id="apply_discount" <?php echo isset($product['discount']) && $product['discount'] > 0 ? 'checked' : ''; ?>>
-            </div>
+
 
             <div class="form-group">
                 <label for="discount">Descuento:</label>
                 <input type="number" class="form-control" name="discount" id="discount" value="<?php echo htmlspecialchars($product['discount'] ?? ''); ?>" step="1" min="0">
             </div>
 
-
+            <div class="form-group">
+                <label for="apply_discount">Aplicar Descuento:</label>
+                <input type="checkbox" name="apply_discount" id="apply_discount" <?php echo isset($product['discount']) && $product['discount'] > 0 ? 'checked' : ''; ?>>
+            </div>
 
             <div class="form-group">
                 <label for="is_new">Es un Producto Nuevo:</label>
-                <input type="checkbox" name="is_new" id="is_new" <?php echo isset($product['new']) && $product['new'] ? 'checked' : ''; ?>>
+                <select name="is_new" id="is_new">
+                    <option value="1" <?php echo isset($product['new']) && $product['new'] ? 'selected' : ''; ?>>Sí</option>
+                    <option value="0" <?php echo isset($product['new']) && !$product['new'] ? 'selected' : ''; ?>>No</option>
+                </select>
             </div>
+
 
 
             <div class="form-group">

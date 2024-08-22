@@ -5,10 +5,15 @@ include('config/database.php');
 // Recuperar los datos del producto junto con la marca y la categoría
 $product = null;
 $imagenes = []; // Variable para almacenar las imágenes adicionales
+
 if (isset($_GET['id'])) {
     $id = intval($_GET['id']);
     $stmt = $conn->prepare("
-        SELECT p.*, m.name AS brand_name, c.name AS category_name
+        SELECT p.*, 
+               m.name AS brand_name, 
+               c.name AS category_name, 
+               p.manual, 
+               p.datasheet
         FROM productos p
         LEFT JOIN marcas m ON p.brand_id = m.id
         LEFT JOIN categorias c ON p.category_id = c.id
@@ -38,17 +43,16 @@ if (!empty($product['characteristics'])) {
 // Obtener productos adicionales
 $relatedProducts = [];
 if ($product) {
-// Obtener productos aleatorios
-$stmt = $conn->prepare("
-    SELECT p.*, m.name AS brand_name, c.name AS category_name
-    FROM productos p
-    LEFT JOIN marcas m ON p.brand_id = m.id
-    LEFT JOIN categorias c ON p.category_id = c.id
-    ORDER BY RAND()
-    LIMIT 4
-");
-$stmt->execute();
-$relatedProducts = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
+    // Obtener productos aleatorios
+    $stmt = $conn->prepare("
+        SELECT p.*, m.name AS brand_name, c.name AS category_name
+        FROM productos p
+        LEFT JOIN marcas m ON p.brand_id = m.id
+        LEFT JOIN categorias c ON p.category_id = c.id
+        ORDER BY RAND()
+        LIMIT 4
+    ");
+    $stmt->execute();
+    $relatedProducts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 ?>

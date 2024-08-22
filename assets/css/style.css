@@ -1380,6 +1380,10 @@ textarea.input {
   font-weight: 500;
   cursor: default;
 }
+.store-pagination .active a {
+  color: #FFF;
+  font-weight: 600;
+}
 
 .store-pagination li a {
   display: block;

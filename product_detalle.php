@@ -170,8 +170,8 @@
 								<div id="tab2" class="tab-pane fade in">
 									<div class="row">
 										<div class="col-md-12" style="display: flex; justify-content: center; gap: 25px;">
-											<a href class="primary-btn soporte">Datasheet</a>
-											<a href class="primary-btn soporte">Manual</a>
+											<a href="<?php echo htmlspecialchars($product['manual']); ?>" target="_blank" class="primary-btn soporte">Datasheet</a>
+											<a href="<?php echo htmlspecialchars($product['datasheet']); ?>"  target="_blank" class="primary-btn soporte">Manual</a>
 										</div>
 									</div>
 								</div>
@@ -384,14 +384,19 @@
             <a class="product-img" href="product_detalle.php?id=<?php echo htmlspecialchars($relatedProduct['id']); ?>">
                 <img src="assets/images/<?php echo htmlspecialchars($relatedProduct['imagen']); ?>" alt="<?php echo htmlspecialchars($relatedProduct['name']); ?>">
                 <?php if (isset($relatedProduct['discount']) && $relatedProduct['discount'] > 0): ?>
-                    <div class="product-label">
-                        <span class="sale">-<?php echo htmlspecialchars($relatedProduct['discount']); ?>%</span>
-                    </div>
+					<div class="product-label">
+						<?php if ($producto['discount'] > 0): ?>
+							<span class="sale">-<?php echo htmlspecialchars($producto['discount']); ?>%</span>
+						<?php endif; ?>
+						<?php if ($producto['new']): ?>
+							<span class="new">Nuevo!</span>
+						<?php endif; ?>
+					</div>
                 <?php endif; ?>
             </a>
             <div class="product-body">
                 <p class="product-category"><?php echo htmlspecialchars($relatedProduct['category_name']); ?></p>
-                <h3 class="product-name"><a href="product_detalle.php?id=<?php echo htmlspecialchars($relatedProduct['id']); ?>"><?php echo htmlspecialchars($relatedProduct['name']); ?></a></h3>
+                <h3 class="product-name"><a href="product_detalle.php?id=<?php echo htmlspecialchars($relatedProduct['id']); ?>"><?php echo htmlspecialchars($relatedProduct['brand_name']); ?> - <?php echo htmlspecialchars($relatedProduct['name']); ?></a></h3>
                 <h4 class="product-price">$<?php echo number_format($relatedProduct['price'], 2); ?>
                     <?php if (isset($relatedProduct['old_price'])): ?>
                         <del class="product-old-price">$<?php echo number_format($relatedProduct['old_price'], 2); ?></del>
