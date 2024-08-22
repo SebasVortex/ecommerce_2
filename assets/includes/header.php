@@ -72,10 +72,27 @@ $categorias = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <li><a href="#"><i class="fa fa-envelope-o"></i> ventas@sistemasenergeticos.com.ar</a></li>
                 <li><a href="#"><i class="fa fa-map-marker"></i> Av. Díaz Vélez 1240 (C.P. 1702)Ciudadela, Buenos Aires, Argentina</a></li>
             </ul>
-            <ul class="header-links pull-right">
-                <li><a href="userpanel.php"><i class="fa fa-user-o"></i> Mi cuenta</a></li>
-                <li><a href="config/logout.php"><i class="fa fa-user-o"></i> Cerrar Sesion</a></li>
-            </ul>
+            <?php
+            
+            // Verificar si $user_id está definido
+            if (isset($_SESSION['user_id'])) {
+                $user_id = $_SESSION['user_id'];
+                ?>
+                <ul class="header-links pull-right">
+                    <li><a href="userpanel.php"><i class="fa fa-user-o"></i> Mi cuenta</a></li>
+                    <li><a href="config/logout.php"><i class="fa fa-user-o"></i> Cerrar Sesión</a></li>
+                </ul>
+                <?php
+            } else {
+                ?>
+                <ul class="header-links pull-right">
+                    <li><a href="login.php"><i class="fa fa-user-o"></i> Iniciar Sesión</a></li>
+                    <li><a href="register.php"><i class="fa fa-user-o"></i> Registrarse</a></li>
+                </ul>
+                <?php
+            }
+            ?>
+
         </div>
     </div>
     <!-- /TOP HEADER -->

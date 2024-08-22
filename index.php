@@ -45,7 +45,7 @@ if ($stmt->execute()) {
 					<div class="col-md-4 col-xs-6">
 						<div class="shop">
 							<div class="shop-img">
-							<img src="assets/images/A2_SOLUCIONES.png" alt="">
+							<img src="assets/images/SOLAR TOWER.png" alt="">
 							</div>
 							<div class="shop-body">
 								<h3>Sistemas<br>hibridos</h3>
@@ -59,10 +59,10 @@ if ($stmt->execute()) {
 					<div class="col-md-4 col-xs-6">
 						<div class="shop">
 							<div class="shop-img">
-								<img src="assets/images/BAT_200.png" alt="">
+								<img src="assets/images/EFB 2200.png" alt="">
 							</div>
 							<div class="shop-body">
-								<h3>Baterías de litio</h3>
+								<h3>Baterías<br>de litio</h3>
 								<a href="store.php?category%5B%5D=9" class="cta-btn">Ver mas <i class="fa fa-arrow-circle-right"></i></a>
 							</div>
 						</div>
@@ -73,7 +73,7 @@ if ($stmt->execute()) {
 					<div class="col-md-4 col-xs-6">
 						<div class="shop">
 							<div class="shop-img">
-								<img src="assets/images/PM2.png" alt="">
+								<img src="assets/images/EFP-10U-48R18-S30.png" alt="">
 							</div>
 							<div class="shop-body">
 								<h3>Plantas<br>Modulares</h3>

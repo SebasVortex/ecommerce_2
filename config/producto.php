@@ -64,6 +64,4 @@ $stmt_store = $conn->prepare("
 $stmt_store->execute();
 $productostore = $stmt_store->fetchAll(PDO::FETCH_ASSOC)
 
-
-
 ?>

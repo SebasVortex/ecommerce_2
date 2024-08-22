@@ -40,6 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $brand_id = $_POST['brand']; // Obtener la marca seleccionada
     $category_id = $_POST['category']; // Obtener la categoría seleccionada
     $datasheet = $_POST['datasheet'];
+    $manual = $_POST['manual']; // Obtener el valor del manual
 
     // Obtener descuento y estado de nuevo producto
     $discount = isset($_POST['apply_discount']) ? $_POST['discount'] : 0;
@@ -54,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Actualizar producto existente
         $query = "
             UPDATE productos 
-            SET name = :name, description = :description, characteristics = :characteristics, price = :price, stock = :stock, datasheet = :datasheet, brand_id = :brand_id, category_id = :category_id, discount = :discount, `new` = :is_new
+            SET name = :name, description = :description, characteristics = :characteristics, price = :price, stock = :stock, datasheet = :datasheet, brand_id = :brand_id, category_id = :category_id, discount = :discount, `new` = :is_new, manual = :manual
         ";
         if (isset($_FILES['imagenes']['name'][0]) && !empty($_FILES['imagenes']['name'][0])) {
             $query .= ", imagen = :imagen";
@@ -72,6 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt->bindParam(':category_id', $category_id);
         $stmt->bindParam(':discount', $discount);
         $stmt->bindParam(':is_new', $is_new, PDO::PARAM_INT);
+        $stmt->bindParam(':manual', $manual); // Bind del manual
         if (isset($_FILES['imagenes']['name'][0]) && !empty($_FILES['imagenes']['name'][0])) {
             $imagen = $_FILES['imagenes']['name'][0];
             $stmt->bindParam(':imagen', $imagen);
@@ -80,8 +82,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     } else {
         // Insertar nuevo producto
         $stmt = $conn->prepare("
-            INSERT INTO productos (name, description, characteristics, price, stock, imagen, datasheet, brand_id, category_id, discount, `new`) 
-            VALUES (:name, :description, :characteristics, :price, :stock, :imagen, :datasheet, :brand_id, :category_id, :discount, :is_new)
+            INSERT INTO productos (name, description, characteristics, price, stock, imagen, datasheet, brand_id, category_id, discount, `new`, manual) 
+            VALUES (:name, :description, :characteristics, :price, :stock, :imagen, :datasheet, :brand_id, :category_id, :discount, :is_new, :manual)
         ");
         // Bind parameters for insert
         $stmt->bindParam(':name', $name);
@@ -96,6 +98,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt->bindParam(':is_new', $is_new, PDO::PARAM_INT);
         $imagen = $_FILES['imagenes']['name'][0] ?? null; // Default to null if not set
         $stmt->bindParam(':imagen', $imagen);
+        $stmt->bindParam(':manual', $manual); // Bind del manual
     }
 
     if ($stmt->execute()) {
@@ -124,6 +127,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         echo "Error al guardar el producto.";
     }
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -201,28 +205,36 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 </select>
             </div>
 
+
             <div class="form-group">
-                    <label for="imagenes">Imágenes:</label>
-                    <input type="file" class="form-control-file" name="imagenes[]" id="imagenes" multiple>
-                    <?php if (isset($product['id'])): ?>
-                        <?php
-                        // Obtener todas las imágenes existentes del producto
-                        $stmt = $conn->prepare("SELECT imagen FROM productos_imagenes WHERE producto_id = :id");
-                        $stmt->bindParam(':id', $product['id'], PDO::PARAM_INT);
-                        $stmt->execute();
-                        $imagenes = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                        ?>
-                        <?php foreach ($imagenes as $imagen): ?>
-                            <img src="../assets/images/<?php echo htmlspecialchars($imagen['imagen']); ?>" alt="Imagen del Producto" class="img-fluid mt-2" style="max-width: 200px;">
-                        <?php endforeach; ?>
-                    <?php endif; ?>
-                </div>
+                <label for="imagenes">Imágenes:</label>
+                <input type="file" class="form-control-file" name="imagenes[]" id="imagenes" multiple>
+                <?php if (isset($product['id'])): ?>
+                    <?php
+                    $stmt = $conn->prepare("SELECT id, imagen FROM productos_imagenes WHERE producto_id = :id");
+                    $stmt->bindParam(':id', $product['id'], PDO::PARAM_INT);
+                    $stmt->execute();
+                    $imagenes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                    ?>
+                    <?php foreach ($imagenes as $imagen): ?>
+                        <div class="image-container mt-2" id="image-<?php echo $imagen['id']; ?>">
+                            <img src="../assets/images/<?php echo htmlspecialchars($imagen['imagen']); ?>" alt="Imagen del Producto" class="img-fluid" style="max-width: 200px;">
+                            <button type="button" class="btn btn-danger btn-sm" onclick="deleteImage(<?php echo $imagen['id']; ?>)">Eliminar</button>
+                        </div>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </div>
 
 
             <div class="form-group">
                 <label for="datasheet">Datasheet:</label>
                 <input type="text" class="form-control" name="datasheet" id="datasheet" value="<?php echo htmlspecialchars($product['datasheet'] ?? ''); ?>">
             </div>
+            
+            <div class="form-group">
+        <label for="manual">Manual:</label>
+        <input type="text" class="form-control" name="manual" id="manual" value="<?php echo $product['manual'] ?? ''; ?>">
+    </div>
 
             <label>Características:</label>
             <table class="table table-bordered" id="characteristics-table">
@@ -256,6 +268,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+    function deleteImage(imageId) {
+        if (confirm('¿Estás seguro de que deseas eliminar esta imagen?')) {
+            // Realizar la solicitud AJAX
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', 'eliminar_imagen.php', true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    // Eliminar la imagen del DOM
+                    var imageContainer = document.getElementById('image-' + imageId);
+                    if (imageContainer) {
+                        imageContainer.parentNode.removeChild(imageContainer);
+                    }
+                }
+            };
+            xhr.send('image_id=' + imageId);
+        }
+    }
+</script>
 
     <script>
         function addRow() {

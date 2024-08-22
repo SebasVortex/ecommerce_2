@@ -81,7 +81,7 @@
 								<ul class="footer-links">
 									<li><a href="userpanel.php">Mi Cuenta</a></li>
 									<li><a href="carrito.php">Ver Carrito</a></li>
-									<li><a href="#">Ayuda</a></li>
+									<li><a href="https://www.sistemasenergeticos.com.ar/contacto">Ayuda</a></li>
 								</ul>
 							</div>
 						</div>
