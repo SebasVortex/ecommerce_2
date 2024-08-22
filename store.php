@@ -15,8 +15,8 @@ $priceMin = isset($_GET['price_min']) ? intval($_GET['price_min']) : 0;
 $priceMax = isset($_GET['price_max']) ? intval($_GET['price_max']) : $maxPrice;
 $searchTerm = isset($_GET['search']) ? '%' . htmlspecialchars($_GET['search']) . '%' : '';
 
-// Obtener el número de productos por página del parámetro, por defecto es 15
-$productos_por_pagina = isset($_GET['items_per_page']) ? intval($_GET['items_per_page']) : 20;
+// Obtener el número de productos por página del parámetro, por defecto es 12
+$productos_por_pagina = isset($_GET['items_per_page']) ? intval($_GET['items_per_page']) : 12;
 $pagina_actual = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
 $offset = ($pagina_actual - 1) * $productos_por_pagina;
 
