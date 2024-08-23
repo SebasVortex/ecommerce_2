@@ -88,7 +88,7 @@
 							</div>
 							-->
 							<div>
-								<h3 class="product-price"><?php echo number_format($product['price'], 2); ?><del class="product-old-price">$990.00</del></h3>
+								<h3 class="product-price"><?php echo number_format($product['price'], 2); ?><!--<del class="product-old-price">$990.00</del>--></h3>
 								<span class="product-available"><?php echo htmlspecialchars($product['stock']); ?></span>
 							</div>
 							<p><?php echo nl2br(htmlspecialchars($product['description'])); ?></p>

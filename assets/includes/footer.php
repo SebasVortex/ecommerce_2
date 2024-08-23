@@ -154,42 +154,6 @@ document.querySelectorAll('.add-to-cart-btn, .add-to-wishlist').forEach(button =
 </script>
 
 
-			<!-- Temporizador index principal -->
-<script>
-// Verificar si $fechaFin tiene un valor válido antes de pasar a JavaScript
-<?php if ($fechaFin): ?>
-    var fechaFin = new Date("<?php echo $fechaFin; ?>").getTime();
-<?php else: ?>
-    var fechaFin = new Date().getTime(); // Usar la fecha actual si no hay oferta
-<?php endif; ?>
-
-// Actualizar el contador cada segundo
-var x = setInterval(function() {
-    var ahora = new Date().getTime();
-    var distancia = fechaFin - ahora;
-
-    var dias = Math.floor(distancia / (1000 * 60 * 60 * 24));
-    var horas = Math.floor((distancia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    var minutos = Math.floor((distancia % (1000 * 60 * 60)) / (1000 * 60));
-    var segundos = Math.floor((distancia % (1000 * 60)) / 1000);
-
-    document.getElementById("days").innerHTML = dias;
-    document.getElementById("hours").innerHTML = horas;
-    document.getElementById("mins").innerHTML = minutos;
-    document.getElementById("secs").innerHTML = segundos;
-
-    // Si el contador llega a cero, mostrar un mensaje
-    if (distancia < 0) {
-        clearInterval(x);
-        document.querySelector(".hot-deal").innerHTML = "<h2 class='text-uppercase'>¡La oferta ha terminado!</h2>";
-    }
-}, 1000);
-</script>
-
-
-
-
-
 			<!-- codigo para la busqueda -->
 			<script>
 document.addEventListener('DOMContentLoaded', () => {
@@ -238,8 +202,64 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 </script>
+<script>
+    // Manejo del clic en el botón
+    document.querySelectorAll('.quick-view').forEach(function(button) {
+        button.addEventListener('click', function() {
+            var productId = this.getAttribute('data-product-id');
+            window.location.href = 'product_detalle.php?id=' + productId;
+        });
+    });
 
 
+</script>
+<script>
+document.getElementById('userType').addEventListener('change', function() {
+    const formConsumidor = document.getElementById('form-consumidor');
+    const formEmpresa = document.getElementById('form-empresa');
+    const submitGroup = document.getElementById('submit-group');
+    const userType = this.value;
+
+    if (userType === 'consumidor') {
+        formConsumidor.style.display = 'block';
+        formEmpresa.style.display = 'none';
+        submitGroup.style.display = 'block';
+
+        document.querySelectorAll('#form-consumidor input').forEach(input => {
+            input.required = true;
+        });
+
+        document.querySelectorAll('#form-empresa input').forEach(input => {
+            input.required = false;
+        });
+    } else if (userType === 'empresa') {
+        formConsumidor.style.display = 'none';
+        formEmpresa.style.display = 'block';
+        submitGroup.style.display = 'block';
+
+        document.querySelectorAll('#form-empresa input').forEach(input => {
+            input.required = true;
+        });
+
+        document.querySelectorAll('#form-consumidor input').forEach(input => {
+            input.required = false;
+        });
+    } else {
+        formConsumidor.style.display = 'none';
+        formEmpresa.style.display = 'none';
+        submitGroup.style.display = 'none';
+    }
+});
+
+// Event listener para capturar los cambios en los campos de entrada
+document.querySelectorAll('input').forEach(input => {
+    input.addEventListener('input', function() {
+        console.log(`${this.name}: ${this.value}`);
+    });
+});
+
+
+</script>
 
 
 <!-- Incluye jQuery UI para el control deslizante -->

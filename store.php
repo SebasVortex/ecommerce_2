@@ -281,13 +281,7 @@ function getBrandName($brandId) {
     <?php
     $count = 0; // Contador de productos
     foreach ($productostore as $producto):
-        // Si el precio viejo no existe, asigna 100 menos que el precio original
-        if (empty($producto['old_price'])) {
-            $producto['old_price'] = max(0, $producto['price'] - 100); // Asegura que no sea negativo
-        }
 
-        // Genera un rating aleatorio entre 4 y 5 si no existe un rating
-        $rating = rand(4, 5);
     ?>  
     <!-- product -->
     <div class="col-md-4 col-xs-6">
@@ -316,7 +310,9 @@ function getBrandName($brandId) {
                 </div>
                 <div class="product-btns">
                     <button class="add-to-wishlist" data-product-id="<?php echo $producto['id']; ?>"><i class="fa fa-heart-o"></i><span class="tooltipp">Añadir carrito</span></button>
-                    <!--<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>-->
+					<button class="quick-view" data-product-id="<?php echo $producto['id']; ?>">
+														<i class="fa fa-eye"></i><span class="tooltipp">Ver mas</span>
+													</button>
                 </div>
             </div>
             <div class="add-to-cart">

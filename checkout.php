@@ -89,34 +89,56 @@ if (isset($_SESSION['user_id'])) {
                         <div class="section-title">
                             <h3 class="title">Completa tus datos</h3>
                         </div>
-                        <form action="config/processcheckoutt.php" method="POST">
+                        <form action="config/processcheckoutt.php" method="POST" id="checkout-form">
                             <div class="form-group">
-                                <input class="input" type="text" name="first-name" placeholder="Nombre" required>
+                                <label for="userType">Selecciona una opción:</label>
+                                <select id="userType" name="userType" class="input" required>
+                                    <option value="" disabled selected>Seleccione...</option>
+                                    <option value="consumidor">Consumidor Final</option>
+                                    <option value="empresa">Empresa</option>
+                                </select>
                             </div>
-                            <div class="form-group">
-                                <input class="input" type="text" name="last-name" placeholder="Apellido" required>
-                            </div>
-                            <div class="form-group">
-                                <input class="input" type="email" name="email" placeholder="Email" required>
-                            </div>
-                            <div class="form-group">
-                                <input class="input" type="text" name="address" placeholder="Dirección" required>
-                            </div>
-                            <div class="form-group">
-                                <input class="input" type="text" name="city" placeholder="Ciudad" required>
-                            </div>
-                            <div class="form-group">
-                                <input class="input" type="text" name="zip-code" placeholder="Código Postal" required>
-                            </div>
-                            <div class="form-group">
-                                <input class="input" type="tel" name="tel" placeholder="Teléfono" required>
-                            </div>
-                            
-                            <!-- Order notes -->
-                            <div class="form-group">
-                                <textarea class="input" name="notas" placeholder="Notas de Aclaración" rows="4"></textarea>
-                            </div>
-                            <!-- /Order notes -->
+
+                                <!-- Formulario para Consumidor Final -->
+                                <div id="form-consumidor" style="display: none;">
+                                    <div class="form-group">
+                                        <input class="input" type="text" name="consumidor-first-name" placeholder="Nombre">
+                                    </div>
+                                    <div class="form-group">
+                                        <input class="input" type="text" name="consumidor-last-name" placeholder="Apellido">
+                                    </div>
+                                    <div class="form-group">
+                                        <input class="input" type="email" name="consumidor-email" placeholder="Email">
+                                    </div>
+                                    <div class="form-group">
+                                        <input class="input" type="tel" name="consumidor-tel" placeholder="Teléfono">
+                                    </div>
+                                </div>
+
+                                <!-- Formulario para Empresa -->
+                                <div id="form-empresa" style="display: none;">
+                                    <div class="form-group">
+                                        <input class="input" type="text" name="empresa-razon-social" placeholder="Razón Social">
+                                    </div>
+                                    <div class="form-group">
+                                        <input class="input" type="text" name="empresa-cuit" placeholder="CUIT">
+                                    </div>
+                                    <div class="form-group">
+                                        <input class="input" type="email" name="empresa-email" placeholder="Email">
+                                    </div>
+                                    <div class="form-group">
+                                        <input class="input" type="tel" name="empresa-tel" placeholder="Teléfono">
+                                    </div>
+                                    <div class="form-group">
+                                        <input class="input" type="text" name="empresa-persona-contacto" placeholder="Persona de contacto">
+                                    </div>
+                                </div>
+
+                                <!-- Order notes -->
+                                <div class="form-group">
+                                    <textarea class="input" name="notas" placeholder="Notas de Aclaración" rows="4"></textarea>
+                                </div>
+                                <!-- /Order notes -->
                     </div>
                 </div>
 
@@ -155,7 +177,11 @@ if (isset($_SESSION['user_id'])) {
                     </div>
 
                     <!-- Moved the submit button to the checkout section -->
-                    <button type="submit" class="primary-btn order-submit">Finalizar Compra</button>
+                        <!-- Botón de Envío -->
+                        <div class="form-group" id="submit-group" style="display: none;">
+                            <button type="submit" class="primary-btn order-submit">Finalizar Compra</button>
+                        </div>
+
                     </form>
                 </div>
                 <!-- /Order Details -->
@@ -171,4 +197,3 @@ if (isset($_SESSION['user_id'])) {
     <!-- /PIE DE PÁGINA -->
 </body>
 </html>
-

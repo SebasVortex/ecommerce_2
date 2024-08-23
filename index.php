@@ -154,7 +154,9 @@ if ($stmt->execute()) {
 
 												<div class="product-btns">
 													<button class="add-to-wishlist"data-product-id="<?php echo $producto['id']; ?>"><i class="fa fa-heart-o"></i><span class="tooltipp">Añadir al carrito</span></button>
-									<!--<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>-->
+													<button class="quick-view" data-product-id="<?php echo $producto['id']; ?>">
+														<i class="fa fa-eye"></i><span class="tooltipp">Ver mas</span>
+													</button>
 												</div>
 											</div>
 											<div class="add-to-cart">
@@ -289,7 +291,9 @@ if ($stmt->execute()) {
 
 												<div class="product-btns">
 													<button class="add-to-wishlist"data-product-id="<?php echo $producto['id']; ?>"><i class="fa fa-heart-o"></i><span class="tooltipp">añadir al carrito</span></button>
-													<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
+													<button class="quick-view" data-product-id="<?php echo $producto['id']; ?>">
+														<i class="fa fa-eye"></i><span class="tooltipp">Ver mas</span>
+													</button>
 												</div>
 											</div>
 											<div class="add-to-cart">
@@ -433,6 +437,38 @@ if ($stmt->execute()) {
 
 		<!-- PIE DE PÁGINA -->
 		<?php include 'assets/includes/footer.php';?>
+					<!-- Temporizador index principal -->
+<script>
+// Verificar si $fechaFin tiene un valor válido antes de pasar a JavaScript
+<?php if ($fechaFin): ?>
+    var fechaFin = new Date("<?php echo $fechaFin; ?>").getTime();
+<?php else: ?>
+    var fechaFin = new Date().getTime(); // Usar la fecha actual si no hay oferta
+<?php endif; ?>
+
+// Actualizar el contador cada segundo
+var x = setInterval(function() {
+    var ahora = new Date().getTime();
+    var distancia = fechaFin - ahora;
+
+    var dias = Math.floor(distancia / (1000 * 60 * 60 * 24));
+    var horas = Math.floor((distancia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    var minutos = Math.floor((distancia % (1000 * 60 * 60)) / (1000 * 60));
+    var segundos = Math.floor((distancia % (1000 * 60)) / 1000);
+
+    document.getElementById("days").innerHTML = dias;
+    document.getElementById("hours").innerHTML = horas;
+    document.getElementById("mins").innerHTML = minutos;
+    document.getElementById("secs").innerHTML = segundos;
+
+    // Si el contador llega a cero, mostrar un mensaje
+    if (distancia < 0) {
+        clearInterval(x);
+        document.querySelector(".hot-deal").innerHTML = "<h2 class='text-uppercase'>¡La oferta ha terminado!</h2>";
+    }
+}, 1000);
+</script>
+
 		<!-- /PIE DE PÁGINA -->
 	</body>
 </html>
