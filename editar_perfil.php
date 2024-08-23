@@ -93,75 +93,166 @@ try {
 ?>
 
 <?php include 'assets/includes/head.php';?>
-    <style>
-        /* Estilo personalizado para el perfil */
+<style>
+    /* Estilo personalizado para el perfil */
+    .profile-container {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .profile-image-container {
+        position: relative;
+        display: inline-block;
+        width: 200px; /* Fijar ancho */
+        height: 200px; /* Fijar altura */
+        border-radius: 50%; /* Redondear el contenedor */
+        overflow: hidden; /* Ocultar partes desbordantes de la imagen */
+    }
+
+    .profile-image-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* La imagen se recorta para llenar el contenedor */
+        border-radius: 50%; /* Redondear la imagen */
+    }
+
+    .profile-image-container .overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        text-align: center;
+        cursor: pointer;
+    }
+
+    .profile-image-container:hover .overlay {
+        opacity: 1;
+    }
+
+    .form-ent{
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+        margin: 50px 0;
+    }
+
+    .file-input {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        cursor: pointer;
+    }
+    
+    .form-group {
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; 
+    width: 125%;
+    }   
+    .password-container span img {
+        width: 35px;
+        margin-left: 15px;
+    }
+    .password-container {
+        width: 116%;
+        display: flex;
+        align-items: flex-end;
+    }
+    .form-group label {
+        display: block;
+        font-weight: 500;
+        margin-left: 2px;
+    }
+    .btn-log {
+        background-color: #D10024;
+        transition: background-color 0.3s, box-shadow 0.2s; 
+        box-shadow: 0 7px 11px #a0a0a0;
+        border: none;
+        color: #fff;
+        border-radius: 35px;
+        width: 20%;
+        margin: 20px 0;
+        height: 45px;
+        font-size: 18px;
+        font-weight: 600;
+    }
+    .btn-log:hover {
+        background-color: #B31920; /* Un verde ligeramente más oscuro para el hover */
+        box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2); /* Sombra para dar sensación de elevación */
+    }
+
+    /* Estilo para cuando el botón está enfocado o activo */
+    .btn-log:focus, .btn-log:active {
+        outline: none; /* Elimina el outline que algunos navegadores añaden */
+        background-color: #8E171C; /* Un verde aún más oscuro para el focus/active */
+    }
+    .show-password {
+        cursor: pointer;
+    }
+    .change-pssw {
+        background-color: transparent;
+        border: none;
+        color: #D10024;
+        padding: 0;
+    }
+    .form-group input {
+    box-shadow: 4px 4px 10px #bcbcbca6;
+    border-radius: 10.85px;
+    background-color: #eee;
+    border: none;
+    }
+    img#changepasswordIcon {
+        margin-left: 5px;
+        width: 20px;
+    }
+    .psw-btn {
+        margin-top: 10px;
+        margin-left: 4px;
+    }
+    .modal-header{
+        text-align: center;
+    }
+    form#changePasswordForm {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    }
+    .form-modal input {
+    box-shadow: 4px 4px 10px #bcbcbca6;
+    border-radius: 10.85px;
+    background-color: #eee;
+    border: none;
+    }
+    .form-modal {
+        width: 70%;
+    }
+    .form-modal label{
+        font-weight: 500;
+    }
+    .modal-title {
+        font-size: 32px;
+        font-weight: 500;
+    }
+    @media (max-width: 768px) {
         .profile-container {
-            text-align: center;
-            margin-top: 20px;
+            padding: 15px;
         }
+    }
 
-        .profile-image-container {
-            position: relative;
-            display: inline-block;
-        }
-
-        .profile-image-container img {
-            border-radius: 50%;
-            max-width: 150px;
-            max-height: 150px;
-        }
-
-        .profile-image-container .overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            border-radius: 50%;
-            transition: opacity 0.3s ease;
-            text-align: center;
-            cursor: pointer; /* Cambia el cursor para indicar que es clickeable */
-        }
-
-        .profile-image-container:hover .overlay {
-            opacity: 1;
-        }
-
-        .file-input {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0; /* Oculta el input file */
-            cursor: pointer; /* Cambia el cursor para indicar que es clickeable */
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-        }
-
-        .btn-submit {
-            margin-top: 20px;
-        }
-
-        @media (max-width: 768px) {
-            .profile-container {
-                padding: 15px;
-            }
-        }
-    </style>
+</style>
 </head>
 <body>
     <!-- HEADER -->
@@ -175,28 +266,80 @@ try {
             </div>
         <?php } ?>
         <form action="editar_perfil.php" method="POST" enctype="multipart/form-data">
-            <div class="form-group">
-                <label for="username">Nombre:</label>
-                <input type="text" id="username" name="username" class="form-control" value="<?php echo htmlspecialchars($user['username']); ?>" required>
+            <div class="form-ent">
+                <div class="profile-image-container">
+                    <!-- Mostrar imagen de perfil si está disponible -->
+                    <img id="profileImage" src="assets/userimages/<?php echo !empty($user['imagen_perfil']) ? htmlspecialchars($user['imagen_perfil']) : 'default.png'; ?>" alt="Imagen de perfil" class="img-fluid rounded-circle">
+                    <div class="overlay">Subir nueva imagen</div>
+                    <input type="file" id="imagen_perfil" name="imagen_perfil" class="file-input" onchange="previewImage(event)">
+                    <div class="max-size"><p>Tamaño Máximo: <b>5MB</b></p></div>
+                </div> 
+                <div class="group-junt">
+                    <div class="form-group">
+                        <label for="username">Nombre:</label>
+                        <input type="text" id="username" name="username" class="form-control" value="<?php echo htmlspecialchars($user['username']); ?>" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" name="email" class="form-control" value="<?php echo htmlspecialchars($user['email']); ?>" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Contraseña:</label>
+                        <div class="password-container">
+                            <input type="password" id="password" name="password" class="form-control" value="<?php echo htmlspecialchars($user['password']); ?>" readonly>
+                            <span class="show-password" onclick="togglePassword()"><img id="passwordIcon" src="assets/images/lock.png" alt="Toggle Password"></span>
+                        </div>
+                        <div class="psw-btn">
+                            <button type="button" class="btn-secondary change-pssw" data-toggle="modal" data-target="#changePasswordModal">Cambiar Contraseña</button><img id="changepasswordIcon" src="assets/images/new-password.png" alt="Change Password"></span>
+                        </div>
+                    </div>
+                </div>                
             </div>
-
-            <div class="form-group">
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" class="form-control" value="<?php echo htmlspecialchars($user['email']); ?>" required>
-            </div>
-
-            <div class="form-group profile-image-container">
-                <!-- Mostrar imagen de perfil si está disponible -->
-                <img id="profileImage" src="assets/userimages/<?php echo !empty($user['imagen_perfil']) ? htmlspecialchars($user['imagen_perfil']) : 'default.png'; ?>" alt="Imagen de perfil" class="img-fluid rounded-circle">
-                <div class="overlay">Subir nueva imagen</div>
-                <input type="file" id="imagen_perfil" name="imagen_perfil" class="file-input" onchange="previewImage(event)">
-            </div>
-
-            <button type="submit" class="btn btn-primary btn-submit">Actualizar Perfil</button>
+            <button type="submit" class="btn btn-primary btn-submit btn-log">Actualizar Perfil</button>
         </form>
 
         <a href="userpanel.php" class="btn btn-secondary">Volver al Panel de Usuario</a>
     </div>
+    <!-- Modal -->
+    <div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h5 class="modal-title" id="changePasswordModalLabel">Cambiar Contraseña</h5>
+                </div>
+                <div class="modal-body">
+                    <form id="changePasswordForm" method="POST" action="config/cambiar_contrasena.php">
+                        <div class="form-modal">
+                            <label for="current_password">Contraseña Actual:</label>
+                            <div class="password-container">
+                                <input type="password" id="current_password" name="current_password" class="form-control" required>
+                                <span class="show-password" onclick="togglePassword()"><img id="passwordIcon" src="assets/images/lock.png" alt="Toggle Password"></span>
+                            </div>
+                        </div>
+                        <div class="form-modal">
+                            <label for="new_password">Nueva Contraseña:</label>
+                            <div class="password-container">
+                                <input type="password" id="new_password" name="new_password" class="form-control" required>
+                                <span class="show-password" onclick="togglePassword()"><img id="passwordIcon" src="assets/images/lock.png" alt="Toggle Password"></span>
+                            </div>
+                        </div>
+                        <div class="form-modal">
+                            <label for="confirm_password">Confirmar Contraseña:</label>
+                            <div class="password-container">
+                                <input type="password" id="confirm_password" name="confirm_password" class="form-control" required>
+                                <span class="show-password" onclick="togglePassword()"><img id="passwordIcon" src="assets/images/lock.png" alt="Toggle Password"></span>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-log" style="width: 40%;">Guardar Cambios</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- PIE DE PÁGINA -->
     <?php include 'assets/includes/footer.php';?>
     <!-- /PIE DE PÁGINA -->
@@ -206,15 +349,23 @@ try {
             const input = event.target;
             const file = input.files[0];
             const img = document.getElementById('profileImage');
-
             if (file && file.type.startsWith('image/')) {
                 const reader = new FileReader();
-
                 reader.onload = function(e) {
                     img.src = e.target.result;
                 };
-
                 reader.readAsDataURL(file);
+            }
+        }
+        function togglePassword() {
+            var passwordField = document.getElementById('password');
+            var passwordIcon = document.getElementById('passwordIcon');
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+                passwordIcon.src = 'assets/images/unlock.png';
+            } else {
+                passwordField.type = 'password';
+                passwordIcon.src = 'assets/images/lock.png';
             }
         }
     </script>

@@ -29,6 +29,9 @@ try {
 ?>
 <?php include 'assets/includes/head.php';?>
 <title>Mi cuenta - <?php echo htmlspecialchars($user['username']); ?></title>
+<style>
+    
+</style>
 </head>
 <body>
     <!-- HEADER -->
