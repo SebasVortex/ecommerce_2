@@ -118,7 +118,6 @@
 
 							<ul class="product-links">
 								<li>Compartir:</li>
-								<li><a href="#"><i class="fa fa-facebook"></i></a></li>
 								<li><a href="#"><i class="fa fa-linkedin"></i></a></li>
 								<li><a href="#"><i class="fa fa-instagram"></i></a></li>
 								<li><a href="#"><i class="fa fa-youtube"></i></a></li>
@@ -381,19 +380,19 @@
     <div class="col-md-3 col-xs-6">
         <div class="product">
             <!-- Enlace a la página de detalles del producto -->
-            <a class="product-img" href="product_detalle.php?id=<?php echo htmlspecialchars($relatedProduct['id']); ?>">
-                <img src="assets/images/<?php echo htmlspecialchars($relatedProduct['imagen']); ?>" alt="<?php echo htmlspecialchars($relatedProduct['name']); ?>">
-                <?php if (isset($relatedProduct['discount']) && $relatedProduct['discount'] > 0): ?>
+			<a class="product-img" href="product_detalle.php?id=<?php echo htmlspecialchars($relatedProduct['id']); ?>">
+				<div class="product-img">
+					<img src="assets/images/<?php echo htmlspecialchars($relatedProduct['imagen']); ?>" alt="<?php echo htmlspecialchars($relatedProduct['name']); ?>">
 					<div class="product-label">
-						<?php if ($producto['discount'] > 0): ?>
-							<span class="sale">-<?php echo htmlspecialchars($producto['discount']); ?>%</span>
+						<?php if ($relatedProduct['discount'] > 0): ?>
+							<span class="sale">-<?php echo htmlspecialchars($relatedProduct['discount']); ?>%</span>
 						<?php endif; ?>
-						<?php if ($producto['new']): ?>
+						<?php if ($relatedProduct['new']): ?>
 							<span class="new">Nuevo!</span>
 						<?php endif; ?>
 					</div>
-                <?php endif; ?>
-            </a>
+				</div>
+			</a>
             <div class="product-body">
                 <p class="product-category"><?php echo htmlspecialchars($relatedProduct['category_name']); ?></p>
                 <h3 class="product-name"><a href="product_detalle.php?id=<?php echo htmlspecialchars($relatedProduct['id']); ?>"><?php echo htmlspecialchars($relatedProduct['brand_name']); ?> - <?php echo htmlspecialchars($relatedProduct['name']); ?></a></h3>

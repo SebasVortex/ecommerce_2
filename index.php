@@ -124,7 +124,6 @@ if ($stmt->execute()) {
 										<div class="product">
 										<a class="product-img" href="product_detalle.php?id=<?php echo $producto['id']; ?>">
 											<div class="product-img">
-	
 												<img src="assets/images/<?php echo htmlspecialchars($producto['imagen']); ?>" alt="<?php echo htmlspecialchars($producto['name']); ?>">
 												<div class="product-label">
 													<?php if ($producto['discount'] > 0): ?>
@@ -134,8 +133,8 @@ if ($stmt->execute()) {
 														<span class="new">Nuevo!</span>
 													<?php endif; ?>
 												</div>
-												</a>
 											</div>
+											</a>
 											<div class="product-body">
 												<p class="product-category"><?php echo htmlspecialchars($producto['category_name']); ?></p>
 												<h3 class="product-name">

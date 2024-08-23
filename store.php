@@ -286,6 +286,7 @@ function getBrandName($brandId) {
     <!-- product -->
     <div class="col-md-4 col-xs-6">
         <div class="product" data-price="<?php echo htmlspecialchars($producto['price']); ?>">
+		<a class="product-img" href="product_detalle.php?id=<?php echo $producto['id']; ?>">
             <div class="product-img">
                 <img src="assets/images/<?php echo htmlspecialchars($producto['imagen']); ?>" alt="<?php echo htmlspecialchars($producto['name']); ?>">
                 <div class="product-label">
@@ -297,6 +298,7 @@ function getBrandName($brandId) {
                     <?php endif; ?>
                 </div>
             </div>
+			</a>
             <div class="product-body">
                 <p class="product-category"><?php echo htmlspecialchars($producto['category_name']); ?></p>
                 <h3 class="product-name"><a href="product_detalle.php?id=<?php echo $producto['id']; ?>"><?php echo htmlspecialchars($producto['brand_name']); ?> - <?php echo htmlspecialchars($producto['name']); ?></a></h3>

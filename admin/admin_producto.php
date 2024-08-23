@@ -33,7 +33,7 @@ if (isset($_GET['id'])) {
 // Guardar o actualizar el producto
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $id = $_POST['id'] ?? null;
-    $name = $_POST['name'];
+    $name = $_POST['name']; 
     $description = $_POST['description'];
     $price = $_POST['price'];
     $stock = $_POST['stock'];
@@ -42,44 +42,45 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $datasheet = $_POST['datasheet'];
     $manual = $_POST['manual']; // Obtener el valor del manual
 
-    // Obtener descuento y estado de nuevo producto
-    $discount = isset($_POST['apply_discount']) ? $_POST['discount'] : 0;
-    $is_new = isset($_POST['is_new']) ? 1 : 0;
-
     // Convertir características a formato JSON
     $characteristics = $_POST['characteristics'] ?? [];
     $characteristics_json = json_encode($characteristics);
 
-    // Construir la consulta SQL para guardar o actualizar el producto
-    if ($id) {
-        // Actualizar producto existente
-        $query = "
-            UPDATE productos 
-            SET name = :name, description = :description, characteristics = :characteristics, price = :price, stock = :stock, datasheet = :datasheet, brand_id = :brand_id, category_id = :category_id, discount = :discount, `new` = :is_new, manual = :manual
-        ";
-        if (isset($_FILES['imagenes']['name'][0]) && !empty($_FILES['imagenes']['name'][0])) {
-            $query .= ", imagen = :imagen";
-        }
-        $query .= " WHERE id = :id";
-        $stmt = $conn->prepare($query);
-        // Bind parameters for update
-        $stmt->bindParam(':name', $name);
-        $stmt->bindParam(':description', $description);
-        $stmt->bindParam(':characteristics', $characteristics_json);
-        $stmt->bindParam(':price', $price);
-        $stmt->bindParam(':stock', $stock);
-        $stmt->bindParam(':datasheet', $datasheet);
-        $stmt->bindParam(':brand_id', $brand_id);
-        $stmt->bindParam(':category_id', $category_id);
-        $stmt->bindParam(':discount', $discount);
-        $stmt->bindParam(':is_new', $is_new, PDO::PARAM_INT);
-        $stmt->bindParam(':manual', $manual); // Bind del manual
-        if (isset($_FILES['imagenes']['name'][0]) && !empty($_FILES['imagenes']['name'][0])) {
-            $imagen = $_FILES['imagenes']['name'][0];
-            $stmt->bindParam(':imagen', $imagen);
-        }
-        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-    } else {
+// Obtener descuento y estado de nuevo producto
+$discount = isset($_POST['apply_discount']) ? $_POST['discount'] : 0;
+$is_new = isset($_POST['is_new']) ? intval($_POST['is_new']) : 0; // Convertir a entero
+
+// Construir la consulta SQL para guardar o actualizar el producto
+if ($id) {
+    // Actualizar producto existente
+    $query = "
+        UPDATE productos 
+        SET name = :name, description = :description, characteristics = :characteristics, price = :price, stock = :stock, datasheet = :datasheet, brand_id = :brand_id, category_id = :category_id, discount = :discount, `new` = :is_new, manual = :manual
+    ";
+    if (isset($_FILES['imagenes']['name'][0]) && !empty($_FILES['imagenes']['name'][0])) {
+        $query .= ", imagen = :imagen";
+    }
+    $query .= " WHERE id = :id";
+    $stmt = $conn->prepare($query);
+    // Bind parameters for update
+    $stmt->bindParam(':name', $name);
+    $stmt->bindParam(':description', $description);
+    $stmt->bindParam(':characteristics', $characteristics_json);
+    $stmt->bindParam(':price', $price);
+    $stmt->bindParam(':stock', $stock);
+    $stmt->bindParam(':datasheet', $datasheet);
+    $stmt->bindParam(':brand_id', $brand_id);
+    $stmt->bindParam(':category_id', $category_id);
+    $stmt->bindParam(':discount', $discount);
+    $stmt->bindParam(':is_new', $is_new, PDO::PARAM_INT);
+    $stmt->bindParam(':manual', $manual); // Bind del manual
+    if (isset($_FILES['imagenes']['name'][0]) && !empty($_FILES['imagenes']['name'][0])) {
+        $imagen = $_FILES['imagenes']['name'][0];
+        $stmt->bindParam(':imagen', $imagen);
+    }
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+}
+ else {
         // Insertar nuevo producto
         $stmt = $conn->prepare("
             INSERT INTO productos (name, description, characteristics, price, stock, imagen, datasheet, brand_id, category_id, discount, `new`, manual) 
@@ -184,6 +185,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <option value="0" <?php echo isset($product['new']) && !$product['new'] ? 'selected' : ''; ?>>No</option>
                 </select>
             </div>
+
 
 
 

@@ -55,4 +55,5 @@ if ($product) {
     $stmt->execute();
     $relatedProducts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
+
 ?>
