@@ -16,18 +16,19 @@ if ($stmt->execute()) {
         $fechaFin = $oferta['fecha_fin'];
     } else {
         // Manejo en caso de que no se encuentren resultados
-        echo "No se encontró ninguna oferta activa.";
+        echo "<script>alert('No se encontró ninguna oferta activa.');</script>";
         // Definir valores predeterminados o manejar el error según sea necesario
         $fechaInicio = null;
         $fechaFin = null;
     }
 } else {
     // Manejo en caso de que la consulta falle
-    echo "Error al ejecutar la consulta.";
+    echo "<script>alert('Error al ejecutar la consulta.');</script>";
     $fechaInicio = null;
     $fechaFin = null;
 }
 ?>
+
 <?php include 'assets/includes/head.php';?>
 </head>
 	<body>
