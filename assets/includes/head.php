@@ -21,7 +21,8 @@
  		<link type="text/css" rel="stylesheet" href="assets/css/nouislider.min.css"/>
 
  		<!-- Icono de Font Awesome -->
- 		<link rel="stylesheet" href="assets/css/font-awesome.min.css">
+ 	    <link rel="stylesheet" href="assets/css/font-awesome.min.css"/>
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 
  		<!-- Hoja de estilo personalizada -->
  		<link type="text/css" rel="stylesheet" href="assets/css/style.css"/>

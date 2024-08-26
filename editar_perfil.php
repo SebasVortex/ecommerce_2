@@ -168,7 +168,7 @@ try {
         border: none;
         color: #fff;
         border-radius: 35px;
-        width: 20%;
+        width: 24%;
         margin: 20px 0;
         height: 45px;
         font-size: 18px;
@@ -244,10 +244,43 @@ try {
     }
 
     @media (max-width: 768px) {
-        .profile-container {
-            padding: 15px;
-        }
+    .form-ent {
+        flex-direction: column;
+        align-items: center;
     }
+
+    .profile-image-container {
+        margin-bottom: 20px;
+    }
+
+    .form-group {
+        width: 100%; 
+    }
+
+    .btn-log {
+        width: 50%; 
+        margin-top: 20px;
+    }
+    .psw-cnt {
+    width: 120.66%;
+}
+}
+
+@media (max-width: 480px) {
+    .profile-image-container img {
+        width: 150px;
+        height: 150px;
+    }
+
+    .form-group label {
+        font-size: 14px; 
+    }
+
+    .btn-log {
+        padding: 10px;
+        font-size: 16px; 
+    }
+}
 </style>
 </head>
 <body>
@@ -268,7 +301,6 @@ try {
                     <img id="profileImage" src="assets/userimages/<?php echo !empty($user['imagen_perfil']) ? htmlspecialchars($user['imagen_perfil']) : 'default.png'; ?>" alt="Imagen de perfil" class="img-fluid rounded-circle">
                     <div class="overlay">Subir nueva imagen</div>
                     <input type="file" id="imagen_perfil" name="imagen_perfil" class="file-input" onchange="previewImage(event)">
-                    <div class="max-size"><p>Tamaño Máximo: <b>5MB</b></p></div>
                 </div> 
                 <div class="group-junt">
                     <div class="form-group">
