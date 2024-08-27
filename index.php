@@ -2,7 +2,7 @@
 include('config/producto.php'); // Incluye el archivo que recupera los datos de los productos
 // Obtener la oferta activa desde la base de datos
 
-$query = "SELECT fecha_inicio, fecha_fin FROM ofertas WHERE id = 1"; // Ajusta la consulta según sea necesario
+$query = "SELECT fecha_inicio, fecha_fin FROM ofertas WHERE id = 2"; // Ajusta la consulta según sea necesario
 $stmt = $conn->prepare($query);
 
 // Verificar si la consulta se ejecutó correctamente
