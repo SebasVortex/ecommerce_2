@@ -551,7 +551,7 @@ textarea.input {
   padding: 15px;
   -webkit-box-shadow: 0px 0px 0px 2px #E4E7ED;
   box-shadow: 0px 0px 0px 2px #E4E7ED;
-  z-index: 99;
+  z-index: 9999;
   right: 0;
   opacity: 0;
   visibility: hidden;
