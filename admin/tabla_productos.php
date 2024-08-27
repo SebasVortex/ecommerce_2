@@ -30,39 +30,41 @@ $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </script>
 </head>
 <body class="bg-light">
+    <?php include('assets/menu.php'); ?>
     <div class="container mt-5">
-        <h1 class="text-center mb-4">Lista de Productos</h1>
-        <div class="text-right">
+        <h1 class="text-left mb-4">Lista de Productos</h1>
+        <div class="text-right mb-3">
             <button onclick="location.href='admin_producto.php'" class="btn btn-success">Agregar Nuevo Producto</button>
         </div>
-        <table class="table table-striped table-bordered">
-            <thead class="thead-light">
-                <tr>
-                    <th>ID</th>
-                    <th>Nombre</th>
-                    <th>Marca</th>
-                    <th>Precio</th>
-                    <th>Stock</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($productos as $producto): ?>
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered">
+                <thead class="thead-dark">
                     <tr>
-                        <td><?php echo htmlspecialchars($producto['id']); ?></td>
-                        <td><?php echo htmlspecialchars($producto['name']); ?></td>
-                        <td><?php echo htmlspecialchars($producto['brand_name']); ?></td>
-                        <td>$<?php echo number_format($producto['price'], 2); ?></td>
-                        <td><?php echo htmlspecialchars($producto['stock']); ?></td>
-                        <td>
-                            <a href="admin_producto.php?id=<?php echo $producto['id']; ?>" class="btn btn-primary btn-sm">Editar</a>
-                            <button class="btn btn-danger btn-sm" onclick="confirmDelete(<?php echo $producto['id']; ?>)">Eliminar</button>
-                        </td>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Marca</th>
+                        <th>Precio</th>
+                        <th>Stock</th>
+                        <th>Acciones</th>
                     </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
-
+                </thead>
+                <tbody>
+                    <?php foreach ($productos as $producto): ?>
+                        <tr>
+                            <td><?php echo htmlspecialchars($producto['id']); ?></td>
+                            <td><?php echo htmlspecialchars($producto['name']); ?></td>
+                            <td><?php echo htmlspecialchars($producto['brand_name']); ?></td>
+                            <td>$<?php echo number_format($producto['price'], 2); ?></td>
+                            <td><?php echo htmlspecialchars($producto['stock']); ?></td>
+                            <td>
+                                <a href="admin_producto.php?id=<?php echo $producto['id']; ?>" class="btn btn-primary btn-sm">Editar</a>
+                                <button class="btn btn-danger btn-sm" onclick="confirmDelete(<?php echo $producto['id']; ?>)">Eliminar</button>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <!-- Incluir Bootstrap JS y dependencias de Popper.js -->

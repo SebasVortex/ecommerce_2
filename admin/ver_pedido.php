@@ -38,43 +38,60 @@ try {
     die('Error al consultar el pedido: ' . $e->getMessage());
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <title>Detalles del Pedido</title>
-    <link rel="stylesheet" href="styles.css"> <!-- Incluye tus estilos -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> <!-- Incluye Bootstrap -->
 </head>
-<body>
-    <h1>Detalles del Pedido #<?php echo htmlspecialchars($pedido['id']); ?></h1>
-    <p><strong>Total:</strong> <?php echo number_format($pedido['total'], 2); ?> USD</p>
-    <p><strong>Estado:</strong> <?php echo htmlspecialchars($pedido['status']); ?></p>
-    <p><strong>Nombre del Cliente:</strong> <?php echo htmlspecialchars($pedido['nombre']) . ' ' . htmlspecialchars($pedido['apellido']); ?></p>
-    <p><strong>Email del Cliente:</strong> <?php echo htmlspecialchars($pedido['user_email']); ?></p>
-    <p><strong>Teléfono:</strong> <?php echo htmlspecialchars($pedido['telefono']); ?></p>
-    <p><strong>Notas:</strong> <?php echo htmlspecialchars($pedido['notas']); ?></p>
-    <h2>Items del Pedido</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Producto</th>
-                <th>Cantidad</th>
-                <th>Precio</th>
-                <th>Subtotal</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($items as $item): ?>
-            <tr>
-                <td><?php echo htmlspecialchars($item['name']); ?></td>
-                <td><?php echo htmlspecialchars($item['quantity']); ?></td>
-                <td><?php echo number_format($item['price'], 2); ?> USD</td>
-                <td><?php echo number_format($item['quantity'] * $item['price'], 2); ?> USD</td>
-            </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
-    <a href="admin_pedidos.php">Volver a la lista de pedidos</a>
+<body class="bg-light">
+<?php include('assets/menu.php') ; ?>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Detalles del Pedido #<?php echo htmlspecialchars($pedido['id']); ?></h1>
+
+        <div class="card mb-4">
+            <div class="card-body">
+                <p><strong>Total:</strong> <?php echo number_format($pedido['total'], 2); ?> USD</p>
+                <p><strong>Estado:</strong> <?php echo htmlspecialchars($pedido['status']); ?></p>
+                <p><strong>Nombre del Cliente:</strong> <?php echo htmlspecialchars($pedido['nombre']) . ' ' . htmlspecialchars($pedido['apellido']); ?></p>
+                <p><strong>Email del Cliente:</strong> <?php echo htmlspecialchars($pedido['user_email']); ?></p>
+                <p><strong>Teléfono:</strong> <?php echo htmlspecialchars($pedido['telefono']); ?></p>
+                <p><strong>Notas:</strong> <?php echo htmlspecialchars($pedido['notas']); ?></p>
+            </div>
+        </div>
+
+        <h2 class="text-center mb-4">Items del Pedido</h2>
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered table-hover">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Producto</th>
+                        <th>Cantidad</th>
+                        <th>Precio</th>
+                        <th>Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($items as $item): ?>
+                    <tr>
+                        <td><?php echo htmlspecialchars($item['name']); ?></td>
+                        <td><?php echo htmlspecialchars($item['quantity']); ?></td>
+                        <td><?php echo number_format($item['price'], 2); ?> USD</td>
+                        <td><?php echo number_format($item['quantity'] * $item['price'], 2); ?> USD</td>
+                    </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="text-center mt-4">
+            <a href="admin_pedidos.php" class="btn btn-secondary">Volver a la lista de pedidos</a>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

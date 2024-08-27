@@ -141,7 +141,7 @@ if ($id) {
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body class="bg-light">
-
+<?php include('assets/menu.php') ; ?>
     <div class="container mt-5">
         <h1 class="text-center mb-4">Administrar Producto</h1>
         <form action="admin_producto.php" method="POST" enctype="multipart/form-data" class="shadow p-4 bg-white rounded">
