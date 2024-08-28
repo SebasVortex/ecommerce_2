@@ -5,7 +5,7 @@ include 'config/checksession.php';
 
 // Verificar si el usuario ha iniciado la maldita sesión
 if (!isset($_SESSION['user_id'])) {
-    // Redirigir a login.php si no se encuentra user_id en la sesión chavales
+    // Redirigir a login.php si no se encuentra user_id en la sesión 
     header("Location: login.php");
     exit();
 }
@@ -61,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <?php include 'assets/includes/head.php';?>
 <style>
-    /* Estilos grales */
+    /* Estilos generales */
     body {
         background-color: #f8f9fa;
         color: #333;
@@ -102,7 +102,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         max-height: 200px;
         width: auto;
         height: auto;
-        border-radius: 5px;
+        border-radius: 35px;
         margin-bottom: 10px;
     }
 
@@ -126,13 +126,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     .number-inside {
-    width: 50px;
-    height: 50px;
+    width: 35px;
+    height: 35px;
     line-height: 50px; /* Asegura que el texto esté centrado verticalmente */
     border-radius: 50%; /* Círculo perfecto */
-    border: 1px solid #ced4da;
+    border: 1px solid #343a40;
     background: none;
-    font-size: 20px;
+    font-size: 18px;
+    font-weight: 500;
     text-align: center; /* Centrar el número horizontalmente */
     padding: 0; /* Elimina padding interno */
     margin: 0; /* Elimina cualquier margen */
@@ -150,23 +151,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         padding: 5px 10px;
     }
 
-    .cart-item .btn-default {
-        background-color: #e9ecef;
-        border: 1px solid #ced4da;
-    }
-
-    .cart-item .btn-danger {
-        background-color: #dc3545;
-        color: white;
-    }
-
     .cart-item .text-right {
         text-align: right;
         margin-top: 10px;
+        font-weight: 700;
     }
 
     .right {
         text-align: right;
+        display: flex;
+        justify-content: flex-end;
     }
     
     .btn {
@@ -182,18 +176,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     /* Botón de finalizar pago :D*/
     .btn-primary {
-        background-color: #007bff;
+        background-color: #D10024;
         border: none;
         padding: 10px 20px;
         color: white;
         text-transform: uppercase;
         font-weight: bold;
-        border-radius: 0.25rem;
+        border-radius: 2.25rem;
         transition: background-color 0.3s ease;
+        max-width: 300px;
+        min-width: 200px;
     }
 
     .btn-primary:hover {
-        background-color: #0056b3;
+        background-color: #A8001D;
     }
     
     .plus, .minus{
@@ -203,29 +199,85 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     .img-tt{
         display: flex;
     }
-    /* Responsive */
-    @media (max-width: 768px) {
-        .cart-header, .cart-item {
-            flex-direction: column;
-            align-items: flex-start;
-        }
-
-        .cart-item .col-md-6,
-        .cart-item .col-md-4 {
-            width: 100%;
-            text-align: left;
-        }
-
-        .cart-item .text-right {
-            text-align: left;
-            margin-top: 10px;
-        }
-
-        .cart-item .btn {
-            width: 100%;
-            margin-top: 5px;
-        }
+    .title-marc{
+        padding: 10px 15px;
     }
+    .title-marc h4 {
+        white-space: normal; /* Permite que el texto haga salto de línea en pantallas más grandes */
+        overflow: visible; /* Muestra todo el contenido del texto */
+        text-overflow: clip; /* Elimina los puntos suspensivos si el texto cabe en el contenedor */          
+}
+    /* Responsive */
+    @media (max-width: 992px) {
+    .cart-header {
+        display: none;
+    }
+    .title-marc {
+        padding: 10px 15px;
+        width: calc(100% - 45px);
+    }
+    .title-marc h4 {
+        white-space: nowrap;        /* No permite que el texto haga salto de línea */
+        overflow: hidden;           /* Oculta el texto que no cabe en el contenedor */
+        text-overflow: ellipsis;    /* Muestra los puntos suspensivos (...) al final del texto */
+        max-width: 100%;  /* Asegura que el ancho máximo del contenedor se ajuste al 100% de su contenedor padre */
+    }
+
+    .cart-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .cart-item .col-md-6,
+    .cart-item .col-md-2,
+    .cart-item .text-right {
+        width: 100%;
+        text-align: left;
+        margin-bottom: 10px;
+    }
+
+    .cart-item img {
+        max-width: 80px;
+        margin-bottom: 15px;
+        border-radius: 10px;
+    }
+    
+    .cart-item h4 {
+        font-size: 1.6rem;
+        margin-bottom: 10px;
+    }
+
+    .cart-item .text-right {
+        text-align: left;
+        margin-top: 10px;
+    }
+
+    .cart-item .btn {
+        width: 45px;
+        margin-top: 5px;
+    }
+
+    .cart-item .input-group {
+        justify-content: space-between;
+        width: 70%;
+    }
+
+    .delete-g {
+        justify-content: flex-end;
+        margin-top: 10px;
+    }
+
+    .btn-primary {
+        width: 100%;
+        margin-top: 20px;
+    }
+    button.plus {
+        margin-left: -35px !important;
+    }
+    .cart-item .form-inline {
+        justify-content: center;
+    }
+}
 </style>
 </head>
 <body>
@@ -234,7 +286,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <!-- HEADER -->
      <div class="section">
     <div class="container mt-4">
-        <h1>Carrito de Compras</h1>
+        <h1>Mi Carrito</h1>
 
         <!-- Header del carrito -->
         <div class="cart-header">
@@ -243,19 +295,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <div class="col-md-2">Cantidad</div>
             <div class="col-md-2 text-right">Total</div>
         </div>
-
         <?php if (!empty($items)): ?>
             <div class="list-group">
                 <?php foreach ($items as $item): ?>
                     <div class="cart-item">
                         <div class="col-md-6 img-tt">
                             <img src="assets/images/<?php echo htmlspecialchars($item['imagen']); ?>" alt="<?php echo htmlspecialchars($item['name']); ?>">
-                            <div>
+                            <div class="title-marc">
                                 <h4><?php echo htmlspecialchars($item['name']); ?></h4>
                                 <p>Marca: <?php echo htmlspecialchars($item['brand_name']); ?></p>
                             </div>
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-2 title-marc">
                             <p>$<?php echo number_format($item['price'], 2); ?></p>
                         </div>
                         <div class="col-md-2">
@@ -263,11 +314,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <input type="hidden" name="product_id" value="<?php echo htmlspecialchars($item['id']); ?>">
                                 <div class="input-group">
                                     <span class="input-group-btn">
-                                        <button type="submit" name="update_quantity" class="btn btn-default minus" onclick="this.form.quantity.stepDown()"><span class="material-symbols-outlined">remove</span></button>
+                                        <button type="submit" name="update_quantity" class="minus" onclick="this.form.quantity.stepDown()"><span class="material-symbols-outlined">remove</span></button>
                                     </span>
                                     <input type="number" name="quantity" class="number-inside" value="<?php echo htmlspecialchars($item['quantity']); ?>" min="0" max="99" readonly>
                                     <span class="input-group-btn">
-                                        <button type="submit" name="update_quantity" class="btn btn-default plus" onclick="this.form.quantity.stepUp()"><span class="material-symbols-outlined">add</span></button>
+                                        <button type="submit" name="update_quantity" class="plus" onclick="this.form.quantity.stepUp()"><span class="material-symbols-outlined">add</span></button>
                                     </span>
                                 </div>
                             </form>
