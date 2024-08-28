@@ -296,7 +296,47 @@ document.querySelectorAll('input').forEach(input => {
 });
 </script>
 
+<script>
+        function updateQuantity(productId, change) {
+    const quantityInput = document.getElementById('quantity-' + productId);
+    let newQuantity = parseInt(quantityInput.value) + change;
 
+    if (newQuantity < 0) {
+        newQuantity = 0;
+    }
+
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', 'carrito.php', true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            if (newQuantity > 0) {
+                quantityInput.value = newQuantity;
+
+                // Obtén el precio del producto
+                const itemPrice = parseFloat(document.getElementById('price-' + productId).textContent.replace('$', '').replace(/,/g, ''));
+
+                // Calcula el nuevo total
+                const newTotal = (itemPrice * newQuantity).toFixed(2);
+
+                // Actualiza el total del producto en la interfaz
+                const totalElement = document.getElementById('total-' + productId);
+                totalElement.textContent = '$' + newTotal;
+
+            } else {
+                document.getElementById('cart-item-' + productId).remove();
+            }
+
+            // Actualiza el subtotal
+            updateSubtotal();
+        }
+    };
+
+    xhr.send('update_quantity=1&product_id=' + productId + '&quantity=' + newQuantity);
+}
+
+</script>
 <!-- Incluye jQuery UI para el control deslizante -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>

@@ -40,23 +40,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $stmt->execute([$user_id, $product_id]);
         }
         
-        // Redirigir para evitar reenvíos de formularios
-        header("Location: carrito.php");
-        exit();
-    }
-
-    // Manejar la eliminación directa del producto
-    if (isset($_POST['delete_product'])) {
-        $product_id = $_POST['product_id'];
-        $delete_query = "DELETE FROM carrito WHERE user_id = ? AND product_id = ?";
-        $stmt = $conn->prepare($delete_query);
-        $stmt->execute([$user_id, $product_id]);
-
-        // Redirigir para evitar reenvíos de formularios
-        header("Location: carrito.php");
-        exit();
+        // Si es una solicitud AJAX, no redirigir
+        if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
+            exit(); // Terminar la ejecución para evitar cualquier HTML adicional
+        } else {
+            // Redirigir para evitar reenvíos de formularios en solicitudes normales
+            header("Location: carrito.php");
+            exit();
+        }
     }
 }
+
 ?>
 
 <?php include 'assets/includes/head.php';?>
@@ -125,6 +119,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     .cart-item .input-group {
         display: flex;
         align-items: center;
+        justify-content: space-between;
     }
 
     .number-inside {
@@ -197,6 +192,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     .plus, .minus{
         background: none !important;
         border: none !important;
+        margin-left: -16px;
     }
     .img-tt{
         display: flex;
@@ -297,7 +293,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <?php if (!empty($items)): ?>
             <div class="list-group">
                 <?php foreach ($items as $item): ?>
-                    <div class="cart-item">
+                    <div class="cart-item" id="cart-item-<?php echo $item['id']; ?>">
                         <div class="col-md-6 img-tt">
                             <img src="assets/images/<?php echo htmlspecialchars($item['imagen']); ?>" alt="<?php echo htmlspecialchars($item['name']); ?>">
                             <div class="title-marc">
@@ -306,24 +302,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             </div>
                         </div>
                         <div class="col-md-2 title-marc">
-                            <p>$<?php echo number_format($item['price'], 2); ?></p>
+                            <p id="price-<?php echo $item['id']; ?>">$<?php echo number_format($item['price'], 2); ?></p>
                         </div>
                         <div class="col-md-2">
-                            <form method="POST" action="carrito.php" class="form-inline d-inline">
-                                <input type="hidden" name="product_id" value="<?php echo htmlspecialchars($item['id']); ?>">
-                                <div class="input-group">
-                                    <span class="input-group-btn">
-                                        <button type="submit" name="update_quantity" class="minus" onclick="this.form.quantity.stepDown()"><span class="material-symbols-outlined">remove</span></button>
-                                    </span>
-                                    <input type="number" name="quantity" class="number-inside" value="<?php echo htmlspecialchars($item['quantity']); ?>" min="0" max="99" readonly>
-                                    <span class="input-group-btn">
-                                        <button type="submit" name="update_quantity" class="plus" onclick="this.form.quantity.stepUp()"><span class="material-symbols-outlined">add</span></button>
-                                    </span>
-                                </div>
-                            </form>
+                            <div class="input-group">
+                                <span class="input-group-btn">
+                                    <button type="button" class="minus" onclick="updateQuantity(<?php echo $item['id']; ?>, -1)"><span class="material-symbols-outlined">remove</span></button>
+                                </span>
+                                <input type="number" name="quantity" class="number-inside" value="<?php echo htmlspecialchars($item['quantity']); ?>" min="0" max="99" readonly id="quantity-<?php echo $item['id']; ?>">
+                                <span class="input-group-btn">
+                                    <button type="button" class="plus" onclick="updateQuantity(<?php echo $item['id']; ?>, 1)"><span class="material-symbols-outlined">add</span></button>
+                                </span>
+                            </div>
                         </div>
                         <div class="col-md-2 text-right">
-                            <p>$<?php echo number_format($item['price'] * $item['quantity'], 2); ?></p>
+                            <p id="total-<?php echo $item['id']; ?>">$<?php echo number_format($item['price'] * $item['quantity'], 2); ?></p>
                             <form method="POST" action="carrito.php" class="d-inline delete-g">
                                 <input type="hidden" name="product_id" value="<?php echo htmlspecialchars($item['id']); ?>">
                                 <button type="submit" name="delete_product" class="btn btn-danger ml-2"><span class="material-symbols-outlined">delete</span></button>
@@ -331,6 +324,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         </div>
                     </div>
                 <?php endforeach; ?>
+            </div>
+            <div class="cart-summary">
+                <small><?php echo $total_items; ?> Item(s)</small>
+                <h5>SUBTOTAL: <span id="subtotal">$<?php echo number_format($total, 2); ?></span></h5>
             </div>
             <div class="mt-3 right">
                 <a href="checkout.php" class="btn btn-primary">Finalizar pago</a>
@@ -343,5 +340,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <!-- Footer -->
     <?php include 'assets/includes/footer.php';?>
     <!-- /FOOTER -->
+    
 </body>
 </html>
