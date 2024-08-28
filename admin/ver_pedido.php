@@ -26,8 +26,7 @@ if ($role != 'admine') {
 include '../config/database.php'; // Incluye tu archivo de configuración con PDO
 include '../config/checksession.php';
 
-
-
+// Validar el ID del pedido
 if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
     die('ID de pedido inválido.');
 }
@@ -37,7 +36,7 @@ $orderId = intval($_GET['id']);
 try {
     // Consultar los detalles del pedido
     $stmt = $conn->prepare('
-        SELECT p.*, u.username AS user_username, u.email AS user_email
+        SELECT p.*, u.username AS user_username, u.email AS user_email, p.user_type AS user_type
         FROM pedidos p
         JOIN clientes u ON p.user_id = u.id
         WHERE p.id = :order_id
@@ -70,7 +69,7 @@ try {
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> <!-- Incluye Bootstrap -->
 </head>
 <body class="bg-light">
-<?php include('assets/menu.php') ; ?>
+<?php include('assets/menu.php'); ?>
     <div class="container mt-5">
         <h1 class="text-center mb-4">Detalles del Pedido #<?php echo htmlspecialchars($pedido['id']); ?></h1>
 
@@ -78,9 +77,10 @@ try {
             <div class="card-body">
                 <p><strong>Total:</strong> <?php echo number_format($pedido['total'], 2); ?> USD</p>
                 <p><strong>Estado:</strong> <?php echo htmlspecialchars($pedido['status']); ?></p>
-                <p><strong>Nombre del Cliente:</strong> <?php echo htmlspecialchars($pedido['nombre']) . ' ' . htmlspecialchars($pedido['apellido']); ?></p>
+                <p><strong>Nombre del Cliente:</strong> <?php echo htmlspecialchars($pedido['nombre']) . ' ' . htmlspecialchars($pedido['apellido']); ?> <?php echo htmlspecialchars($pedido['persona_contacto']); ?></p>
                 <p><strong>Email del Cliente:</strong> <?php echo htmlspecialchars($pedido['user_email']); ?></p>
                 <p><strong>Teléfono:</strong> <?php echo htmlspecialchars($pedido['telefono']); ?></p>
+                <p><strong>Tipo de Usuario:</strong> <?php echo htmlspecialchars($pedido['user_type']); ?></p> <!-- Mostrar tipo de usuario -->
                 <p><strong>Notas:</strong> <?php echo htmlspecialchars($pedido['notas']); ?></p>
             </div>
         </div>
