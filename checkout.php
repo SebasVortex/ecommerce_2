@@ -44,6 +44,96 @@ if (isset($_SESSION['user_id'])) {
 ?>
 
 <?php include 'assets/includes/head.php'; ?>
+<style>
+.custom-button {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
+  font-size: 16px;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: #fff;
+  background-color: #D10024;
+  border: none;
+  border-radius: 35px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  min-width: 150px;
+  height: 45px;
+}
+
+.custom-button .content-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  position: relative;
+}
+
+.custom-button .button-text {
+  z-index: 2;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+.red{
+    color: #D10024;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.custom-button .checkmark,
+.custom-button .error-x {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  font-size: 18px;
+  line-height: 1;
+  display: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.custom-button.loading .button-text {
+  opacity: 0;
+}
+
+.custom-button.loading .checkmark,
+.custom-button.loading .error-x {
+  display: block;
+}
+
+.custom-button.loading.success .checkmark {
+  opacity: 1;
+}
+
+.custom-button.loading.error .error-x {
+  opacity: 1;
+}
+
+.custom-button::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-color: #A8001D;
+  z-index: 1;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.5s ease-in-out;
+}
+
+.custom-button.loading::after {
+  transform: scaleX(1);
+}
+</style>
 </head>
 <body>
     <!-- HEADER -->
@@ -162,7 +252,7 @@ if (isset($_SESSION['user_id'])) {
                             <?php endforeach; ?>
                         </div>
                         <?php else: ?>
-                            Tu carrito está vacío
+                            <p class="red">Tu carrito está vacío <i class="fa-solid fa-cart-plus fa-bounce"></i></p>
                         <?php endif; ?>
                         <!--
                         <div class="order-col">
@@ -179,7 +269,13 @@ if (isset($_SESSION['user_id'])) {
                     <!-- Moved the submit button to the checkout section -->
                         <!-- Botón de Envío -->
                         <div class="form-group" id="submit-group" style="display: none;">
-                            <button type="submit" class="primary-btn order-submit">Finalizar Compra</button>
+                            <button id="customButton" type="submit" class="custom-button">
+                                <div class="content-wrapper">
+                                    <span class="button-text">Finalizar compra</span>
+                                    <span class="checkmark"><span class="material-symbols-outlined">task_alt</span></span>
+                                    <span class="error-x"><span class="material-symbols-outlined">cancel</span></span>
+                                </div>
+                            </button>
                         </div>
 
                     </form>
@@ -195,5 +291,36 @@ if (isset($_SESSION['user_id'])) {
     <!-- PIE DE PÁGINA -->
     <?php include 'assets/includes/footer.php'; ?>
     <!-- /PIE DE PÁGINA -->
+    <script>
+        document.getElementById('checkout-form').addEventListener('submit', function (e) {
+            e.preventDefault(); // Prevenir el envío inmediato del formulario
+            var button = document.getElementById('customButton');
+            button.classList.add('loading');
+            button.disabled = true;
+
+            // Verificar si el carrito está vacío
+            var carritoVacio = <?php echo empty($items) ? 'true' : 'false'; ?>; // Comprobación basada en PHP
+
+            setTimeout(function () {
+                if (carritoVacio) {
+                    button.classList.add('error');
+                    button.querySelector('.checkmark').style.display = 'none';
+                    button.querySelector('.error-x').style.display = 'inline-block';
+                } else {
+                    button.classList.add('success');
+                    button.querySelector('.checkmark').style.display = 'inline-block';
+                    button.querySelector('.error-x').style.display = 'none';
+                }
+
+                // No se envía el formulario si el carrito está vacío (se muestra el error)
+                if (!carritoVacio) {
+                    e.target.submit();
+                } else {
+                    button.disabled = false; // Reactivar el botón si el carrito está vacío
+                    button.classList.remove('loading');
+                }
+            }, 1500); // Simulación del tiempo de "carga" de 1.5 segundos
+        });
+    </script>
 </body>
 </html>
