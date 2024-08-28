@@ -1,5 +1,28 @@
 <?php
 // Conectar a la base de datos
+include('../gestionadmin/herramientas/check.php');
+include('../gestionadmin/herramientas/dbconex.php');
+date_default_timezone_set('America/Argentina/Buenos_Aires'); // Ajusta esto a tu zona horaria
+// Verificar el rol del usuario
+$username = $_SESSION['username'];
+$sql = "SELECT role FROM usuarios WHERE username='$username'";
+$result = $conn->query($sql);
+
+if ($result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    $role = $row['role'];
+} else {
+    echo "Usuario no encontrado.";
+    exit();
+}
+
+if ($role != 'admine') {
+    echo "No tienes permiso para acceder a esta página.";
+    exit();
+}
+
+?>
+<?php
 include('../config/database.php');
 
 // Recuperar todos los productos
