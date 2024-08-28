@@ -22,6 +22,7 @@ if (isset($_POST['set_index_offer_id'])) {
     $stmt->execute(['new_id' => $newIndexOfferId]);
 
     echo "<div class='alert alert-success'>Oferta del índice actualizada exitosamente.</div>";
+    header('Location: admin_ofertas.php');
 }
 
 // Verificar si se ha enviado una solicitud para eliminar una oferta
@@ -49,7 +50,7 @@ if (isset($_POST['delete_offer_id'])) {
 <body class="bg-light">
 <?php include('assets/menu.php'); ?>
     <div class="container mt-5">
-        <h3 class="text-center mb-4">Gestionar Ofertas</h3>
+    <h1 class="text-left mb-4">Gestionar ofertas</h1>
         <div class="text-right mb-3">
             <button onclick="location.href='crear_oferta.php'" class="btn btn-success">Agregar Nueva Oferta</button>
         </div>
