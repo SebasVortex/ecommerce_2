@@ -7,7 +7,7 @@
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ml-auto">
             <li class="nav-item active">
-                <a class="nav-link" href="#">Inicio <span class="sr-only">(actual)</span></a>
+                <a class="nav-link" href="https://sistemasenergeticos.com.ar/gestionadmin/iniciodata.php">Inicio <span class="sr-only">(actual)</span></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="tabla_productos.php">Productos</a>
