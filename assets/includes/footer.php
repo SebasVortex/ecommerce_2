@@ -165,11 +165,25 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
+    // Función para escapar caracteres especiales en texto HTML para prevenir XSS
+    function escapeHTML(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
     function searchProducts(searchTerm) {
-        fetch(`config/buscar_productos.php?search=${encodeURIComponent(searchTerm)}`)
+        fetch(`config/buscar_productos.php?search=${encodeURIComponent(searchTerm)}`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            credentials: 'same-origin' // Asegura que las cookies se envíen solo con solicitudes de la misma origen
+        })
             .then(response => {
                 if (!response.ok) {
-                    throw new Error('Network response was not ok');
+                    throw new Error('La respuesta de la red no fue satisfactoria');
                 }
                 return response.json();
             })
@@ -177,11 +191,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 resultsContainer.innerHTML = '';
 
                 data.forEach(item => {
+                    // Escapamos datos recibidos para prevenir XSS
                     const productHtml = `
-                        <div class="result-item" style="padding: 1.5rem; border-bottom: 1px solid #ccc; max-width: 535px;">
-                            <h3><a href="product_detalle.php?id=${item.id}">${item.brand_name} - ${item.name}</a></h3>
-                            <p>Categoria: ${item.category_name}</p>
-                            <p>$${parseFloat(item.price).toFixed(2)}</p>
+                        <div class="result-item" style="display: flex; padding: 1.5rem; border-bottom: 1px solid #ccc; max-width: 535px; width: 100%;">
+                            <img src="assets/images/${escapeHTML(item.imagen)}" alt="${escapeHTML(item.name)}" style="width: 100px; height: auto; margin-right: 15px;">
+                            <div style="display: flex; flex-direction: column; justify-content: center;">
+                                <h3 style="font-size: 18px;">
+                                    <a href="product_detalle.php?id=${encodeURIComponent(item.id)}">${escapeHTML(item.brand_name)} - ${escapeHTML(item.name)}</a>
+                                </h3>
+                                <p>Categoria: ${escapeHTML(item.category_name)}</p>
+                            </div>
                         </div>
                     `;
 
@@ -195,13 +214,31 @@ document.addEventListener('DOMContentLoaded', () => {
         const searchTerm = searchInput.value.trim();
         if (searchTerm) {
             searchProducts(searchTerm);
+            resultsContainer.style.display = 'block'; // Mostrar resultados
         } else {
             resultsContainer.innerHTML = ''; // Limpiar resultados si no hay término de búsqueda
+            resultsContainer.style.display = 'none'; // Ocultar resultados
+        }
+    });
+
+    // Detectar clics fuera del contenedor de resultados y del campo de búsqueda
+    document.addEventListener('click', (event) => {
+        const isClickInside = resultsContainer.contains(event.target) || searchInput.contains(event.target);
+        if (!isClickInside) {
+            resultsContainer.style.display = 'none'; // Ocultar resultados si se hace clic fuera
+        }
+    });
+
+    // Mostrar resultados nuevamente si se hace clic en el campo de búsqueda
+    searchInput.addEventListener('focus', () => {
+        if (searchInput.value.trim() !== '') {
+            resultsContainer.style.display = 'block';
         }
     });
 });
 
 </script>
+
 <script>
     // Manejo del clic en el botón
     document.querySelectorAll('.quick-view').forEach(function(button) {
