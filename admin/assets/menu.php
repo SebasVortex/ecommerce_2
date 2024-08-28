@@ -16,7 +16,7 @@
                 <a class="nav-link" href="admin_pedidos.php">Pedidos</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="ofertas.php">Ofertas</a>
+                <a class="nav-link" href="admin_ofertas.php">Ofertas</a>
             </li>
         </ul>
     </div>

@@ -78,7 +78,7 @@ try {
                 <p><strong>Total:</strong> <?php echo number_format($pedido['total'], 2); ?> USD</p>
                 <p><strong>Estado:</strong> <?php echo htmlspecialchars($pedido['status']); ?></p>
                 <p><strong>Nombre del Cliente:</strong> <?php echo htmlspecialchars($pedido['nombre']) . ' ' . htmlspecialchars($pedido['apellido']); ?> <?php echo htmlspecialchars($pedido['persona_contacto']); ?></p>
-                <p><strong>Email del Cliente:</strong> <?php echo htmlspecialchars($pedido['user_email']); ?></p>
+                <p><strong>Email del Cliente:</strong> <?php echo htmlspecialchars($pedido['user_email']); ?> | <?php echo htmlspecialchars($pedido['email']); ?></p>
                 <p><strong>Teléfono:</strong> <?php echo htmlspecialchars($pedido['telefono']); ?></p>
                 <p><strong>Tipo de Usuario:</strong> <?php echo htmlspecialchars($pedido['user_type']); ?></p> <!-- Mostrar tipo de usuario -->
                 <p><strong>Notas:</strong> <?php echo htmlspecialchars($pedido['notas']); ?></p>

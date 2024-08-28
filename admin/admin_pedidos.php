@@ -90,8 +90,9 @@ try {
 
        <!-- Formulario de filtrado -->
             <form method="GET" class="mb-4">
-                <div class="form-group">
-                    <label for="status">Filtrar por Estado:</label>
+            <div class="form-row align-items-end">
+            <div class="col-auto">
+                    <label for="status">Estado:</label>
                     <select name="status" id="status" class="form-control">
                         <option value="">Todos</option>
                         <option value="pendiente" <?php echo isset($_GET['status']) && $_GET['status'] == 'pendiente' ? 'selected' : ''; ?>>Pendiente</option>
@@ -100,15 +101,19 @@ try {
                         <option value="cancelado" <?php echo isset($_GET['status']) && $_GET['status'] == 'cancelado' ? 'selected' : ''; ?>>Cancelado</option>
                     </select>
                 </div>
-                <div class="form-group">
-                    <label for="user_type">Filtrar por Tipo de Usuario:</label>
+                <div class="col-auto">
+                    <label for="user_type">Tipo de Usuario:</label>
                     <select name="user_type" id="user_type" class="form-control">
                         <option value="">Todos</option>
                         <option value="consumidor" <?php echo isset($_GET['user_type']) && $_GET['user_type'] == 'consumidor' ? 'selected' : ''; ?>>Consumidor Final</option>
                         <option value="empresa" <?php echo isset($_GET['user_type']) && $_GET['user_type'] == 'empresa' ? 'selected' : ''; ?>>Empresa</option>
                     </select>
                 </div>
+                <div class="col-auto">
                 <button type="submit" class="btn btn-primary">Filtrar</button>
+</div>
+            </div>
+<div class="text-right mb-3"></div>
             </form>
 
         <!-- Tabla de pedidos -->

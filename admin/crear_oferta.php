@@ -52,6 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         ':fecha_fin' => $fechaFin,
         ':descripcion' => $descripcion
     ])) {
+        header("Location: admin_ofertas.php");
         echo "<div class='alert alert-success'>Oferta guardada exitosamente.</div>";
     } else {
         echo "<div class='alert alert-danger'>Error al guardar la oferta.</div>";
@@ -76,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <h3>Gestionar Oferta</h3>
                     </div>
                     <div class="card-body">
-                        <form action="ofertas.php" method="POST">
+                        <form action="crear_oferta.php" method="POST">
                             <div class="form-group">
                                 <label for="fecha_inicio">Fecha de Inicio:</label>
                                 <input type="datetime-local" id="fecha_inicio" name="fecha_inicio" class="form-control" required>
