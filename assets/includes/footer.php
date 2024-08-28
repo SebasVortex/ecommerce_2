@@ -248,8 +248,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-
 </script>
+
 <script>
 document.getElementById('userType').addEventListener('change', function() {
     const formConsumidor = document.getElementById('form-consumidor');
@@ -294,8 +294,6 @@ document.querySelectorAll('input').forEach(input => {
         console.log(`${this.name}: ${this.value}`);
     });
 });
-
-
 </script>
 
 
