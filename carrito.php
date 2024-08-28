@@ -72,7 +72,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         color: #343a40;
         margin-bottom: 20px;
     }
-
+    hr{
+        display: none;
+    }
     .container {
         max-width: 1200px;
         margin: 0 auto;
@@ -212,6 +214,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     .cart-header {
         display: none;
     }
+    hr{
+        display: block;
+        border-top:2px solid #dee2e6;
+    }
     .title-marc {
         padding: 10px 15px;
         width: calc(100% - 45px);
@@ -222,17 +228,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         text-overflow: ellipsis;    /* Muestra los puntos suspensivos (...) al final del texto */
         max-width: 100%;  /* Asegura que el ancho máximo del contenedor se ajuste al 100% de su contenedor padre */
     }
-
-    .cart-item {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
     .cart-item .col-md-6,
     .cart-item .col-md-2,
     .cart-item .text-right {
         width: 100%;
-        text-align: left;
         margin-bottom: 10px;
     }
 
@@ -248,7 +247,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     .cart-item .text-right {
-        text-align: left;
         margin-top: 10px;
     }
 
@@ -287,6 +285,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
      <div class="section">
     <div class="container mt-4">
         <h1>Mi Carrito</h1>
+        <hr>
 
         <!-- Header del carrito -->
         <div class="cart-header">
