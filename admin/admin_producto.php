@@ -188,9 +188,14 @@ if ($id) {
 
             <div class="form-group">
                 <label for="stock">Stock:</label>
-                <input type="text" class="form-control" name="stock" id="stock" value="<?php echo htmlspecialchars($product['stock'] ?? ''); ?>">
+                <select class="form-control" name="stock" id="stock">
+                    <option value="En stock" <?php echo (isset($product['stock']) && $product['stock'] == 'En stock') ? 'selected' : ''; ?>>En stock</option>
+                    <option value="Sin stock" <?php echo (isset($product['stock']) && $product['stock'] == 'Sin stock') ? 'selected' : ''; ?>>Sin stock</option>
+                    <option value="Últimas unidades" <?php echo (isset($product['stock']) && $product['stock'] == 'Últimas unidades') ? 'selected' : ''; ?>>Últimas unidades</option>
+                    <option value="Unidades en camino" <?php echo (isset($product['stock']) && $product['stock'] == 'Unidades en camino') ? 'selected' : ''; ?>>Unidades en camino</option>
+                    <option value="Últimas unidades + Unidades en camino" <?php echo (isset($product['stock']) && $product['stock'] == 'Últimas unidades + Unidades en camino') ? 'selected' : ''; ?>>Últimas unidades + Unidades en camino</option>
+                </select>
             </div>
-
 
             <div class="form-group">
                 <label for="discount">Descuento:</label>

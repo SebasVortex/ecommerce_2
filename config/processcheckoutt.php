@@ -92,8 +92,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         // Insertar el pedido dependiendo del tipo de usuario
         $stmt = $conn->prepare('
-            INSERT INTO pedidos (user_id, total, status, nombre, apellido, razon_social, cuit, telefono, notas, persona_contacto, email) 
-            VALUES (:user_id, :total, :status, :nombre, :apellido, :razon_social, :cuit, :telefono, :notas, :persona_contacto, :email)
+            INSERT INTO pedidos (user_id, total, status, nombre, apellido, razon_social, cuit, telefono, notas, persona_contacto, email, user_type) 
+            VALUES (:user_id, :total, :status, :nombre, :apellido, :razon_social, :cuit, :telefono, :notas, :persona_contacto, :email, :user_type)
         ');
 
         $stmt->execute([
@@ -107,7 +107,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             'telefono' => $tel,
             'notas' => $notas,
             'persona_contacto' => $userType == 'empresa' ? $personaContacto : null,
-            'email' => $email // Agrega este parámetro
+            'email' => $email,
+            'user_type' => $userType // Agrega este parámetro
         ]);
 
         // Obtener el ID del pedido recién creado
