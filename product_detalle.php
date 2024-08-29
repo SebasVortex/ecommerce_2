@@ -17,7 +17,7 @@
 						<ul class="breadcrumb-tree">
 							<li><a href="index.php">Inicio</a></li>
 							<li><a href="store.php">Todas las Categorías</a></li>
-							<li><a href="store?=<?php echo htmlspecialchars($product['category_name']); ?>"><?php echo htmlspecialchars($product['category_name']); ?></a></li>
+							<li><a href="store.php?category%5B%5D=<?php echo htmlspecialchars($product['category_id']); ?>"><?php echo htmlspecialchars($product['category_name']); ?></a></li>
 							<li class="active"><?php echo htmlspecialchars($product['brand_name']); ?> - <?php echo htmlspecialchars($product['name']); ?></li>
 						</ul>
 					</div>
@@ -113,7 +113,7 @@
 
 							<ul class="product-links">
 								<li>Categoría:</li>
-								<li><a href="#"><?php echo htmlspecialchars($product['category_name']); ?></a></li>
+								<li><a href="store.php?category%5B%5D=<?php echo htmlspecialchars($product['category_id']); ?>"><?php echo htmlspecialchars($product['category_name']); ?></a></li>
 							</ul>
 
 							<ul class="product-links">

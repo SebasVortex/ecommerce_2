@@ -47,7 +47,7 @@ if ($stmt->execute()) {
 					<div class="col-md-4 col-xs-6">
 						<div class="shop">
 							<div class="shop-img">
-							<img src="assets/images/SOLAR TOWER.png" alt="">
+							<img src="assets/images/bannersh.png" alt="">
 							</div>
 							<div class="shop-body">
 								<h3>Sistemas<br>hibridos</h3>
@@ -61,7 +61,7 @@ if ($stmt->execute()) {
 					<div class="col-md-4 col-xs-6">
 						<div class="shop">
 							<div class="shop-img">
-								<img src="assets/images/EFB 2200.png" alt="">
+								<img src="assets/images/bateriabanner.png" alt="">
 							</div>
 							<div class="shop-body">
 								<h3>Baterías<br>de litio</h3>

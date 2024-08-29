@@ -54,7 +54,7 @@
 									<h3 class="footer-title">Categorías</h3>
 									<ul class="footer-links">
 										<?php foreach ($categorias as $categoria): ?>
-											<li><a href="#"><?php echo htmlspecialchars($categoria['name']); ?></a></li>
+											<li><a href="store.php?category%5B%5D=<?php echo htmlspecialchars($categoria['id']); ?>"><?php echo htmlspecialchars($categoria['name']); ?></a></li>
 										<?php endforeach; ?>
 									</ul>
 								</div>
