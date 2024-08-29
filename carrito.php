@@ -69,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     hr{
         display: none;
     }
-    .container {
+    .container2 {
         max-width: 1200px;
         margin: 0 auto;
         padding: 20px;
@@ -279,7 +279,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <?php include 'assets/includes/header.php';?>
     <!-- HEADER -->
      <div class="section">
-    <div class="container mt-4">
+    <div class="container2 mt-4">
         <h1>Mi Carrito</h1>
         <hr>
 
@@ -326,7 +326,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <?php endforeach; ?>
             </div>
             <div class="cart-summary">
-                <small><?php echo $total_items; ?> Item(s)</small>
+                <small id="total-it"><?php echo $total_items; ?> Item(s)</small>
                 <h5>SUBTOTAL: <span id="subtotal">$<?php echo number_format($total, 2); ?></span></h5>
             </div>
             <div class="mt-3 right">

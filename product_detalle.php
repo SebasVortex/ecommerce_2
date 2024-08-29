@@ -132,8 +132,8 @@
 						<div id="product-tab">
 							<!-- navegación de pestañas del producto -->
 							<ul class="tab-nav">
-								<li class="active"><a data-toggle="tab" href="#tab1">Especificaciones</a></li>
-								<li><a data-toggle="tab" href="#tab2">Soporte</a></li>
+								<li class="active bg-cl"><a data-toggle="tab" href="#tab1">Especificaciones</a></li>
+								<li class="bg-cl"><a data-toggle="tab" href="#tab2">Soporte</a></li>
 								<!-- <li><a data-toggle="tab" href="#tab3">Opiniones (3)</a></li> -->
 							</ul>
 							<!-- /navegación de pestañas del producto -->

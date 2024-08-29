@@ -297,44 +297,85 @@ document.querySelectorAll('input').forEach(input => {
 </script>
 
 <script>
-        function updateQuantity(productId, change) {
-    const quantityInput = document.getElementById('quantity-' + productId);
-    let newQuantity = parseInt(quantityInput.value) + change;
-
-    if (newQuantity < 0) {
-        newQuantity = 0;
+document.addEventListener('DOMContentLoaded', function() {
+    function updateSubtotal() {
+        let subtotal = 0;
+        document.querySelectorAll('.cart-item').forEach(item => {
+            const quantityElement = item.querySelector('input[name="quantity"]');
+            const priceElement = item.querySelector('.text-right p');
+            if (quantityElement && priceElement) {
+                const quantity = parseInt(quantityElement.value);
+                const price = parseFloat(priceElement.textContent.replace('$', '').replace(/,/g, ''));
+                subtotal += quantity * price;
+            }
+        });
+        document.getElementById('subtotal').textContent = '$' + subtotal.toFixed(2);
     }
 
-    const xhr = new XMLHttpRequest();
-    xhr.open('POST', 'carrito.php', true);
-    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    function updateTotalItems() {
+        let totalItems = 0;
+        document.querySelectorAll('.cart-item').forEach(item => {
+            const quantityElement = item.querySelector('input[name="quantity"]');
+            if (quantityElement) {
+                totalItems += parseInt(quantityElement.value);
+            }
+        });
+        const totalItemsElement = document.getElementById('total-it');
+        if (totalItemsElement) {
+            totalItemsElement.textContent = totalItems + ' Item(s)';
+        }
+    }
 
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            if (newQuantity > 0) {
-                quantityInput.value = newQuantity;
+    function updateQuantity(productId, change) {
+        const quantityElement = document.getElementById('quantity-' + productId);
+        if (quantityElement) {
+            let currentQuantity = parseInt(quantityElement.value);
+            currentQuantity += change;
+            if (currentQuantity < 0) currentQuantity = 0; 
+            quantityElement.value = currentQuantity;
 
-                // Obtén el precio del producto
-                const itemPrice = parseFloat(document.getElementById('price-' + productId).textContent.replace('$', '').replace(/,/g, ''));
-
-                // Calcula el nuevo total
-                const newTotal = (itemPrice * newQuantity).toFixed(2);
-
-                // Actualiza el total del producto en la interfaz
-                const totalElement = document.getElementById('total-' + productId);
-                totalElement.textContent = '$' + newTotal;
-
-            } else {
-                document.getElementById('cart-item-' + productId).remove();
+            const priceElement = document.getElementById('price-' + productId);
+            const totalElement = document.getElementById('total-' + productId);
+            if (priceElement && totalElement) {
+                const price = parseFloat(priceElement.textContent.replace('$', '').replace(/,/g, ''));
+                totalElement.textContent = '$' + (price * currentQuantity).toFixed(2);
             }
 
-            // Actualiza el subtotal
             updateSubtotal();
-        }
-    };
+            updateTotalItems();
 
-    xhr.send('update_quantity=1&product_id=' + productId + '&quantity=' + newQuantity);
-}
+            fetch('carrito.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: new URLSearchParams({
+                    'update_quantity': true,
+                    'product_id': productId,
+                    'quantity': currentQuantity
+                })
+            }).catch(error => console.error('Error:', error));
+        }
+    }
+
+    document.querySelectorAll('.plus').forEach(button => {
+        button.addEventListener('click', function() {
+            const productId = this.closest('.cart-item').id.split('-').pop();
+            updateQuantity(productId, 1);
+        });
+    });
+
+    document.querySelectorAll('.minus').forEach(button => {
+        button.addEventListener('click', function() {
+            const productId = this.closest('.cart-item').id.split('-').pop();
+            updateQuantity(productId, -1);
+        });
+    });
+
+    updateSubtotal();
+    updateTotalItems();
+});
 
 </script>
 <!-- Incluye jQuery UI para el control deslizante -->
