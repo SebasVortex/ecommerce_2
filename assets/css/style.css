@@ -617,7 +617,22 @@ textarea.input {
   padding-top: 15px;
   padding-bottom: 15px;
 }
+/* Estilo general para la barra de desplazamiento */
+.cart-dropdown .cart-list::-webkit-scrollbar {
+  width: 12px; /* Ancho de la barra de desplazamiento */
+}
 
+/* Estilo para la parte arrastrable de la barra de desplazamiento */
+.cart-dropdown .cart-list::-webkit-scrollbar-thumb {
+  background-color: #888; /* Color del pulgar */
+  border-radius: 6px; /* Radio de los bordes del pulgar */
+}
+
+/* Estilo para el rastro de la barra de desplazamiento */
+.cart-dropdown .cart-list::-webkit-scrollbar-track {
+  background-color: #f1f1f1; /* Color del rastro */
+  border-radius: 6px; /* Radio de los bordes del rastro */
+}
 /*=========================================================
 	03 -> Navigation
 ===========================================================*/
