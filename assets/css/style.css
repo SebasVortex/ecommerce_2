@@ -1222,13 +1222,15 @@ textarea.input {
 .products-slick-nav .slick-prev:before, .products-slick-nav .slick-next:before {
   font-size: 14px;
 }
-
+.bg-cl{
+  background-color: #f8f9fa;
+}
 /*=========================================================
 	07 -> PRODUCTS PAGE
 ===========================================================*/
 
 /*----------------------------*\
-	Aside
+	      Aside
 \*----------------------------*/
 
 .aside+.aside {
