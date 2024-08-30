@@ -302,7 +302,7 @@ document.addEventListener('DOMContentLoaded', function() {
         let subtotal = 0;
         document.querySelectorAll('.cart-item').forEach(item => {
             const quantityElement = item.querySelector('input[name="quantity"]');
-            const priceElement = item.querySelector('.text-right p');
+            const priceElement = item.querySelector('.precio');
             if (quantityElement && priceElement) {
                 const quantity = parseInt(quantityElement.value);
                 const price = parseFloat(priceElement.textContent.replace('$', '').replace(/,/g, ''));
