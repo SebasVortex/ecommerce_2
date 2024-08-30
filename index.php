@@ -30,6 +30,77 @@ if ($stmt->execute()) {
 ?>
 
 <?php include 'assets/includes/head.php';?>
+<style>
+    .swiper-container {
+      width: 100%;
+      padding-top: 20px;
+      padding-bottom: 40px;
+	  height: 500px;
+    }
+    .swiper-slide {
+      text-align: center;
+	  width: 100%;
+      font-size: 18px;
+      background: #fff;
+      display: flex !important;
+      justify-content: center;
+      align-items: center;
+	  height: 500px;
+    }
+	.swiper-slide .btn{
+		align-self: end;
+		margin-bottom: 50px;
+	}
+	.swiper-wrapper{
+		width: 100%;
+	}
+	.swiper-pagination{
+		position: relative !important;
+		margin-top: 25px;
+	}
+	/* Estilos para los botones de navegación personalizados */
+.custom-button-next,
+.custom-button-prev {
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  background-color: #007bff; /* Color de fondo personalizado */
+  color: #fff; /* Color del texto */
+  font-size: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%; /* Hace los botones redondos */
+  position: relative; /* Posicionamiento absoluto para ubicarlos en el contenedor */
+  top: 50%; /* Centrados verticalmente */
+
+  z-index: 10; /* Asegura que estén sobre otros elementos */
+  transition: background-color 0.3s; /* Transición para un efecto suave al pasar el ratón */
+}
+
+.custom-button-next:hover,
+.custom-button-prev:hover {
+  background-color: #0056b3; /* Cambio de color al pasar el ratón */
+}
+
+.custom-button-next {
+margin-left: auto;
+}
+
+.custom-button-prev {
+margin-right: auto;
+}
+.control-slider {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    top: 55%;
+}
+
+  </style>
+    <!-- CSS de Swiper -->
+	<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
 </head>
 	<body>
 		<!-- HEADER -->
@@ -40,6 +111,35 @@ if ($stmt->execute()) {
 		<!-- SECTION -->
 		<div class="section">
 			<!-- container -->
+			<div class="container" style="overflow: hidden;">
+            <!-- Controles de navegación -->
+					<div class="swiper-container">
+						<div class="control-slider">
+						<div class="custom-button-prev"><</div>
+						<div class="custom-button-next">></div>
+						</div>
+						<!-- Wrapper de Slides -->
+						<div class="swiper-wrapper">
+						<!-- Slide 1 -->
+						<div class="swiper-slide">
+							<button class="btn btn-primary">Botón 1</button>
+						</div>
+						<!-- Slide 2 -->
+						<div class="swiper-slide">
+							<button class="btn btn-success">Botón 2</button>
+						</div>
+						<!-- Slide 3 -->
+						<div class="swiper-slide">
+							<button class="btn btn-danger">Botón 3</button>
+						</div>
+						<!-- Agregar más slides según sea necesario -->
+					</div>
+
+            <!-- Paginación -->
+          </div>
+		  <div class="swiper-pagination"></div>
+      </div>
+	  
 			<div class="container">
 				<!-- row -->
 				<div class="row">
@@ -469,6 +569,28 @@ var x = setInterval(function() {
 }, 1000);
 </script>
 
+<!-- JavaScript de Swiper -->
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+<script>
+  var swiper = new Swiper('.swiper-container', {
+    slidesPerView: 1,
+    spaceBetween: 25,
+    loop: true,
+    pagination: {
+      el: '.swiper-pagination',
+      clickable: true,
+    },
+    navigation: {
+		nextEl: '.custom-button-next', // Apunta al nuevo botón personalizado
+		prevEl: '.custom-button-prev', // Apunta al nuevo botón personalizado
+    },
+    autoplay: {
+      delay: 5000,
+      disableOnInteraction: false,
+    },
+    effect: 'slide', // Aquí puedes cambiar el efecto a 'fade', 'cube', etc.
+  });
+</script>
 		<!-- /PIE DE PÁGINA -->
 	</body>
 </html>
