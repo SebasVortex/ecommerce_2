@@ -388,7 +388,7 @@
 							<span class="sale">-<?php echo htmlspecialchars($relatedProduct['discount']); ?>%</span>
 						<?php endif; ?>
 						<?php if ($relatedProduct['new']): ?>
-							<span class="new">Nuevo!</span>
+							<span class="new">Nuevo <i class="fa-solid fa-exclamation fa-shake" style="--fa-animation-duration: 2s;"></i></span>
 						<?php endif; ?>
 					</div>
 				</div>

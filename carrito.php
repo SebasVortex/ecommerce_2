@@ -302,7 +302,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             </div>
                         </div>
                         <div class="col-md-2 title-marc">
-                            <p id="price-<?php echo $item['id']; ?>">$<?php echo number_format($item['price'], 2); ?></p>
+                            <p class="precio" id="price-<?php echo $item['id']; ?>">$<?php echo number_format($item['price'], 2); ?></p>
                         </div>
                         <div class="col-md-2">
                             <div class="input-group">

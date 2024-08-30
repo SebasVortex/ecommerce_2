@@ -294,7 +294,7 @@ function getBrandName($brandId) {
                         <span class="sale">-<?php echo htmlspecialchars($producto['discount']); ?>%</span>
                     <?php endif; ?>
                     <?php if ($producto['new']): ?>
-                        <span class="new">Nuevo!</span>
+                        <span class="new">Nuevo <i class="fa-solid fa-exclamation fa-shake" style="--fa-animation-duration: 2s;"></i></span>
                     <?php endif; ?>
                 </div>
             </div>
@@ -311,9 +311,9 @@ function getBrandName($brandId) {
                     <?php endfor; ?>
                 </div>
                 <div class="product-btns">
-                    <button class="add-to-wishlist" data-product-id="<?php echo $producto['id']; ?>"><i class="fa fa-heart-o"></i><span class="tooltipp">Añadir carrito</span></button>
+                    <button class="add-to-wishlist" data-product-id="<?php echo $producto['id']; ?>"><i class="fa-solid fa-cart-plus fa-flip" style="--fa-animation-duration: 3s;"></i><span class="tooltipp">Añadir carrito</span></button>
 					<button class="quick-view" data-product-id="<?php echo $producto['id']; ?>">
-														<i class="fa fa-eye"></i><span class="tooltipp">Ver mas</span>
+														<i class="fa fa-eye fa-beat" style="--fa-animation-duration: 2s;"></i><span class="tooltipp">Ver mas</span>
 													</button>
                 </div>
             </div>

@@ -228,10 +228,10 @@ margin-right: auto;
 												<img src="assets/images/<?php echo htmlspecialchars($producto['imagen']); ?>" alt="<?php echo htmlspecialchars($producto['name']); ?>">
 												<div class="product-label">
 													<?php if ($producto['discount'] > 0): ?>
-														<span class="sale">-<?php echo htmlspecialchars($producto['discount']); ?>%</span>
+														<span class="sale">-<?php echo htmlspecialchars($producto['discount']); ?><i class="fa-solid fa-tag fa-shake"></i>%</span>
 													<?php endif; ?>
 													<?php if ($producto['new']): ?>
-														<span class="new">Nuevo!</span>
+														<span class="new">Nuevo <i class="fa-solid fa-exclamation fa-shake" style="--fa-animation-duration: 2s;"></i></span>
 													<?php endif; ?>
 												</div>
 											</div>
