@@ -46,10 +46,15 @@ if ($stmt->execute()) {
       justify-content: center;
       align-items: center;
 	  height: 500px;
+	  background-position: center;
+	  background-repeat: no-repeat;
+	  background-size: cover;
     }
 	.swiper-slide .btn{
 		align-self: end;
 		margin-bottom: 50px;
+		margin-left: auto;
+		margin-right: 4rem;
 	}
 	.swiper-wrapper{
 		width: 100%;
@@ -64,23 +69,25 @@ if ($stmt->execute()) {
   cursor: pointer;
   width: 40px;
   height: 40px;
-  background-color: #007bff; /* Color de fondo personalizado */
-  color: #fff; /* Color del texto */
-  font-size: 24px;
+  color: gray; /* Color del texto */
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 50%; /* Hace los botones redondos */
+  border-radius: 25%; /* Hace los botones redondos */
   position: relative; /* Posicionamiento absoluto para ubicarlos en el contenedor */
   top: 50%; /* Centrados verticalmente */
-
+  font-size: 28px !important;
   z-index: 10; /* Asegura que estén sobre otros elementos */
   transition: background-color 0.3s; /* Transición para un efecto suave al pasar el ratón */
 }
-
+.custom-button-next span,
+.custom-button-prev  span{
+   font-size: 48px !important;
+}
 .custom-button-next:hover,
 .custom-button-prev:hover {
   background-color: #0056b3; /* Cambio de color al pasar el ratón */
+  color: white;
 }
 
 .custom-button-next {
@@ -96,6 +103,9 @@ margin-right: auto;
     align-items: center;
     position: relative;
     top: 55%;
+}
+#dimensionador{
+	background-image: url(assets/images/dimensionador.png);
 }
 
   </style>
@@ -115,21 +125,25 @@ margin-right: auto;
             <!-- Controles de navegación -->
 					<div class="swiper-container">
 						<div class="control-slider">
-						<div class="custom-button-prev"><</div>
-						<div class="custom-button-next">></div>
+						<div class="custom-button-prev"><span class="material-symbols-outlined">
+chevron_left
+</span></div>
+						<div class="custom-button-next"><span class="material-symbols-outlined">
+chevron_right
+</span></div>
 						</div>
 						<!-- Wrapper de Slides -->
 						<div class="swiper-wrapper">
 						<!-- Slide 1 -->
-						<div class="swiper-slide">
-							<button class="btn btn-primary">Botón 1</button>
+						<div class="swiper-slide" id="dimensionador">
+							<button class="btn btn-primary">Dimensiona ya!</button>
 						</div>
 						<!-- Slide 2 -->
-						<div class="swiper-slide">
+						<div class="swiper-slide" id="2222">
 							<button class="btn btn-success">Botón 2</button>
 						</div>
 						<!-- Slide 3 -->
-						<div class="swiper-slide">
+						<div class="swiper-slide" id="9999">
 							<button class="btn btn-danger">Botón 3</button>
 						</div>
 						<!-- Agregar más slides según sea necesario -->
@@ -585,7 +599,7 @@ var x = setInterval(function() {
 		prevEl: '.custom-button-prev', // Apunta al nuevo botón personalizado
     },
     autoplay: {
-      delay: 5000,
+      delay: 7500,
       disableOnInteraction: false,
     },
     effect: 'slide', // Aquí puedes cambiar el efecto a 'fade', 'cube', etc.
