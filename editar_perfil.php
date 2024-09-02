@@ -5,9 +5,10 @@ include('config/checksession.php');
 $user_id = $_SESSION['user_id'];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['username']) && isset($_POST['email'])) {
+    if (isset($_POST['username']) && isset($_POST['email']) && isset($_POST['nombre'])) {
         $username = trim($_POST['username']);
         $email = trim($_POST['email']);
+        $nombre = trim($_POST['nombre']);
         $imagen_perfil = $_FILES['imagen_perfil']['name'] ?? '';
 
         function sanitizeInput($input) {
@@ -16,26 +17,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $username = sanitizeInput($username);
         $email = sanitizeInput($email);
+        $nombre = sanitizeInput($nombre);
+
+        $uploadOk = 1;
 
         if ($imagen_perfil) {
             $target_dir = "assets/userimages/";
             $target_file = $target_dir . basename($imagen_perfil);
-            $uploadOk = 1;
             $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
 
             $check = getimagesize($_FILES["imagen_perfil"]["tmp_name"]);
             if ($check === false) {
-                echo "El archivo no es una imagen.";
+                $_SESSION['message'] = ['type' => 'danger', 'text' => 'El archivo no es una imagen.'];
                 $uploadOk = 0;
             }
 
             if ($_FILES["imagen_perfil"]["size"] > 3000000) {
-                echo "El archivo es demasiado grande.";
+                $_SESSION['message'] = ['type' => 'danger', 'text' => 'El archivo es demasiado grande.'];
                 $uploadOk = 0;
             }
 
             if (!in_array($imageFileType, ["jpg", "jpeg", "png", "gif"])) {
-                echo "Solo se permiten archivos JPG, JPEG, PNG y GIF.";
+                $_SESSION['message'] = ['type' => 'danger', 'text' => 'Solo se permiten archivos JPG, JPEG, PNG y GIF.'];
                 $uploadOk = 0;
             }
 
@@ -44,23 +47,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $stmt = $conn->prepare("UPDATE clientes SET username = :username, email = :email, imagen_perfil = :imagen_perfil WHERE id = :user_id");
                     $stmt->bindParam(':imagen_perfil', $imagen_perfil);
                 } else {
-                    echo "Hubo un error al subir la imagen.";
+                    $_SESSION['message'] = ['type' => 'danger', 'text' => 'Hubo un error al subir la imagen.'];
                 }
             }
         } else {
-            $stmt = $conn->prepare("UPDATE clientes SET username = :username, email = :email WHERE id = :user_id");
+            $stmt = $conn->prepare("UPDATE clientes SET username = :username, email = :email, nombre = :nombre WHERE id = :user_id");
         }
 
-        $stmt->bindParam(':username', $username);
-        $stmt->bindParam(':email', $email);
-        $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
-        $stmt->execute();
+        if (isset($stmt)) {
+            $stmt->bindParam(':username', $username);
+            $stmt->bindParam(':email', $email);
+            $stmt->bindParam(':nombre', $nombre);
+            $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+            $stmt->execute();
 
-        header("Location: editar_perfil.php?verificado=actualizado");
-        exit();
-    } else {
-        header("Location: editar_perfil.php?error=incompleto");
-        exit();
+            $_SESSION['message'] = ['type' => 'success', 'text' => 'Perfil actualizado con éxito.'];
+            header("Location: editar_perfil.php");
+            exit();
+        } else {
+            $_SESSION['message'] = ['type' => 'danger', 'text' => 'Error al actualizar el perfil.'];
+            header("Location: editar_perfil.php");
+            exit();
+        }
     }
 }
 
@@ -71,7 +79,7 @@ try {
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     error_log('Error en la consulta: ' . $e->getMessage());
-    echo "Error al obtener la información del usuario.";
+    $_SESSION['message'] = ['type' => 'danger', 'text' => 'Error al obtener la información del usuario.'];
 }
 ?>
 
@@ -82,7 +90,25 @@ try {
         text-align: center;
         margin-top: 20px;
     }
+    .alert {
+        padding: 15px;
+        margin: 10px 0;
+        border-radius: 5px;
+        font-size: 16px;
+        display: inline-block;
+    }
 
+    .alert-success {
+        background-color: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+    }
+
+    .alert-danger {
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+    }
     .profile-image-container {
         position: relative;
         display: inline-block;
@@ -244,43 +270,64 @@ try {
     }
 
     @media (max-width: 768px) {
-    .form-ent {
-        flex-direction: column;
-        align-items: center;
+        .form-ent {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .profile-image-container {
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            width: 100%; 
+        }
+
+        .btn-log {
+            width: 50%; 
+            margin-top: 20px;
+        }
+
+        .psw-cnt {
+            width: 120.66%;
+        }
     }
 
-    .profile-image-container {
-        margin-bottom: 20px;
+    @media (max-width: 480px) {
+        .profile-image-container img {
+            width: 150px;
+            height: 150px;
+        }
+
+        .form-group label {
+            font-size: 14px; 
+        }
+
+        .btn-log {
+            padding: 10px;
+            font-size: 16px; 
+        }
     }
 
-    .form-group {
-        width: 100%; 
+    .alert {
+        padding: 15px;
+        margin: 10px 0;
+        border-radius: 5px;
+        font-size: 16px;
+        display: inline-block;
     }
 
-    .btn-log {
-        width: 50%; 
-        margin-top: 20px;
-    }
-    .psw-cnt {
-    width: 120.66%;
-}
-}
-
-@media (max-width: 480px) {
-    .profile-image-container img {
-        width: 150px;
-        height: 150px;
+    .alert-success {
+        background-color: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
     }
 
-    .form-group label {
-        font-size: 14px; 
+    .alert-danger {
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
     }
-
-    .btn-log {
-        padding: 10px;
-        font-size: 16px; 
-    }
-}
 </style>
 </head>
 <body>
@@ -289,10 +336,11 @@ try {
     <!-- HEADER -->
     <div class="container profile-container">
         <h1>Editar Perfil</h1>
-        <?php if (isset($message)) { ?>
-            <div class="<?php echo $message['type'] === 'success' ? 'alert alert-success' : 'alert alert-danger'; ?>">
-                <?php echo htmlspecialchars($message['text']); ?>
+        <?php if (isset($_SESSION['message'])) { ?>
+            <div class="alert <?php echo $_SESSION['message']['type'] === 'success' ? 'alert-success' : 'alert-danger'; ?>">
+                <?php echo htmlspecialchars($_SESSION['message']['text']); ?>
             </div>
+            <?php unset($_SESSION['message']); ?>
         <?php } ?>
         <form action="editar_perfil.php" method="POST" enctype="multipart/form-data">
             <div class="form-ent">
@@ -304,7 +352,11 @@ try {
                 </div> 
                 <div class="group-junt">
                     <div class="form-group">
-                        <label for="username">Nombre:</label>
+                        <label for="nombre">Nombre:</label>
+                        <input type="text" id="nombre" name="nombre" class="form-control" value="<?php echo htmlspecialchars($user['nombre']); ?>" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="username">Usuario:</label>
                         <input type="text" id="username" name="username" class="form-control" value="<?php echo htmlspecialchars($user['username']); ?>" required>
                     </div>
                     <div class="form-group">
@@ -318,7 +370,7 @@ try {
                             <span class="show-password" onclick="togglePassword('password', 'passwordIcon')"><img id="passwordIcon" src="assets/images/lock.png" alt="Toggle Password"></span>
                         </div>
                         <div class="psw-btn">
-                            <button type="button" class="btn-secondary change-pssw" data-toggle="modal" data-target="#changePasswordModal">Cambiar Contraseña</button><img id="changepasswordIcon" src="assets/images/new-password.png" alt="Change Password"></button>
+                            <button type="button" class="btn-secondary change-pssw" data-toggle="modal" data-target="#changePasswordModal">Cambiar Contraseña</button><img id="changepasswordIcon" src="assets/images/new-password.png" alt="Change Password">
                         </div>
                     </div>
                 </div>                

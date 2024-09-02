@@ -165,7 +165,7 @@ chevron_right
 							</div>
 							<div class="shop-body">
 								<h3>Sistemas<br>hibridos</h3>
-								<a href="store.php?category%5B%5D=1" class="cta-btn">Ver mas <i class="fa fa-arrow-circle-right"></i></a>
+								<a href="store.php?category%5B%5D=1" class="cta-btn">Ver más <i class="fa fa-arrow-circle-right"></i></a>
 							</div>
 						</div>
 					</div>
@@ -179,7 +179,7 @@ chevron_right
 							</div>
 							<div class="shop-body">
 								<h3>Baterías<br>de litio</h3>
-								<a href="store.php?category%5B%5D=9" class="cta-btn">Ver mas <i class="fa fa-arrow-circle-right"></i></a>
+								<a href="store.php?category%5B%5D=9" class="cta-btn">Ver más <i class="fa fa-arrow-circle-right"></i></a>
 							</div>
 						</div>
 					</div>
@@ -193,7 +193,7 @@ chevron_right
 							</div>
 							<div class="shop-body">
 								<h3>Plantas<br>Modulares</h3>
-								<a href="store.php?category%5B%5D=6" class="cta-btn">Ver mas <i class="fa fa-arrow-circle-right"></i></a>
+								<a href="store.php?category%5B%5D=6" class="cta-btn">Ver más <i class="fa fa-arrow-circle-right"></i></a>
 							</div>
 						</div>
 					</div>
@@ -267,9 +267,9 @@ chevron_right
 												</div>
 
 												<div class="product-btns">
-													<button class="add-to-wishlist"data-product-id="<?php echo $producto['id']; ?>"><i class="fa fa-heart-o"></i><span class="tooltipp">Añadir al carrito</span></button>
+													<button class="add-to-wishlist"data-product-id="<?php echo $producto['id']; ?>"><i class="fa-solid fa-cart-plus fa-flip" style="--fa-animation-duration: 3s;"></i><span class="tooltipp">Añadir al carrito</span></button>
 													<button class="quick-view" data-product-id="<?php echo $producto['id']; ?>">
-														<i class="fa fa-eye"></i><span class="tooltipp">Ver mas</span>
+														<i class="fa fa-eye fa-beat" style="--fa-animation-duration: 2s;"></i><span class="tooltipp">Ver más</span>
 													</button>
 												</div>
 											</div>
@@ -404,9 +404,9 @@ chevron_right
 												</div>
 
 												<div class="product-btns">
-													<button class="add-to-wishlist"data-product-id="<?php echo $producto['id']; ?>"><i class="fa fa-heart-o"></i><span class="tooltipp">añadir al carrito</span></button>
+													<button class="add-to-wishlist"data-product-id="<?php echo $producto['id']; ?>"><i class="fa-solid fa-cart-plus fa-flip" style="--fa-animation-duration: 3s;"></i><span class="tooltipp">añadir al carrito</span></button>
 													<button class="quick-view" data-product-id="<?php echo $producto['id']; ?>">
-														<i class="fa fa-eye"></i><span class="tooltipp">Ver mas</span>
+														<i class="fa fa-eye fa-beat" style="--fa-animation-duration: 2s;"></i><span class="tooltipp">Ver más</span>
 													</button>
 												</div>
 											</div>

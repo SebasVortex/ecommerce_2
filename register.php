@@ -19,6 +19,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $username = trim($_POST['username']);
     $email = trim($_POST['email']);
     $password = trim($_POST['password']);
+    $nombre = trim($_POST['nombre']);
+    $apellido = trim($_POST['apellido']);
+    $tipo_usuario = trim($_POST['tipo_usuario']);
 
     // Limpieza y validación de entradas
     function sanitizeInput($input) {
@@ -28,6 +31,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $username = sanitizeInput($username);
     $email = sanitizeInput($email);
     $password = sanitizeInput($password);
+    $nombre = sanitizeInput($nombre);
+    $apellido = sanitizeInput($apellido);
+    $tipo_usuario = sanitizeInput($tipo_usuario);
 
     try {
         $stmt = $conn->prepare("SELECT id FROM clientes WHERE username = :username OR email = :email");
@@ -39,10 +45,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $_SESSION['error'] = 'El nombre de usuario o el email ya están en uso.';
         } else {
             $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
-            $stmt = $conn->prepare("INSERT INTO clientes (username, email, password) VALUES (:username, :email, :password)");
+            $stmt = $conn->prepare("INSERT INTO clientes (username, email, password, nombre, apellido, tipo_usuario) VALUES (:username, :email, :password, :nombre, :apellido, :tipo_usuario)");
             $stmt->bindParam(':username', $username);
             $stmt->bindParam(':email', $email);
             $stmt->bindParam(':password', $hashedPassword);
+            $stmt->bindParam(':nombre', $nombre);
+            $stmt->bindParam(':apellido', $apellido);
+            $stmt->bindParam(':tipo_usuario', $tipo_usuario);
             if ($stmt->execute()) {
                 $_SESSION['success'] = 'Registro exitoso. Puedes iniciar sesión.';
                 header('Location: login.php');
@@ -63,6 +72,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <?php include 'assets/includes/head.php';?>
     <title>Registro</title>
     <style>
+        .animated.fast {
+            font-family: inherit;
+        }
        .container-reg {
             padding: 5rem 0rem 8rem 0rem;
             display: flex;
@@ -89,14 +101,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             font-weight: 600;
         }
         .btn-reg:hover {
-            background-color: #B31920; /* Un verde ligeramente más oscuro para el hover */
-            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2); /* Sombra para dar sensación de elevación */
+            background-color: #B31920;
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
         }
-
-        /* Estilo para cuando el botón está enfocado o activo */
         .btn-reg:focus, .btn-reg:active {
-            outline: none; /* Elimina el outline que algunos navegadores añaden */
-            background-color: #8E171C; /* Un verde aún más oscuro para el focus/active */
+            outline: none;
+            background-color: #8E171C;
         }
         .img-reg {
             width: 50%;
@@ -133,12 +143,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             flex-direction: column;
             align-items: center;
             justify-content: flex-start;
-            gap: 50px;
+            gap: 40px;
             padding: 35px;
         }
         h2 {
-            margin-top: 50px;
-            margin-bottom: 30px;
+            margin-top: 20px;
+            margin-bottom: 20px;
             font-weight: 400;
             color: #616161;
         }
@@ -147,6 +157,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             display: flex;
             align-items: flex-end;
             margin-top: 25px;
+            gap: 20px;
+            color: #616161;
         }
         .password-input {
             width: 100%;
@@ -176,6 +188,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             text-decoration: underline;
             color: #D10024;
             font-weight: 500;
+        }
+        .nya-cont{
+            gap: 15px;
         }
         @media (max-width: 768px) {
             .register-container {
@@ -216,18 +231,35 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <div class="form-reg">
                 <form action="register.php" method="post" class="register-user">
                     <h2>Crear Cuenta</h2>
-                    <div class="password-container">
-                        <input type="text" class="password-input" id="username" name="username" placeholder="Nombre de Usuario" required>
-                        <span><img src="assets/images/person.png" alt="User Icon"></span>
+                    <div class="password-container nya-cont">
+                        <input type="text" class="password-input" id="nombre" name="nombre" placeholder="Nombre" required>
+                        <input type="text" class="password-input" id="apellido" name="apellido" placeholder="Apellido" required>
+                        <span><i class="fa-solid fa-id-card" style="font-size:26px"></i></span>
                     </div>
                     <div class="password-container">
+                        <input type="text" class="password-input" id="username" name="username" placeholder="Nombre de Usuario" required>
+                        <span><i class="fa-solid fa-user" style="font-size:26px"></i></span>
+                    </div>
+                    <div class="password-container nya-cont">
+                        <div style="width: 100%;">
+                            <select class="password-input" id="tipo_usuario" name="tipo_usuario" required>
+                                <option value="">Selecciona tipo de Perfil</option>
+                                <option value="empresa">Empresa</option>
+                                <option value="consumidor_final">Consumidor Final</option>
+                            </select>
+                            <p style="font-size: 12px; color: #616161; margin-top: 5px;">Esta opción no se podrá cambiar más adelante.*</p>
+                        </div>
+                        <span><i class="fa-solid fa-building-user" style="font-size:26px; margin-bottom:30px;"></i></span>
+                    </div>
+                    <div class="password-container" style="margin-top:5px;">
                         <input type="email" class="password-input" id="email" name="email" placeholder="Email" required>
-                        <span><img src="assets/images/email2.png" alt="Email Icon"></span>
+                        <span><i class="fa-solid fa-envelope" style="font-size:26px"></i></span>
                     </div>
                     <div class="password-container">
                         <input type="password" class="password-input" id="password" name="password" placeholder="Contraseña" required>
-                        <span class="show-password" onclick="togglePassword()"><img id="passwordIcon" src="assets/images/lock.png" alt="Toggle Password"></span>
+                        <span class="show-password" onclick="togglePassword()"><i id="passwordIcon" class="fa-solid fa-lock" style="font-size:26px"></i></span>
                     </div>
+                    
                     <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token']); ?>">
                     <button type="submit" class="btn-reg">Registrarme</button>
                 </form>
@@ -244,10 +276,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         var passwordIcon = document.getElementById('passwordIcon');
         if (passwordField.type === 'password') {
             passwordField.type = 'text';
-            passwordIcon.src = 'assets/images/unlock.png';
+            passwordIcon.classList.remove('fa-lock');
+            passwordIcon.classList.add('fa-unlock');
         } else {
             passwordField.type = 'password';
-            passwordIcon.src = 'assets/images/lock.png';
+            passwordIcon.classList.remove('fa-unlock');
+            passwordIcon.classList.add('fa-lock');
         }
     }
 </script>

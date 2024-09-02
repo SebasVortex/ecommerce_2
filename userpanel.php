@@ -136,7 +136,7 @@ try {
     <?php include 'assets/includes/header.php';?>
     <!-- HEADER -->
     <div class="container mt-5">
-        <h1 class="mb-4 title"> Hola, <?php echo htmlspecialchars($user['username']); ?>!</h1>
+        <h1 class="mb-4 title"> Hola, <?php echo htmlspecialchars($user['nombre']); ?>!</h1>
         
         <div class="row-us">
             <div class="col-md-4 text-center">
@@ -151,9 +151,10 @@ try {
             <div class="col-md-8">
                 <div class="card mb-4">
                     <div class="card-body">
-                        <p><strong>Nombre:</strong> <?php echo htmlspecialchars($user['username']); ?></p>
+                        <p><strong>Nombre:</strong> <?php echo htmlspecialchars($user['nombre']); ?></p>
                         <p><strong>Email:</strong> <?php echo htmlspecialchars($user['email']); ?></p>
                         <p><strong>Usuario:</strong> <?php echo htmlspecialchars($user['username']); ?></p>
+                        <p><strong>Perfil:</strong> <?php echo htmlspecialchars($user['tipo_usuario']);?> </p>
                         <!-- Agrega más información del usuario según sea necesario -->
                     </div>
                 </div>
