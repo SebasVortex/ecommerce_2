@@ -79,7 +79,7 @@ if (isset($_SESSION['error'])) {
             border: none;
             color: #fff;
             border-radius: 35px;
-            width: 50%;
+            width: 55%;
             margin-top: 55px;
             height: 50px;
             font-size: 18px;
@@ -143,6 +143,7 @@ if (isset($_SESSION['error'])) {
             display: flex;
             align-items: flex-end;
             margin-top: 25px;
+            gap: 20px;
         }
         .password-input {
             width: 100%;
@@ -180,12 +181,14 @@ if (isset($_SESSION['error'])) {
                 background-color: transparent;
             }
             .img-log {
-                width: 100%;
-                height: 200px;
+                display: none;
             }
             .form-log {
                 width: 100%;
                 padding: 20px;
+            }
+            .btn-log{
+                width: 70%;
             }
         }
     </style>
@@ -209,16 +212,16 @@ if (isset($_SESSION['error'])) {
                 <form action="config/processlogin.php" method="post" class="login-user">
                     <div class="password-container">
                         <input type="text" id="username" name="username" placeholder="Usuario" class="password-input" required>
-                        <span><img src="assets/images/person.png" alt="User Icon"></span>
+                        <span><i class="fa-solid fa-user" style="font-size:26px"></i></span>
                     </div>
                     <div class="password-container">
                         <input type="password" id="password" name="password" placeholder="Contraseña" class="password-input" required>
-                        <span class="show-password" onclick="togglePassword()"><img id="passwordIcon" src="assets/images/lock.png" alt="Toggle Password"></span>
+                        <span class="show-password" onclick="togglePassword()"><i id="passwordIcon" class="fa-solid fa-lock" style="font-size:26px"></i></span>
                     </div>
                     <input type="submit" value="Iniciar sesión" class="btn-log">
                 </form>
                 <p><a href="register.php">¿No tenés una cuenta? <span class="register">Registrate acá</span></a></p>
-                <p><a href="register.php">¿Olvidaste tu contraseña?</a></p>
+                <p><a href="forgot_password.php">¿Olvidaste tu contraseña?</a></p>
             </div>    
         </div>
     </div>
@@ -229,10 +232,12 @@ if (isset($_SESSION['error'])) {
             var passwordIcon = document.getElementById('passwordIcon');
             if (passwordField.type === 'password') {
                 passwordField.type = 'text';
-                passwordIcon.src = 'assets/images/unlock.png';
+                passwordIcon.classList.remove('fa-lock');
+                passwordIcon.classList.add('fa-unlock');
             } else {
                 passwordField.type = 'password';
-                passwordIcon.src = 'assets/images/lock.png';
+                passwordIcon.classList.remove('fa-unlock');
+                passwordIcon.classList.add('fa-lock');
             }
         }
     </script>

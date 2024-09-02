@@ -247,7 +247,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <option value="empresa">Empresa</option>
                                 <option value="consumidor_final">Consumidor Final</option>
                             </select>
-                            <p style="font-size: 12px; color: #616161; margin-top: 5px;">Esta opción no se podrá cambiar más adelante.*</p>
+                            <p style="font-size: 12px; color: #d10024; margin-top: 5px;">Esta opción NO se podrá cambiar más adelante.*</p>
                         </div>
                         <span><i class="fa-solid fa-building-user" style="font-size:26px; margin-bottom:30px;"></i></span>
                     </div>
