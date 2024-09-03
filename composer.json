@@ -1,0 +1,17 @@
+{
+    "name": "sistemasener/ecommerce2",
+    "require": {
+        "phpmailer/phpmailer": "^6.9"
+    },
+    "autoload": {
+        "psr-4": {
+            "Sistemasener\\Ecommerce2\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "sebas",
+            "email": "smottino@sistemasenergeticos.com.ar"
+        }
+    ]
+}
