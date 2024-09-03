@@ -47,21 +47,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['email'])) {
                 $mail->SMTPSecure = 'tls';
                 $mail->Port = 587;
 
-                $mail->setFrom('sitioweb.sesa@gmail.com', 'Sistema de Gestión');
+                $mail->setFrom('sitioweb.sesa@gmail.com', 'Sistemas Energéticos');
                 $mail->addAddress($email);
 
                 $mail->isHTML(true);
-                $mail->Subject = 'Restablecimiento de contraseña';
+                $mail->Subject = 'Restablece tu clave';
                 $mail->Body = 'Hacé clic en el siguiente enlace para restablecer tu contraseña: <a href="' . $resetLink . '">' . $resetLink . '</a>';
 
                 $mail->send();
                 $successMessage = 'Te hemos enviado un correo electrónico con las instrucciones para restablecer tu contraseña.';
+                
             } catch (Exception $e) {
                 $errorMessage = 'Hubo un error enviando el correo electrónico. Error: ' . $mail->ErrorInfo;
             }
         } else {
             $errorMessage = 'El correo electrónico no está registrado.';
         }
+        
     } catch (PDOException $e) {
         $errorMessage = 'Error en la base de datos.';
     }
@@ -85,30 +87,22 @@ unset($_SESSION['success']);
         padding: 5rem 0rem 8rem 0rem;
         display: flex;
         justify-content: center;
-        height: 600px;
+    }
+    .text-light{
+        color:#808080;
     }
     .container-inside {
-        display: flex;
         background-color: #ffffff;
         box-shadow: 10px 10px 15px rgba(0, 0, 0, 0.3);
         max-width: 600px;
+        padding: 65px;
+        display: flex;
         flex-direction: column;
+        justify-content: center;
         align-items: center;
-        padding: 30px;
+        gap: 30px;
     }
-    .btn-log {
-        background-color: #D10024;
-        transition: background-color 0.3s, box-shadow 0.2s;
-        box-shadow: 0 7px 11px #a0a0a0;
-        border: none;
-        color: #fff;
-        border-radius: 35px;
-        width: 55%;
-        margin-top: 35px;
-        height: 50px;
-        font-size: 18px;
-        font-weight: 600;
-    }
+    
     .btn-log:hover {
         background-color: #B31920;
         box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
@@ -121,13 +115,33 @@ unset($_SESSION['success']);
         width: 100%;
         display: flex;
         flex-direction: column;
-        gap: 20px;
+        gap: 30px;
     }
     .input-container input {
         padding: 1rem;
         font-size: 18px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
+        border: none;
+        border-bottom: 1px solid #ccc;
+        transition: border-color 0.3s;
+    }
+    .input-container input:focus {
+        border-color: #D10024;
+        outline: none;
+    }
+    .btn-log {
+        background-color: #D10024;
+        transition: background-color 0.3s, box-shadow 0.2s;
+        box-shadow: 0 7px 11px #a0a0a0;
+        border: none !important;
+        color: #fff;
+        border-radius: 35px;
+        width: 45%;
+        margin-top: 10px;
+        height: 42px;
+        font-size: 18px;
+        font-weight: 600;
+        align-self: center;
+        padding: 0 !important;
     }
 </style>
 </head>
@@ -135,19 +149,22 @@ unset($_SESSION['success']);
     <?php include 'assets/includes/header.php'; ?>
     <div class="container2">
         <div class="container-inside">
+            <img src="assets/images/logo.webp" alt="Logo" style="width: 100px; ">
             <h2>Restablecer Contraseña</h2>
             <?php
             if ($errorMessage) {
-                echo '<p>' . $errorMessage . '</p>';
+                echo '<p style="color: red;">' . $errorMessage . '</p>';
             }
             if ($successMessage) {
-                echo '<p>' . $successMessage . '</p>';
+                echo '<p style="color: green;">' . $successMessage . '</p>';
             }
             ?>
             <form action="forgot_password.php" method="post" class="input-container">
                 <input type="email" name="email" placeholder="Ingresa tu correo electrónico" required>
+                <p class="text-light">Si no recibes el correo electrónico en unos minutos, revisa tu carpeta de spam o intenta nuevamente.</p>
                 <input type="submit" value="Enviar" class="btn-log">
             </form>
+            <p class="text-light">¿Ya recuerdas tu contraseña? <a style="text-decoration:underline;" href="login.php">Inicia sesión aquí</a>.</p>
         </div>
     </div>
     <?php include 'assets/includes/footer.php'; ?>
