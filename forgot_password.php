@@ -1,8 +1,14 @@
 <?php
 require 'vendor/autoload.php';
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
 session_start();
 include('config/database.php');
+
+// Inicializar las variables de mensaje
+$successMessage = '';
+$errorMessage = '';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['email'])) {
     $email = trim($_POST['email']);
@@ -27,23 +33,43 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['email'])) {
             $stmt->execute();
 
             // Enviar el correo electrónico con el enlace de restablecimiento
-            $resetLink = 'http://tudominio.com/reset_password.php?token=' . $token;
-            $subject = 'Restablecimiento de contraseña';
-            $message = 'Hacé clic en el siguiente enlace para restablecer tu contraseña: ' . $resetLink;
-            $headers = 'From: noreply@tudominio.com';
+            $resetLink = 'http://sistemasenergeticos.com.ar/reset_password.php?token=' . $token;
+            
+            // Configuración del PHPMailer
+            $mail = new PHPMailer(true);
 
-            if (mail($email, $subject, $message, $headers)) {
-                $_SESSION['success'] = 'Te hemos enviado un correo electrónico con las instrucciones para restablecer tu contraseña.';
-            } else {
-                $_SESSION['error'] = 'Hubo un error enviando el correo electrónico.';
+            try {
+                $mail->isSMTP();
+                $mail->Host = 'smtp.gmail.com'; // Cambia esto por tu servidor SMTP
+                $mail->SMTPAuth = true;
+                $mail->Username = 'sitioweb.sesa@gmail.com'; // Tu dirección de correo
+                $mail->Password = 'gggezcxwbmutcoix'; // La contraseña de tu cuenta de correo
+                $mail->SMTPSecure = 'tls';
+                $mail->Port = 587;
+
+                $mail->setFrom('sitioweb.sesa@gmail.com', 'Sistema de Gestión');
+                $mail->addAddress($email);
+
+                $mail->isHTML(true);
+                $mail->Subject = 'Restablecimiento de contraseña';
+                $mail->Body = 'Hacé clic en el siguiente enlace para restablecer tu contraseña: <a href="' . $resetLink . '">' . $resetLink . '</a>';
+
+                $mail->send();
+                $successMessage = 'Te hemos enviado un correo electrónico con las instrucciones para restablecer tu contraseña.';
+            } catch (Exception $e) {
+                $errorMessage = 'Hubo un error enviando el correo electrónico. Error: ' . $mail->ErrorInfo;
             }
         } else {
-            $_SESSION['error'] = 'El correo electrónico no está registrado.';
+            $errorMessage = 'El correo electrónico no está registrado.';
         }
     } catch (PDOException $e) {
-        $_SESSION['error'] = 'Error en la base de datos.';
+        $errorMessage = 'Error en la base de datos.';
     }
 }
+
+// Limpia los mensajes de la sesión
+unset($_SESSION['error']);
+unset($_SESSION['success']);
 ?>
 
 <?php include 'assets/includes/head.php'; ?>
@@ -111,11 +137,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['email'])) {
         <div class="container-inside">
             <h2>Restablecer Contraseña</h2>
             <?php
-            if (isset($_SESSION['error'])) {
-                echo '<p>' . $_SESSION['error'] . '</p>';
+            if ($errorMessage) {
+                echo '<p>' . $errorMessage . '</p>';
             }
-            if (isset($_SESSION['success'])) {
-                echo '<p>' . $_SESSION['success'] . '</p>';
+            if ($successMessage) {
+                echo '<p>' . $successMessage . '</p>';
             }
             ?>
             <form action="forgot_password.php" method="post" class="input-container">

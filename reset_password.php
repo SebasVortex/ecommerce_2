@@ -9,9 +9,10 @@ if (isset($_GET['token'])) {
 
     // Verificar si el token es válido y no ha expirado
     try {
+        $now = date('U'); // Almacena el valor en una variable
         $stmt = $conn->prepare("SELECT * FROM password_resets WHERE token = :token AND expires > :now LIMIT 1");
         $stmt->bindParam(':token', $token);
-        $stmt->bindParam(':now', date('U'));
+        $stmt->bindParam(':now', $now); // Usa la variable aquí
         $stmt->execute();
         $reset = $stmt->fetch(PDO::FETCH_ASSOC);
 
