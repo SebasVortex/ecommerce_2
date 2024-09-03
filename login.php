@@ -243,3 +243,17 @@ if (isset($_SESSION['error'])) {
     </script>
 </body>
 </html>
+<?php
+// Verificar si el parámetro 'status' existe en la URL y si es igual a 'registrado'
+if (isset($_GET['status']) && $_GET['status'] === 'registrado') {
+    echo "
+    <script>
+        Swal.fire({
+            title: '¡Registro exitoso!',
+            text: 'Te has registrado correctamente.',
+            icon: 'success',
+            confirmButtonText: 'Aceptar'
+        });
+    </script>";
+}
+?>

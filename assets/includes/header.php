@@ -106,7 +106,7 @@ $categorias = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <form style="display: flex;">
                             <input id="search-input" style="width: 100%; border-radius: 25px;" name="search" class="input" placeholder="Buscar productos...">
                         </form>
-                        <div id="results-container" style="max-height: 500px; overflow-y: auto; position: absolute; background: white; z-index: 9999; margin-left: auto; margin-right: auto;"></div>
+                        <div id="results-container" style="width: 100%; max-width: 550px; max-height: 500px; overflow-y: auto; position: absolute; background: white; z-index: 9999; margin-left: auto; margin-right: auto;"></div>
                     </div>
                 </div>
                 <!-- /SEARCH BAR -->

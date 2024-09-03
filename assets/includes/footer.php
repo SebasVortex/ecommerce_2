@@ -194,7 +194,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     // Escapamos datos recibidos para prevenir XSS
                     const productHtml = `
                         <div class="result-item" style="display: flex; padding: 1.5rem; border-bottom: 1px solid #ccc; max-width: 535px; width: 100%;">
-                            <img src="assets/images/${escapeHTML(item.imagen)}" alt="${escapeHTML(item.name)}" style="width: 100px; height: auto; margin-right: 15px;">
+                            <img src="assets/images/${escapeHTML(item.imagen)}" alt="${escapeHTML(item.name)}" style="border: 1px solid rgb(213, 213, 231);width: 75px; height: auto; margin-right: 15px; border-radius: 4px;">
                             <div style="display: flex; flex-direction: column; justify-content: center;">
                                 <h3 style="font-size: 18px;">
                                     <a href="product_detalle.php?id=${encodeURIComponent(item.id)}">${escapeHTML(item.brand_name)} - ${escapeHTML(item.name)}</a>
@@ -381,4 +381,5 @@ document.addEventListener('DOMContentLoaded', function() {
 <!-- Incluye jQuery UI para el control deslizante -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">

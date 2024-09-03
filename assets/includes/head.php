@@ -27,3 +27,7 @@
 
  		<!-- Hoja de estilo personalizada -->
  		<link type="text/css" rel="stylesheet" href="assets/css/style.css"/>
+
+
+        <!-- sweet alert-->
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">

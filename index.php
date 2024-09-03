@@ -1,3 +1,4 @@
+
 <?php
 include('config/producto.php'); // Incluye el archivo que recupera los datos de los productos
 // Obtener la oferta activa desde la base de datos
@@ -578,7 +579,8 @@ var x = setInterval(function() {
     // Si el contador llega a cero, mostrar un mensaje
     if (distancia < 0) {
         clearInterval(x);
-        document.querySelector(".hot-deal").innerHTML = "<h2 class='text-uppercase'>¡La oferta ha terminado!</h2>";
+        document.querySelector(".hot-deal").innerHTML = "<h2 class='text-uppercase'>¡La oferta ha terminado!</h2><p>Mira nuestro nuevos inversores</p><a class='primary-btn cta-btn' href='store.php?category%5B%5D=5'>Comprar ahora</a>";
+
     }
 }, 1000);
 </script>
@@ -608,3 +610,18 @@ var x = setInterval(function() {
 		<!-- /PIE DE PÁGINA -->
 	</body>
 </html>
+
+<?php
+// Verificar si el parámetro 'pedido' existe en la URL y si es igual a 'realizado'
+if (isset($_GET['pedido']) && $_GET['pedido'] === 'realizado') {
+    echo "
+    <script>
+        Swal.fire({
+            title: '¡Pedido realizado con éxito!',
+            text: 'Tu pedido ha sido procesado correctamente.',
+            icon: 'success',
+            confirmButtonText: 'Aceptar'
+        });
+    </script>";
+}
+?>
