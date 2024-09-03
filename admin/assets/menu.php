@@ -13,6 +13,9 @@
                 <a class="nav-link" href="tabla_productos.php">Productos</a>
             </li>
             <li class="nav-item">
+                <a class="nav-link" href="admin_clientes.php">Clientes</a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" href="admin_pedidos.php">Pedidos</a>
             </li>
             <li class="nav-item">

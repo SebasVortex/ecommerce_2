@@ -22,33 +22,34 @@ try {
     $stmt->execute(['user_id' => $userId]);
     $pedidos = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
-    if (empty($pedidos)) {
-        echo '<div class="alert alert-info" role="alert">No tienes pedidos realizados.</div>';
-    } else {
-        // Agrupar los pedidos por ID
-        $pedidosAgrupados = [];
-        foreach ($pedidos as $pedido) {
-            $pedidoId = $pedido['pedido_id'];
-            if (!isset($pedidosAgrupados[$pedidoId])) {
-                $pedidosAgrupados[$pedidoId] = [
-                    'pedido_id' => $pedidoId,
-                    'total' => $pedido['total'],
-                    'status' => $pedido['status'],
-                    'nombre' => $pedido['nombre'],
-                    'apellido' => $pedido['apellido'],
-                    'telefono' => $pedido['telefono'],
-                    'notas' => $pedido['notas'],
-                    'items' => []
-                ];
-            }
-            $pedidosAgrupados[$pedidoId]['items'][] = [
-                'product_id' => $pedido['product_id'],
-                'quantity' => $pedido['quantity'],
-                'price' => $pedido['price'],
-                'product_name' => $pedido['product_name']
+    // Agrupar los pedidos por ID
+    $pedidosAgrupados = [];
+    foreach ($pedidos as $pedido) {
+        $pedidoId = $pedido['pedido_id'];
+        if (!isset($pedidosAgrupados[$pedidoId])) {
+            $pedidosAgrupados[$pedidoId] = [
+                'pedido_id' => $pedidoId,
+                'total' => $pedido['total'],
+                'status' => $pedido['status'],
+                'nombre' => $pedido['nombre'],
+                'apellido' => $pedido['apellido'],
+                'telefono' => $pedido['telefono'],
+                'notas' => $pedido['notas'],
+                'items' => []
             ];
         }
-        ?>
+        $pedidosAgrupados[$pedidoId]['items'][] = [
+            'product_id' => $pedido['product_id'],
+            'quantity' => $pedido['quantity'],
+            'price' => $pedido['price'],
+            'product_name' => $pedido['product_name']
+        ];
+    }
+} catch (PDOException $e) {
+    $error_message = 'Error al obtener los pedidos: ' . htmlspecialchars($e->getMessage());
+}
+?>
+
 <?php include 'assets/includes/head.php'; ?>
 </head>
 <body>
@@ -62,58 +63,69 @@ try {
         <h2 class="mb-4">Mis Pedidos</h2>
         <br>
         <br>
-        <?php foreach ($pedidosAgrupados as $pedido): ?>
-            <hr>
-            <div class="card mb-4">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5 class="card-title mb-0">Pedido ID: <?php echo htmlspecialchars($pedido['pedido_id']); ?></h5>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <p><strong>Nombre:</strong> <?php echo htmlspecialchars($pedido['nombre'] . ' ' . $pedido['apellido']); ?></p>
-                            <p><strong>Teléfono:</strong> <?php echo htmlspecialchars($pedido['telefono']); ?></p>
-                        </div>
-                        <div class="col-md-6">
-                            <p><strong>Notas:</strong> <?php echo htmlspecialchars($pedido['notas']); ?></p>
-                            <p><strong>Status:</strong> <?php echo htmlspecialchars($pedido['status']); ?></p>
-                            <p><strong>Total:</strong> $<?php echo number_format($pedido['total'], 2); ?></p>
-                        </div>
-                    </div>
-                    <div class="table-responsive">
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Producto</th>
-                                    <th>Cantidad</th>
-                                    <th>Precio Unitario</th>
-                                    <th>Total</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach ($pedido['items'] as $item): ?>
-                                    <tr>
-                                        <td><?php echo htmlspecialchars($item['product_name']); ?></td>
-                                        <td><?php echo htmlspecialchars($item['quantity']); ?></td>
-                                        <td>$<?php echo number_format($item['price'], 2); ?></td>
-                                        <td>$<?php echo number_format($item['quantity'] * $item['price'], 2); ?></td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                        </table>
-                    </div>
-                    <?php if ($pedido['status'] == 'pendiente'): ?>
-                        <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#cancelModal<?php echo htmlspecialchars($pedido['pedido_id']); ?>">
-                            Cancelar Pedido
-                        </button>
-                    <?php endif; ?>
-                </div>
+
+        <?php if (isset($error_message)): ?>
+            <div class="alert alert-danger" role="alert">
+                <?php echo $error_message; ?>
             </div>
-            <br>
-            <br>
-            <br>
-            <br>
-        <?php endforeach; ?>
+        <?php elseif (empty($pedidosAgrupados)): ?>
+            <div class="alert alert-info" role="alert">
+                No tienes pedidos realizados.
+            </div>
+        <?php else: ?>
+            <?php foreach ($pedidosAgrupados as $pedido): ?>
+                <hr>
+                <div class="card mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="card-title mb-0">Pedido ID: <?php echo htmlspecialchars($pedido['pedido_id']); ?></h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><strong>Nombre:</strong> <?php echo htmlspecialchars($pedido['nombre'] . ' ' . $pedido['apellido']); ?></p>
+                                <p><strong>Teléfono:</strong> <?php echo htmlspecialchars($pedido['telefono']); ?></p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>Notas:</strong> <?php echo htmlspecialchars($pedido['notas']); ?></p>
+                                <p><strong>Status:</strong> <?php echo htmlspecialchars($pedido['status']); ?></p>
+                                <p><strong>Total:</strong> $<?php echo number_format($pedido['total'], 2); ?></p>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Producto</th>
+                                        <th>Cantidad</th>
+                                        <th>Precio Unitario</th>
+                                        <th>Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($pedido['items'] as $item): ?>
+                                        <tr>
+                                            <td><?php echo htmlspecialchars($item['product_name']); ?></td>
+                                            <td><?php echo htmlspecialchars($item['quantity']); ?></td>
+                                            <td>$<?php echo number_format($item['price'], 2); ?></td>
+                                            <td>$<?php echo number_format($item['quantity'] * $item['price'], 2); ?></td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                        <?php if ($pedido['status'] == 'pendiente'): ?>
+                            <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#cancelModal<?php echo htmlspecialchars($pedido['pedido_id']); ?>">
+                                Cancelar Pedido
+                            </button>
+                        <?php endif; ?>
+                    </div>
+                </div>
+                <br>
+                <br>
+                <br>
+                <br>
+            <?php endforeach; ?>
+        <?php endif; ?>
     </div>
 
     <!-- Modal para Confirmar Cancelación -->
@@ -147,11 +159,5 @@ try {
     <!-- PIE DE PÁGINA -->
     <?php include 'assets/includes/footer.php'; ?>
     <!-- /PIE DE PÁGINA -->
-
-    <?php
-    }
-} catch (PDOException $e) {
-    echo '<div class="alert alert-danger" role="alert">Error al obtener los pedidos: ' . htmlspecialchars($e->getMessage()) . '</div>';
-}
-?>
-
+</body>
+</html>
