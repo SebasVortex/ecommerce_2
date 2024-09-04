@@ -211,7 +211,7 @@ if (isset($_SESSION['error'])) {
                 <h2>Bienvenido!</h2>
                 <form action="config/processlogin.php" method="post" class="login-user">
                     <div class="password-container">
-                        <input type="text" id="username" name="username" placeholder="Usuario" class="password-input" required>
+                        <input type="text" id="username" name="username" placeholder="Usuario o Email" class="password-input" required>
                         <span><i class="fa-solid fa-user" style="font-size:26px"></i></span>
                     </div>
                     <div class="password-container">

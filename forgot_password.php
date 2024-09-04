@@ -47,13 +47,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['email'])) {
                 $mail->SMTPSecure = 'tls';
                 $mail->Port = 587;
 
-                $mail->setFrom('sitioweb.sesa@gmail.com', 'Sistemas Energéticos');
+                $mail->setFrom('sitioweb.sesa@gmail.com', 'Sistemas Energeticos');
                 $mail->addAddress($email);
 
                 $mail->isHTML(true);
-                $mail->Subject = 'Restablece tu clave';
+                $mail->Subject = 'Restablece tu claveee';
                 $mail->Body = 'Hacé clic en el siguiente enlace para restablecer tu contraseña: <a href="' . $resetLink . '">' . $resetLink . '</a>';
-
+                $mail->Body .= '<br>Para que no lo olvides, tu nombre de usuario es: ' . $username . ';';
+                
                 $mail->send();
                 $successMessage = 'Te hemos enviado un correo electrónico con las instrucciones para restablecer tu contraseña.';
                 

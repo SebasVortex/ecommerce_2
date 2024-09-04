@@ -4,7 +4,7 @@ session_start(); // Asegúrate de que la sesión esté iniciada
 include('database.php'); // Incluye el archivo de configuración de la base de datos
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $username = trim($_POST['username']);
+    $username_or_email = trim($_POST['username']); // Aquí 'username' se usa para tanto username como email
     $password = trim($_POST['password']);
 
     // Limpieza y validación de entradas
@@ -12,14 +12,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         return htmlspecialchars(strip_tags($input));
     }
 
-    $username = sanitizeInput($username);
+    $username_or_email = sanitizeInput($username_or_email);
     $password = sanitizeInput($password);
 
     try {
         // Consulta para obtener el hash de la contraseña y el ID del usuario
-        $sql = "SELECT id, password FROM clientes WHERE username = :username";
+        $sql = "SELECT id, password FROM clientes WHERE username = :username_or_email OR email = :username_or_email LIMIT 1";
         $stmt = $conn->prepare($sql);
-        $stmt->bindParam(':username', $username);
+        $stmt->bindParam(':username_or_email', $username_or_email);
         $stmt->execute();
 
         if ($stmt->rowCount() > 0) {
