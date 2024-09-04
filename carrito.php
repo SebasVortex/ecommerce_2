@@ -335,7 +335,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <?php else: ?>
             <br>
             <div class="alert alert-info" role="alert">
-                Tu carrito esta vacio.
+                 Tu carrito está vacío.
             </div>
         <?php endif; ?>
     </div>
