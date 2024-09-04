@@ -333,7 +333,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <a href="checkout.php" class="btn btn-primary">Finalizar pago</a>
             </div>
         <?php else: ?>
-            <p>Tu carrito está vacío.</p>
+            <br>
+            <div class="alert alert-info" role="alert">
+                Tu carrito esta vacio.
+            </div>
         <?php endif; ?>
     </div>
     </div>
