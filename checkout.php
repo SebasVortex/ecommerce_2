@@ -211,7 +211,7 @@ if (isset($_SESSION['user_id'])) {
                                         <input class="input" type="text" name="empresa-razon-social" placeholder="Razón Social">
                                     </div>
                                     <div class="form-group">
-                                        <input class="input" type="text" name="empresa-cuit" placeholder="CUIT">
+                                           <input class="input" type="text" name="empresa-cuit" placeholder="CUIT" minlength="11" maxlength="11">
                                     </div>
                                     <div class="form-group">
                                         <input class="input" type="email" name="empresa-email" placeholder="Email">
