@@ -3,9 +3,8 @@
 include 'config/database.php';
 include 'config/checksession.php';
 
-// Verificar si el usuario ha iniciado la maldita sesión
+// Verificar si el usuario ha iniciado la sesión
 if (!isset($_SESSION['user_id'])) {
-    // Redirigir a login.php si no se encuentra user_id en la sesión 
     header("Location: login.php");
     exit();
 }
@@ -13,18 +12,23 @@ if (!isset($_SESSION['user_id'])) {
 // Obtener el user_id de la sesión
 $user_id = $_SESSION['user_id'];
 
-// Obtener los productos en el carrito desde la base de datos
-$query = "SELECT p.id, p.name, p.price, p.imagen, m.name AS brand_name, c.quantity 
-          FROM carrito c 
-          JOIN productos p ON c.product_id = p.id 
-          LEFT JOIN marcas m ON p.brand_id = m.id 
-          WHERE c.user_id = ?";
-$stmt = $conn->prepare($query);
-$stmt->execute([$user_id]);
-$items = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-// Manejar la actualización de la cantidad de productos en el carrito
+// Manejar la eliminación de productos en el carrito
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // Verificar si se envió el formulario para eliminar el producto
+    if (isset($_POST['delete_product'])) {
+        $product_id = $_POST['product_id'];
+
+        // Eliminar el producto del carrito
+        $delete_query = "DELETE FROM carrito WHERE user_id = ? AND product_id = ?";
+        $stmt = $conn->prepare($delete_query);
+        $stmt->execute([$user_id, $product_id]);
+
+        // Redirigir para evitar reenvíos de formularios
+        header("Location: carrito.php");
+        exit();
+    }
+
+    // Manejar la actualización de la cantidad de productos en el carrito
     if (isset($_POST['update_quantity'])) {
         $product_id = $_POST['product_id'];
         $new_quantity = $_POST['quantity'];
@@ -39,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $stmt = $conn->prepare($delete_query);
             $stmt->execute([$user_id, $product_id]);
         }
-        
+
         // Si es una solicitud AJAX, no redirigir
         if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
             exit(); // Terminar la ejecución para evitar cualquier HTML adicional
@@ -51,6 +55,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
+// Obtener los productos en el carrito desde la base de datos
+$query = "SELECT p.id, p.name, p.price, p.imagen, m.name AS brand_name, c.quantity 
+          FROM carrito c 
+          JOIN productos p ON c.product_id = p.id 
+          LEFT JOIN marcas m ON p.brand_id = m.id 
+          WHERE c.user_id = ?";
+$stmt = $conn->prepare($query);
+$stmt->execute([$user_id]);
+$items = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <?php include 'assets/includes/head.php';?>

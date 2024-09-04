@@ -118,7 +118,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 <label for="user_type">Tipo de Usuario</label>
                 <select id="user_type" name="user_type" class="form-control">
                     <option value="">Todos</option>
-                    <option value="consumidor final" <?php if ($userTypeFilter == 'consumidor final') echo 'selected'; ?>>Consumidor Final</option>
+                    <option value="consumidor_final" <?php if ($userTypeFilter == 'consumidor_final') echo 'selected'; ?>>Consumidor Final</option>
                     <option value="empresa" <?php if ($userTypeFilter == 'empresa') echo 'selected'; ?>>Empresa</option>
                 </select>
             </div>
