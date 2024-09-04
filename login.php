@@ -244,16 +244,17 @@ if (isset($_SESSION['error'])) {
 </body>
 </html>
 <?php
-// Verificar si el parámetro 'status' existe en la URL y si es igual a 'registrado'
-if (isset($_GET['status']) && $_GET['status'] === 'registrado') {
+// Verificar si el parámetro 'restablecido' existe en la URL y si es igual a '1'
+if (isset($_GET['restablecido']) && $_GET['restablecido'] === '1') {
     echo "
     <script>
         Swal.fire({
-            title: '¡Registro exitoso!',
-            text: 'Te has registrado correctamente.',
+            title: '¡Contraseña cambiada con éxito!',
+            text: 'Tu contraseña ha sido actualizada correctamente.',
             icon: 'success',
             confirmButtonText: 'Aceptar'
         });
     </script>";
 }
 ?>
+

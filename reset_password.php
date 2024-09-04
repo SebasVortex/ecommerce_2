@@ -2,13 +2,14 @@
 require 'vendor/autoload.php';
 session_start();
 include('config/database.php');
+include('config/checksession.php'); // Incluir el archivo de verificación de sesión
+
 
 if (isset($_GET['token'])) {
     $token = $_GET['token'];
 
-    // Verificar si el token es válido y no ha expirado
     try {
-        $now = date('U');
+        $now = time();
         $stmt = $conn->prepare("SELECT * FROM password_resets WHERE token = :token AND expires > :now LIMIT 1");
         $stmt->bindParam(':token', $token);
         $stmt->bindParam(':now', $now);
@@ -21,22 +22,19 @@ if (isset($_GET['token'])) {
                 $confirm_password = trim($_POST['confirm_password']);
 
                 if ($password === $confirm_password) {
-                    // Encriptar la nueva contraseña
                     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-                    // Actualizar la contraseña del usuario
                     $stmt = $conn->prepare("UPDATE clientes SET password = :password WHERE email = :email");
                     $stmt->bindParam(':password', $hashed_password);
                     $stmt->bindParam(':email', $reset['email']);
                     $stmt->execute();
 
-                    // Eliminar el token de la base de datos
                     $stmt = $conn->prepare("DELETE FROM password_resets WHERE token = :token");
                     $stmt->bindParam(':token', $token);
                     $stmt->execute();
 
                     $_SESSION['success'] = 'Tu contraseña ha sido actualizada con éxito.';
-                    header('Location: reset_password.php');
+                    header('Location: login.php?restablecido=1');
                     exit();
                 } else {
                     $_SESSION['error'] = 'Las contraseñas no coinciden.';
@@ -48,9 +46,10 @@ if (isset($_GET['token'])) {
             exit();
         }
     } catch (PDOException $e) {
+        // Mostrar un mensaje amigable al usuario en caso de error en la base de datos
+        $_SESSION['error'] = 'Lo sentimos, ocurrió un problema con el servidor. Por favor, intenta nuevamente más tarde.';
         error_log('Error en la base de datos: ' . $e->getMessage()); // Registrar el error en el log
-        $_SESSION['error'] = 'Error en la base de datos.';
-        header('Location: forgot_password.php');
+        header('Location: reset_password.php'); // Puedes redirigir o mostrar el error en la misma página
         exit();
     }
 } else {
