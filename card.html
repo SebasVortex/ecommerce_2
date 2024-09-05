@@ -13,7 +13,7 @@
 </head>
 <body>
 
-    <div class="card">
+    <div class="card" id="federico">
 
         <div class="card-head-wrap">
             <!-- Fondo que quedará detrás de las imágenes -->
@@ -21,7 +21,7 @@
         
             <!-- Contenido que estará encima del fondo -->
             <img src="assets/images/logosis.png" class="logo-img">
-            <img src="assets/userimages/default.png" class="user-img">
+            <img src="assets/userimages/federico.png" class="user-img">
             <h2>Federico Solima</h2>
             <p>Direccion Obras</p>
         </div>
@@ -44,7 +44,86 @@
                     <div class="socials-inf">
 
                         <p>Email</p>
-                        <span>fsolima@sistemasenergeticos.com.ar</span>
+                        <span class="email-small">maranda@sistemasenergeticos.com.ar</span>
+
+                    </div>
+                </div>
+                
+                <div class="row-socials">
+                    <i class="fa-solid fa-phone-volume"></i>
+                    <div class="socials-inf">
+
+                        <p>Telefono</p>
+                        <span>+54 (11) 69000407</span>
+
+                    </div>
+                </div>
+
+                <div class="row-socials">
+                    <i class="far fa-folder"></i>
+                    <div class="socials-inf">
+
+                        <p>Portfolio</p>
+                        <span>Nuestros productos</span>
+
+                    </div>
+                </div>
+
+        </div>
+
+
+        <div class="card-footer">
+            <a href="https://www.sistemasenergeticos.com.ar/" target="_blank">
+                <i class="fa-solid fa-globe"></i>
+            </a>
+
+            <a href="https://www.linkedin.com/company/sistemas-energeticos" target="_blank">
+                <i class="fa-brands fa-linkedin-in"></i>
+            </a>
+
+            <a href="https://www.instagram.com/sistemasenergeticossa/" target="_blank">
+                <i class="fa-brands fa-instagram"></i>
+            </a>
+
+            <a href="https://www.youtube.com/@sistemasenergeticoss.a.8229" target="_blank">
+                <i class="fa-brands fa-youtube"></i>
+            </a>
+
+        </div>
+    </div>
+
+        <div class="card" id="federico">
+
+        <div class="card-head-wrap">
+            <!-- Fondo que quedará detrás de las imágenes -->
+            <div class="card-head"></div>
+        
+            <!-- Contenido que estará encima del fondo -->
+            <img src="assets/images/logosis.png" class="logo-img">
+            <img src="assets/userimages/federico.png" class="user-img">
+            <h2>Federico Solima</h2>
+            <p>Direccion Obras</p>
+        </div>
+        
+
+        <div class="card-section">
+
+                <div class="row-socials">
+                    <i class="fa-brands fa-whatsapp"></i>
+                    <div class="socials-inf">
+
+                        <p>Whatsapp</p>
+                        <span>+54 (11) 69000407</span>
+                        
+                    </div>
+                </div>
+
+                <div class="row-socials">
+                    <i class="far fa-envelope"></i>
+                    <div class="socials-inf">
+
+                        <p>Email</p>
+                        <span class="email-small">maranda@sistemasenergeticos.com.ar</span>
 
                     </div>
                 </div>
@@ -92,6 +171,24 @@
         </div>
     </div>
 
-
+<!-- Sirve para mostrar la card segun este la url -->
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Obtener el parámetro 'id' de la URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const id = urlParams.get('id');
+        
+        if (id) {
+            const card = document.getElementById(id);
+            if (card) {
+                card.style.display = 'flex';
+            } else {
+                console.log("No se encontró la card con el id:", id);
+            }
+        } else {
+            console.log("No se proporcionó ningún id en la URL.");
+        }
+    });
+</script>
 </body>
 </html>

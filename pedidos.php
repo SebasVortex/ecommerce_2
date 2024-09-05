@@ -8,8 +8,26 @@ if (!isset($_SESSION['user_id'])) {
 
 $userId = $_SESSION['user_id'];
 
+// Número de pedidos por página
+$pedidosPorPagina = 5;
+
+// Obtener el número de página actual
+$paginaActual = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
+$paginaActual = max($paginaActual, 1); // Asegurarse de que sea al menos 1
+
+// Calcular el offset para la consulta SQL
+$offset = ($paginaActual - 1) * $pedidosPorPagina;
+
 try {
-    // Obtener todos los pedidos del usuario
+    // Obtener el número total de pedidos para este usuario
+    $stmtCount = $conn->prepare('SELECT COUNT(*) AS total FROM pedidos WHERE user_id = :user_id');
+    $stmtCount->execute(['user_id' => $userId]);
+    $totalPedidos = (int)$stmtCount->fetch(PDO::FETCH_ASSOC)['total'];
+
+    // Calcular el número total de páginas
+    $totalPaginas = ceil($totalPedidos / $pedidosPorPagina);
+
+    // Obtener todos los pedidos del usuario con paginación
     $stmt = $conn->prepare('
         SELECT p.id AS pedido_id, p.total, p.status, p.nombre, p.apellido, p.telefono, p.notas, 
                pi.product_id, pi.quantity, pi.price, pr.name AS product_name
@@ -18,10 +36,14 @@ try {
         INNER JOIN productos pr ON pi.product_id = pr.id
         WHERE p.user_id = :user_id
         ORDER BY p.id DESC
+        LIMIT :limit OFFSET :offset
     ');
-    $stmt->execute(['user_id' => $userId]);
+    $stmt->bindValue(':user_id', $userId, PDO::PARAM_INT);
+    $stmt->bindValue(':limit', $pedidosPorPagina, PDO::PARAM_INT);
+    $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+    $stmt->execute();
     $pedidos = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
+
     // Agrupar los pedidos por ID
     $pedidosAgrupados = [];
     foreach ($pedidos as $pedido) {
@@ -125,6 +147,23 @@ try {
                 <br>
                 <br>
             <?php endforeach; ?>
+
+            <!-- Paginación -->
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center">
+                    <?php if ($paginaActual > 1): ?>
+                        <li class="page-item"><a class="page-link" href="?pagina=<?php echo $paginaActual - 1; ?>">Anterior</a></li>
+                    <?php endif; ?>
+                    <?php for ($i = 1; $i <= $totalPaginas; $i++): ?>
+                        <li class="page-item <?php echo ($i == $paginaActual) ? 'active' : ''; ?>">
+                            <a class="page-link" href="?pagina=<?php echo $i; ?>"><?php echo $i; ?></a>
+                        </li>
+                    <?php endfor; ?>
+                    <?php if ($paginaActual < $totalPaginas): ?>
+                        <li class="page-item"><a class="page-link" href="?pagina=<?php echo $paginaActual + 1; ?>">Siguiente</a></li>
+                    <?php endif; ?>
+                </ul>
+            </nav>
         <?php endif; ?>
     </div>
 
@@ -147,7 +186,7 @@ try {
                             <form action="config/cancelarpedido.php" method="POST">
                                 <input type="hidden" name="pedido_id" value="<?php echo htmlspecialchars($pedido['pedido_id']); ?>">
                                 <button type="submit" class="btn btn-danger">Sí, cancelar</button>
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
                             </form>
                         </div>
                     </div>
@@ -156,8 +195,6 @@ try {
         <?php endif; ?>
     <?php endforeach; ?>
 
-    <!-- PIE DE PÁGINA -->
     <?php include 'assets/includes/footer.php'; ?>
-    <!-- /PIE DE PÁGINA -->
 </body>
 </html>

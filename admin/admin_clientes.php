@@ -13,16 +13,16 @@ if (isset($_GET['toggle_status_id'])) {
     $toggleStatusId = intval($_GET['toggle_status_id']);
 
     // Obtener el estado actual del cliente
-    $stmt = $conn->prepare("SELECT status FROM clientes WHERE id = :id");
+    $stmt = $conn->prepare("SELECT status, solicitud_verificacion FROM clientes WHERE id = :id");
     $stmt->bindParam(':id', $toggleStatusId, PDO::PARAM_INT);
     $stmt->execute();
-    $currentStatus = $stmt->fetchColumn();
+    $client = $stmt->fetch(PDO::FETCH_ASSOC);
 
     // Determinar el nuevo estado
-    $newStatus = ($currentStatus === 'verificado') ? 'sin verificar' : 'verificado';
+    $newStatus = ($client['status'] === 'verificado') ? 'sin verificar' : 'verificado';
 
     // Actualizar el estado en la base de datos
-    $updateStmt = $conn->prepare("UPDATE clientes SET status = :newStatus WHERE id = :id");
+    $updateStmt = $conn->prepare("UPDATE clientes SET status = :newStatus, solicitud_verificacion = NULL WHERE id = :id");
     $updateStmt->bindParam(':newStatus', $newStatus, PDO::PARAM_STR);
     $updateStmt->bindParam(':id', $toggleStatusId, PDO::PARAM_INT);
     $updateStmt->execute();
@@ -40,6 +40,7 @@ $offset = ($page - 1) * $limit;
 // Parámetros de filtrado
 $statusFilter = isset($_GET['status']) ? $_GET['status'] : '';
 $userTypeFilter = isset($_GET['user_type']) ? $_GET['user_type'] : '';
+$solicitudFilter = isset($_GET['solicitud']) ? $_GET['solicitud'] : '';
 $sortOrder = isset($_GET['sort']) ? $_GET['sort'] : 'DESC';
 
 // Consultar clientes con filtros y paginación
@@ -53,6 +54,10 @@ if ($userTypeFilter) {
     $sql .= " AND tipo_usuario = :user_type";
 }
 
+if ($solicitudFilter !== '') {
+    $sql .= " AND solicitud_verificacion = :solicitud";
+}
+
 $sql .= " ORDER BY created_at $sortOrder LIMIT :limit OFFSET :offset";
 
 $stmt = $conn->prepare($sql);
@@ -63,6 +68,10 @@ if ($statusFilter) {
 
 if ($userTypeFilter) {
     $stmt->bindParam(':user_type', $userTypeFilter, PDO::PARAM_STR);
+}
+
+if ($solicitudFilter !== '') {
+    $stmt->bindParam(':solicitud', $solicitudFilter, PDO::PARAM_STR);
 }
 
 $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
@@ -82,6 +91,8 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     $order_counts[$row['user_id']] = $row['order_count'];
 }
 ?>
+
+
 
 <!DOCTYPE html>
 <html lang="es">
@@ -129,6 +140,15 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     <option value="ASC" <?php if ($sortOrder == 'ASC') echo 'selected'; ?>>Más Antiguo</option>
                 </select>
             </div>
+            <div class="form-group col-md-3">
+                <label for="solicitud">Solicitud de Verificación</label>
+                <select id="solicitud" name="solicitud" class="form-control">
+                    <option value="">Todos</option>
+                    <option value="si" <?php if ($solicitudFilter == 'si') echo 'selected'; ?>>Sí</option>
+                    <option value="no" <?php if ($solicitudFilter == 'no') echo 'selected'; ?>>No</option>
+                </select>
+            </div>
+
             <div class="form-group col-md-3 d-flex align-items-end">
                 <button type="submit" class="btn btn-primary">Filtrar</button>
             </div>
@@ -146,6 +166,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             <th>Tipo de Usuario</th>
             <th>Email</th>
             <th>Status</th>
+            <th>Solicito</th>
             <th>Pedidos</th>
             <th>Acciones</th>
         </tr>
@@ -162,6 +183,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 <td><?php echo $cliente['status']; ?><br>
                     <a href="admin_clientes.php?toggle_status_id=<?php echo $cliente['id']; ?>" class="btn btn-primary btn-sm">Cambiar Status</a>
                 </td>
+                <td><?php echo $cliente['solicitud_verificacion']; ?></td>
                 <td>
                     <?php echo isset($order_counts[$cliente['id']]) ? $order_counts[$cliente['id']] : 0; ?>
                 </td>
