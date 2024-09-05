@@ -12,6 +12,7 @@ $errorMessage = '';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['email'])) {
     $email = trim($_POST['email']);
+    
 
     // Verificar si el correo electrónico existe en la base de datos
     try {
@@ -19,7 +20,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['email'])) {
         $stmt->bindParam(':email', $email);
         $stmt->execute();
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
+        $username = $user['username']; // Aquí obtienes el nombre de usuario
+        
         if ($user) {
             // Generar un token único
             $token = bin2hex(random_bytes(50));
@@ -40,10 +42,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['email'])) {
 
             try {
                 $mail->isSMTP();
-                $mail->Host = 'smtp.gmail.com'; // Cambia esto por tu servidor SMTP
+                $mail->Host = 'smtp.gmail.com'; 
                 $mail->SMTPAuth = true;
-                $mail->Username = 'sitioweb.sesa@gmail.com'; // Tu dirección de correo
-                $mail->Password = 'gggezcxwbmutcoix'; // La contraseña de tu cuenta de correo
+                $mail->Username = 'sitioweb.sesa@gmail.com'; 
+                $mail->Password = 'gggezcxwbmutcoix'; 
                 $mail->SMTPSecure = 'tls';
                 $mail->Port = 587;
 
@@ -51,10 +53,52 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['email'])) {
                 $mail->addAddress($email);
 
                 $mail->isHTML(true);
-                $mail->Subject = 'Restablece tu claveee';
-                $mail->Body = 'Hacé clic en el siguiente enlace para restablecer tu contraseña: <a href="' . $resetLink . '">' . $resetLink . '</a>';
-                $mail->Body .= '<br>Para que no lo olvides, tu nombre de usuario es: ' . $username . ';';
-                
+                $mail->Subject = 'Restablece tu clave';
+                $mail->Body = '
+                                <!DOCTYPE html>
+                                <html lang="es">
+                                <head>
+                                    <meta charset="UTF-8">
+                                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                                </head>
+                                <body style="font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0;">
+                                    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color: #f4f4f4; padding: 20px 0;">
+                                        <tr>
+                                            <td align="center">
+                                                <table role="presentation" width="600" cellspacing="0" cellpadding="0" border="0" style="text-align: center; background-color: #ffffff; border: 1px solid #e0e0e0; border-radius: 10px; padding: 20px;">
+                                                    <tr>
+                                                        <td align="center" style="padding-bottom: 20px;">
+                                                            <h1 style="font-size: 26px; color: #333; margin: 0;">Restablece tu contraseña</h1>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="color: #555; padding-bottom: 20px; ">
+                                                            <h2 style="margin: 0;">Hola,</h2>
+                                                            <p style="margin: 10px 0 20px 0; font-size: 16px;">Hacé clic en el siguiente enlace para restablecer tu contraseña:</p>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td align="center" style="padding-bottom: 35px;">
+                                                            <a href="' . $resetLink . '" style="background-color: #D10024; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block; font-size: 16px;">Restablecer contraseña</a>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="padding-bottom: 20px; font-size: 16px; color: #555;">
+                                                            <p style="margin: 0;">Para que no lo olvides, tu nombre de usuario es: <b> ' . $username . ' </b></p>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="font-size: 16px; color: #555; ">
+                                                            <small style="margin: 0;">Si no solicitaste este cambio, puedes ignorar este correo.</small>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </body>
+                                </html>
+                                ';
                 $mail->send();
                 $successMessage = 'Te hemos enviado un correo electrónico con las instrucciones para restablecer tu contraseña.';
                 
