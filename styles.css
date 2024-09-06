@@ -8,6 +8,7 @@ body{
     display: flex;
     justify-content: center;
     align-items: center;
+    max-height: 835px;
 
 }
 .card{
@@ -81,11 +82,18 @@ body{
     margin-top: 25px;
     background-color: #ffffff;
 }
+.card-section a{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    text-decoration: none;
+}
 .row-socials{
     display: flex;
     align-items: center;
     width: 85%;
-    max-width: 350px;
+    max-width: 310px;
     gap: 1rem;
     padding: 0.8rem;
     border-radius: 10px;
@@ -121,7 +129,7 @@ body{
     background-color: #EEEEEE;
     height: 90px;
     width: 100%;
-    margin-top: 50px;
+    margin-top: 45px;
 }
 .card-footer a{
     text-decoration: none;
