@@ -31,278 +31,12 @@ if ($stmt->execute()) {
 ?>
 
 <?php include 'assets/includes/head.php';?>
-<style>
-    .swiper-container {
-		width: 100%;
-		padding-top: 20px;
-		padding-bottom: 40px;
-		height: 500px;
-    }
-    .swiper-slide {
-		text-align: center;
-		width: 100%;
-		font-size: 18px;
-		background: #fff;
-		display: flex !important;
-		justify-content: center;
-		align-items: center;
-		height: 500px;
-		background-position: center;
-		background-repeat: no-repeat;
-		background-size: cover;
-    }
-	.swiper-slide .btn{
-		align-self: end;
-		margin-bottom: 50px;
-		margin-left: auto;
-		margin-right: 4rem;
-	}
-	.swiper-wrapper{
-		width: 100%;
-	}
-	.swiper-pagination{
-		position: relative !important;
-		margin-top: 25px;
-	}
-	/* Estilos para los botones de navegación personalizados */
-	.custom-button-next,
-	.custom-button-prev {
-		cursor: pointer;
-		width: 40px;
-		height: 40px;
-		color: gray; /* Color del texto */
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		border-radius: 25%; /* Hace los botones redondos */
-		position: relative; /* Posicionamiento absoluto para ubicarlos en el contenedor */
-		top: 50%; /* Centrados verticalmente */
-		font-size: 28px !important;
-		z-index: 10; /* Asegura que estén sobre otros elementos */
-		transition: background-color 0.3s; /* Transición para un efecto suave al pasar el ratón */
-}
-	.custom-button-next span,
-	.custom-button-prev  span{
-		font-size: 48px !important;
-	}
-	.custom-button-next:hover,
-	.custom-button-prev:hover {
-	  	background-color: #0056b3; /* Cambio de color al pasar el ratón */
-		color: white;
-	}
-	.custom-button-next {
-		margin-left: auto;
-	}
-	.custom-button-prev {
-		margin-right: auto;
-	}
-	.control-slider {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		position: relative;
-		top: 55%;
-	}
-	#dimensionador{
-		background-color: #D51939;
-	}
-.second-s a{
-    border: 1px solid transparent;
-    padding: 10px 54px;
-    color: #D51939;
-    background-color: white;
-    text-transform: uppercase;
-    font-weight: 700;
-    border-radius: 40px;
-    -webkit-transition: 0.2s all;
-    transition: 0.2s all;
-    font-size: 25px;
-}
-.first-p p{
-    color: white;
-    font-size: 34px;
-    font-weight: 600;
-    margin-bottom: 60px;
-}
-.second-s img{
-    width: 150px;
-}
-.second-s{
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-}
-/* Estilo para el slide 2 */
-#slide-2 {
-    position: relative;
-}
-.swiper-notification{
-	display: none;
-}
-.banner-2 {
-	position: relative;
-    width: 100%;
-    height: 100%; /* Toda la altura de la pantalla */
-    background-image: url('assets/images/prueba.png'); /* Imagen de fondo */
-    background-size: cover;
-    background-position: center;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
 
-.overlay-2 {
-	position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(to right, rgba(0, 0, 0, 0.8), rgba(54, 99, 171, 0.6)); 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.content-2 {
-    text-align: center;
-    z-index: 2; /* El contenido debe estar sobre la imagen */
-	color: white !important;
-
-}
-
-.content-2 h1 {
-	font-size: 3.5rem;
-    font-weight: bold;
-    margin-bottom: 20px;
-	color: white ;
-}
-
-.content-2 p {
-    font-size: 2.2rem;
-    margin-bottom: 10px;
-}
-
-.content-2 span {
-	font-size: 2.5rem;
-    font-weight: bold;
-    text-transform: uppercase;
-    border-bottom: 2px solid white; /* Subrayado */
-}
-
-div#slider-3 {
-    background-color: #000;
-    display: flex;
-}
-.banner-3 {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    color: white;
-    background-color: #000; /* Fondo negro */
-}
-
-.content-3 {
-    flex: 1;
-	height: 320px;
-}
-
-.header-3 .ribbon {
-    background-color: #E30613;
-    padding: 10px 18px;
-    border-top-right-radius: 35px;
-    border-bottom-right-radius: 35px;
-    color: white;
-    margin-bottom: 70px;
-}
-
-.header-3 .ribbon h2 {
-    margin: 0;
-    font-size: 3.5rem;
-    font-weight: bold;
-	color: white;
-}
-
-.description-3 h1 {
-    font-size: 2rem;
-    margin-bottom: 20px;
-	color: white;
-}
-.description-3 {
-	display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-.description-3 ul {
-    font-size: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-}
-
-.description-3 li {
-    margin-bottom: 10px;
-    font-weight: 300;
-}
-
-.product-image-3 {
-    flex: 1;
-    text-align: right;
-}
-
-.product-image-3 img {
-    max-width: 450px;
-    height: auto;
-	margin-right: 4rem;
-}
-
-@media (max-width: 700px){
-    .second-s {
-        display: flex;
-        align-items: center;
-        flex-direction: column-reverse;
-    }
-    .second-s img{
-        width: 100px;
-    }
-    .second-s a{
-        padding: 8px 40px;
-        font-size: 20px;
-        margin-bottom: 40px;
-    }
-    .first-p p {
-        font-size: 28px;
-        margin-bottom: 40px;
-    }
-    .banner-3 {
-        flex-direction: column; /* Coloca la imagen y el contenido en columna */
-        align-items: center; /* Centra el contenido */
-        text-align: center;
-    }
-
-    .product-image-3 img {
-        max-width: 250px; /* Reduce el tamaño de la imagen */
-        margin-top: 20px; /* Añade espacio superior */
-    }
-
-    .header-3 .ribbon h2 {
-        font-size: 2rem; /* Ajusta el tamaño del texto */
-    }
-
-    .description-3 h1 {
-        font-size: 1.5rem;
-    }
-
-    .description-3 ul {
-        font-size: 1.2rem;
-    }
-
-}
-    </style>
     <!-- CSS de Swiper -->
 	<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
 </head>
 	<body>
+		
 		<!-- HEADER -->
 		<?php include 'assets/includes/header.php';?>
 		<!-- HEADER -->
@@ -310,8 +44,8 @@ div#slider-3 {
 
 		<!-- SECTION -->
 		<div class="section">
-			<!-- container -->
-			<div class="container" style="overflow: hidden;">
+		<!-- container -->
+		<div class="container" style="overflow: hidden;">
             <!-- Controles de navegación -->
 				<div class="swiper-container">
 					<div class="control-slider">
@@ -366,6 +100,7 @@ div#slider-3 {
 				</div>
 				<div class="swiper-pagination"></div>
 			</div>
+	  
 			<div class="container">
 				<!-- row -->
 				<div class="row">
@@ -809,13 +544,306 @@ var x = setInterval(function() {
     },
     navigation: {
 		nextEl: '.custom-button-next', // Apunta al nuevo botón personalizado
-		prevEl: '.custom-button-prev', // Apunta al nuevo botón personalizado AQQQQQUo
+		prevEl: '.custom-button-prev', // Apunta al nuevo botón personalizado
     },
-    
+    autoplay: {
+      delay: 7500,
+      disableOnInteraction: false,
+    },
     effect: 'slide', // Aquí puedes cambiar el efecto a 'fade', 'cube', etc.
   });
 </script>
 		<!-- /PIE DE PÁGINA -->
+		<style>
+    .swiper-container {
+		width: 100%;
+		padding-top: 20px;
+		padding-bottom: 40px;
+		height: 500px;
+    }
+    .swiper-slide {
+		text-align: center;
+		width: 100%;
+		font-size: 18px;
+		background: #fff;
+		display: flex !important;
+		justify-content: center;
+		align-items: center;
+		height: 500px;
+		background-position: center;
+		background-repeat: no-repeat;
+		background-size: cover;
+    }
+	.swiper-slide .btn{
+		align-self: end;
+		margin-bottom: 50px;
+		margin-left: auto;
+		margin-right: 4rem;
+	}
+	.swiper-wrapper{
+		width: 100%;
+	}
+	.swiper-pagination{
+		position: relative !important;
+		margin-top: 25px;
+	}
+	/* Estilos para los botones de navegación personalizados */
+	.custom-button-next,
+	.custom-button-prev {
+		cursor: pointer;
+		width: 40px;
+		height: 40px;
+		color: gray; /* Color del texto */
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		border-radius: 25%; /* Hace los botones redondos */
+		position: relative; /* Posicionamiento absoluto para ubicarlos en el contenedor */
+		top: 50%; /* Centrados verticalmente */
+		font-size: 28px !important;
+		z-index: 10; /* Asegura que estén sobre otros elementos */
+		transition: background-color 0.3s; /* Transición para un efecto suave al pasar el ratón */
+}
+	.custom-button-next span,
+	.custom-button-prev  span{
+		font-size: 48px !important;
+	}
+	.custom-button-next:hover,
+	.custom-button-prev:hover {
+	  	background-color: #0056b3; /* Cambio de color al pasar el ratón */
+		color: white;
+	}
+	.custom-button-next {
+		margin-left: auto;
+	}
+	.custom-button-prev {
+		margin-right: auto;
+	}
+	.control-slider {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		position: relative;
+		top: 55%;
+	}
+	#dimensionador{
+		background-color: #D51939;
+	}
+.second-s a{
+    border: 1px solid transparent;
+    padding: 10px 54px;
+    color: #D51939;
+    background-color: white;
+    text-transform: uppercase;
+    font-weight: 700;
+    border-radius: 40px;
+    -webkit-transition: 0.2s all;
+    transition: 0.2s all;
+    font-size: 25px;
+}
+.first-p p{
+    color: white;
+    font-size: 34px;
+    font-weight: 600;
+    margin-bottom: 60px;
+}
+.second-s img{
+    width: 150px;
+}
+.second-s{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+/* Estilo para el slide 2 */
+#slide-2 {
+    position: relative;
+}
+.swiper-notification{
+	display: none;
+}
+.banner-2 {
+	position: relative;
+    width: 100%;
+    height: 100%; /* Toda la altura de la pantalla */
+    background-image: url('assets/images/prueba.png'); /* Imagen de fondo */
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.overlay-2 {
+	position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to right, rgba(0, 0, 0, 0.8), rgba(54, 99, 171, 0.6)); 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.content-2 {
+    text-align: center;
+    z-index: 2; /* El contenido debe estar sobre la imagen */
+	color: white !important;
+
+}
+
+.content-2 h1 {
+	font-size: 3.5rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+	color: white ;
+}
+
+.content-2 p {
+    font-size: 2.2rem;
+    margin-bottom: 10px;
+}
+
+.content-2 span {
+	font-size: 2.5rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    border-bottom: 2px solid white; /* Subrayado */
+}
+
+div#slider-3 {
+    background-color: #000;
+    display: flex;
+}
+.banner-3 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    color: white;
+    background-color: #000; /* Fondo negro */
+}
+
+.content-3 {
+    flex: 1;
+	height: 320px;
+}
+
+.header-3 .ribbon {
+    background-color: #E30613;
+    padding: 10px 18px;
+    border-top-right-radius: 35px;
+    border-bottom-right-radius: 35px;
+    color: white;
+    margin-bottom: 70px;
+}
+
+.header-3 .ribbon h2 {
+    margin: 0;
+    font-size: 3.5rem;
+    font-weight: bold;
+	color: white;
+}
+
+.description-3 h1 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+	color: white;
+}
+.description-3 {
+	display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.description-3 ul {
+    font-size: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.description-3 li {
+    margin-bottom: 10px;
+    font-weight: 300;
+}
+
+.product-image-3 {
+    flex: 1;
+    text-align: right;
+}
+
+.product-image-3 img {
+    max-width: 450px;
+    height: auto;
+	margin-right: 4rem;
+}
+
+@media (max-width: 700px){
+    .second-s {
+        display: flex;
+        align-items: center;
+        flex-direction: column-reverse;
+    }
+    .second-s img{
+        width: 100px;
+    }
+    .second-s a{
+        padding: 8px 40px;
+        font-size: 20px;
+        margin-bottom: 40px;
+    }
+    .first-p p {
+        font-size: 28px;
+        margin-bottom: 40px;
+    }
+    .banner-3 {
+        flex-direction: column-reverse; /* Coloca la imagen y el contenido en columna */
+        align-items: center; /* Centra el contenido */
+        text-align: center;
+    }
+
+    .product-image-3 img {
+        max-width: 250px; /* Reduce el tamaño de la imagen */
+        margin-top: 20px; /* Añade espacio superior */
+		margin-right: 0rem;
+		margin-bottom: 25px;
+    }
+
+    .header-3 .ribbon h2 {
+        font-size: 2rem; /* Ajusta el tamaño del texto */
+    }
+
+    .description-3 h1 {
+        font-size: 1.5rem;
+    }
+
+    .description-3 ul {
+        font-size: 1.2rem;
+    }
+	.control-slider{
+		display: none;
+	}
+	.content-3{
+	width: 100%;
+	}
+	.header-3 .ribbon {
+     margin-bottom: 35px !important;
+     border-radius: 0px !important;
+
+}
+.description-3 {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 65px;
+    align-items: center;
+}
+.swiper-pagination {
+    position: relative !important;
+    margin-top: 0px;
+}
+}
+    </style>
 	</body>
 </html>
 
