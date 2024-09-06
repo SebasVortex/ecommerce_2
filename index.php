@@ -100,7 +100,7 @@ if ($stmt->execute()) {
 				</div>
 				<div class="swiper-pagination"></div>
 			</div>
-	  
+		</div>
 			<div class="container">
 				<!-- row -->
 				<div class="row">
@@ -557,8 +557,6 @@ var x = setInterval(function() {
 		<style>
     .swiper-container {
 		width: 100%;
-		padding-top: 20px;
-		padding-bottom: 40px;
 		height: 500px;
     }
     .swiper-slide {
@@ -593,7 +591,8 @@ var x = setInterval(function() {
 		cursor: pointer;
 		width: 40px;
 		height: 40px;
-		color: gray; /* Color del texto */
+		color: #ffffff;
+
 		display: flex;
 		justify-content: center;
 		align-items: center;
@@ -610,7 +609,8 @@ var x = setInterval(function() {
 	}
 	.custom-button-next:hover,
 	.custom-button-prev:hover {
-	  	background-color: #0056b3; /* Cambio de color al pasar el ratón */
+		border: 2px solid #ffffff;
+	  	background-color: #d91e22; /* Cambio de color al pasar el ratón */
 		color: white;
 	}
 	.custom-button-next {
@@ -778,8 +778,44 @@ div#slider-3 {
     height: auto;
 	margin-right: 4rem;
 }
+/* Estilo general para la paginación */
+.swiper-pagination {
+    position: absolute; /* Asegúrate de que esté en la posición correcta */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10; /* Asegura que esté encima de otros elementos */
+}
+
+/* Estilo para los puntos de paginación */
+.swiper-pagination-bullet {
+    width: 12px; /* Tamaño de los puntos */
+    height: 12px;
+    background-color: #fff; /* Color de los puntos */
+    border-radius: 50%; /* Hace los puntos redondos */
+    opacity: 0.6; /* Opacidad de los puntos */
+    transition: opacity 0.3s, background-color 0.3s; /* Transiciones suaves */
+	border: 2px solid #ffffff;
+}
+
+/* Estilo para el punto activo */
+.swiper-pagination-bullet-active {
+    background-color: #d91e22; /* Color del punto activo */
+
+    opacity: 1; /* Opacidad del punto activo */
+}
+
+/* Estilo adicional para la paginación cuando se está deslizando */
+.swiper-pagination-bullet:hover {
+    background-color: #0056b3; /* Color de los puntos al pasar el ratón */
+}
+
 
 @media (max-width: 700px){
+	/* Estilo para los puntos de paginación */
+	.swiper-pagination-bullet {
+		border: 2px solid black;
+	}
     .second-s {
         display: flex;
         align-items: center;
@@ -840,7 +876,6 @@ div#slider-3 {
 }
 .swiper-pagination {
     position: relative !important;
-    margin-top: 0px;
 }
 }
     </style>
