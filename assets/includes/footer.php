@@ -352,40 +352,37 @@ document.addEventListener('DOMContentLoaded', function() {
 
 <script>
 function addToCart(productId) {
-    // Obtener la cantidad del input correspondiente
     var quantityInput = document.getElementById("quantity-" + productId);
     var quantity = quantityInput ? quantityInput.value : 1;
 
-    // Crear una solicitud AJAX
     var xhr = new XMLHttpRequest();
     xhr.open("POST", "agregar_al_carrito.php", true);
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 
-    // Configurar lo que sucede cuando se recibe una respuesta
     xhr.onreadystatechange = function () {
         if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-            // Analizar la respuesta JSON
             var response = JSON.parse(xhr.responseText);
             
-            // Actualizar el contenido del carrito
+            // Verificar si la respuesta contiene una URL de redirección
+            if (response.redirect) {
+                window.location.href = response.redirect; // Redirigir al usuario
+                return; // Detener ejecución del resto del código
+            }
+
             if (response.cart_content) {
                 document.getElementById("carrito-contenido").innerHTML = response.cart_content;
             }
-            
-            // Actualizar el total de artículos
+
             var qtyElement = document.querySelector(".dropdown .qty");
             if (qtyElement) {
                 qtyElement.textContent = response.total_items;
             }
-            
-            // Actualizar el subtotal si es necesario
-            // Puedes añadir una lógica similar para el subtotal si es necesario
         }
     };
 
-    // Enviar los datos al servidor
     xhr.send("product_id=" + productId + "&quantity=" + quantity);
 }
+
 // Opcional: Puedes usar esta función para cargar el carrito al cargar la página
 document.addEventListener("DOMContentLoaded", function() {
     var xhr = new XMLHttpRequest();
