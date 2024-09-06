@@ -116,6 +116,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         // Insertar los items del pedido
         foreach ($cartItems as $item) {
+            // Consultar el precio del producto en la base de datos
+            $stmt = $conn->prepare('SELECT price FROM productos WHERE id = :product_id');
+            $stmt->execute(['product_id' => $item['product_id']]);
+            $price = $stmt->fetchColumn();
+            
+            if ($price === false) {
+                throw new Exception('No se encontró el precio para el producto con ID: ' . $item['product_id']);
+            }
+            
+            // Calcular el subtotal para este artículo
+            $total += $price * $item['quantity'];
+            
+            // Insertar los items del pedido
             $stmt = $conn->prepare('
                 INSERT INTO pedidos_items (order_id, product_id, quantity, price) 
                 VALUES (:order_id, :product_id, :quantity, :price)
@@ -124,9 +137,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 'order_id' => $orderId,
                 'product_id' => $item['product_id'],
                 'quantity' => $item['quantity'],
-                'price' => $price
+                'price' => $price // Aquí el precio correcto del producto
             ]);
         }
+        
 
         // Insertar en el historial de pedidos
         $stmt = $conn->prepare('INSERT INTO pedidos_historial (order_id, status) VALUES (:order_id, :status)');

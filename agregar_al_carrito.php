@@ -1,10 +1,27 @@
 <?php
 include('config/database.php');
-session_start();
+include('config/checksession.php');
 
-// Verifica si el usuario está logueado
+// Verificar si el usuario ha iniciado sesión
 if (!isset($_SESSION['user_id'])) {
-    echo json_encode(['error' => 'Debe iniciar sesión para agregar productos al carrito.']);
+    $cartContent = '<div class="cart-list">';
+    $cartContent .= '<p>Tu carrito está vacío</p>';
+    $cartContent .= '</div>
+    <div class="cart-summary">
+        <small>0 Item(s)</small>
+        <h5>SUBTOTAL: $0.00</h5>
+    </div>
+    <div class="cart-btns">
+        <a href="login.php">Inicia sesión para agregar productos</a>
+    </div>';
+
+    // Devolver el contenido del carrito vacío en formato JSON con la URL de redirección
+    echo json_encode([
+        'total_items' => 0,
+        'cart_content' => $cartContent,
+        'total' => '0.00',
+        'redirect' => 'login.php' // URL de redirección
+    ]);
     exit;
 }
 
