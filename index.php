@@ -237,50 +237,50 @@ chevron_right
 								<div id="tab1" class="tab-pane active">
 									<div class="products-slick" data-nav="#slick-nav-1">
 									<?php foreach ($productos as $producto): ?>
-										<div class="product">
-										<a class="product-img" href="product_detalle.php?id=<?php echo $producto['id']; ?>">
-											<div class="product-img">
-												<img src="assets/images/<?php echo htmlspecialchars($producto['imagen']); ?>" alt="<?php echo htmlspecialchars($producto['name']); ?>">
-												<div class="product-label">
-													<?php if ($producto['discount'] > 0): ?>
-														<span class="sale">-<?php echo htmlspecialchars($producto['discount']); ?><i class="fa-solid fa-tag fa-shake"></i>%</span>
-													<?php endif; ?>
-													<?php if ($producto['new']): ?>
-														<span class="new">Nuevo <i class="fa-solid fa-exclamation fa-shake" style="--fa-animation-duration: 2s;"></i></span>
-													<?php endif; ?>
-												</div>
-											</div>
-											</a>
-											<div class="product-body">
-												<p class="product-category"><?php echo htmlspecialchars($producto['category_name']); ?></p>
-												<h3 class="product-name">
-													<a href="product_detalle.php?id=<?php echo $producto['id']; ?>">
-													<?php echo htmlspecialchars($producto['brand_name']); ?> -
-														<?php echo htmlspecialchars($producto['name']); ?>
-													</a>
-												</h3>
-												<h4 class="product-price">
-													$<?php echo number_format($producto['price'], 2); ?>
-												</h4>
+    <div class="product">
+        <a class="product-img" href="product_detalle.php?id=<?php echo $producto['id']; ?>">
+            <div class="product-img">
+                <img src="assets/images/<?php echo htmlspecialchars($producto['imagen']); ?>" alt="<?php echo htmlspecialchars($producto['name']); ?>">
+                <div class="product-label">
+                    <?php if ($producto['discount'] > 0): ?>
+                        <span class="sale">-<?php echo htmlspecialchars($producto['discount']); ?><i class="fa-solid fa-tag fa-shake"></i>%</span>
+                    <?php endif; ?>
+                    <?php if ($producto['new']): ?>
+                        <span class="new">Nuevo <i class="fa-solid fa-exclamation fa-shake" style="--fa-animation-duration: 2s;"></i></span>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </a>
+        <div class="product-body">
+            <p class="product-category"><?php echo htmlspecialchars($producto['category_name']); ?></p>
+            <h3 class="product-name">
+                <a href="product_detalle.php?id=<?php echo $producto['id']; ?>">
+                    <?php echo htmlspecialchars($producto['brand_name']); ?> -
+                    <?php echo htmlspecialchars($producto['name']); ?>
+                </a>
+            </h3>
+            <h4 class="product-price">
+                $<?php echo number_format($producto['price'], 2); ?>
+            </h4>
 
-												<div class="product-rating">
+            <div class="product-rating"></div>
 
-												</div>
+            <div class="product-btns">
+                <button class="add-to-wishlist" onclick="addToCart(<?php echo htmlspecialchars($producto['id']); ?>)"><i class="fa-solid fa-cart-plus fa-flip" style="--fa-animation-duration: 3s;"></i><span class="tooltipp">Añadir al carrito</span></button>
+                <button class="quick-view" data-product-id="<?php echo $producto['id']; ?>">
+                    <i class="fa fa-eye fa-beat" style="--fa-animation-duration: 2s;"></i><span class="tooltipp">Ver más</span>
+                </button>
+            </div>
+        </div>
+        <div class="add-to-cart">
+		<button class="add-to-cart-btn" onclick="addToCart(<?php echo htmlspecialchars($producto['id']); ?>)">
+			<i class="fa fa-shopping-cart"></i>Añadir al carrito
+		</button>
 
-												<div class="product-btns">
-													<button class="add-to-wishlist"data-product-id="<?php echo $producto['id']; ?>"><i class="fa-solid fa-cart-plus fa-flip" style="--fa-animation-duration: 3s;"></i><span class="tooltipp">Añadir al carrito</span></button>
-													<button class="quick-view" data-product-id="<?php echo $producto['id']; ?>">
-														<i class="fa fa-eye fa-beat" style="--fa-animation-duration: 2s;"></i><span class="tooltipp">Ver más</span>
-													</button>
-												</div>
-											</div>
-											<div class="add-to-cart">
-											<button class="add-to-cart-btn" data-product-id="<?php echo htmlspecialchars($producto['id']); ?>">
-												<i class="fa fa-shopping-cart"></i>Añadir al carrito
-											</button>
-										</div>
-									</div>
-										<?php endforeach; ?>
+        </div>
+    </div>
+<?php endforeach; ?>
+
 
 									</div>
 									<div id="slick-nav-1" class="products-slick-nav"></div>
@@ -405,14 +405,14 @@ chevron_right
 												</div>
 
 												<div class="product-btns">
-													<button class="add-to-wishlist"data-product-id="<?php echo $producto['id']; ?>"><i class="fa-solid fa-cart-plus fa-flip" style="--fa-animation-duration: 3s;"></i><span class="tooltipp">añadir al carrito</span></button>
+													<button class="add-to-wishlist"onclick="addToCart(<?php echo htmlspecialchars($producto['id']); ?>)"><i class="fa-solid fa-cart-plus fa-flip" style="--fa-animation-duration: 3s;"></i><span class="tooltipp">añadir al carrito</span></button>
 													<button class="quick-view" data-product-id="<?php echo $producto['id']; ?>">
 														<i class="fa fa-eye fa-beat" style="--fa-animation-duration: 2s;"></i><span class="tooltipp">Ver más</span>
 													</button>
 												</div>
 											</div>
 											<div class="add-to-cart">
-										<button class="add-to-cart-btn" data-product-id="<?php echo $producto['id']; ?>">
+										<button class="add-to-cart-btn" onclick="addToCart(<?php echo htmlspecialchars($producto['id']); ?>)">
 											<i class="fa fa-shopping-cart"></i> Añadir al carrito
 										</button>
 									</div>

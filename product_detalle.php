@@ -104,7 +104,7 @@
 										<span class="qty-down">-</span>
 									</div>
 								</div>
-								<button class="add-to-cart-btn" data-product-id="<?php echo htmlspecialchars($product['id']); ?>"><i class="fa fa-shopping-cart"></i> Añadir al carrito</button>
+								<button class="add-to-cart-btn" onclick="addToCart(<?php echo htmlspecialchars($product['id']); ?>)"><i class="fa fa-shopping-cart"></i> Añadir al carrito</button>
 							</div>
 
 							<ul class="product-btns">
@@ -405,14 +405,14 @@
                     <!-- Puedes agregar estrellas de calificación si tienes esos datos -->
                 </div>
                 <div class="product-btns">
-                    <button class="add-to-wishlist" data-product-id="<?php echo htmlspecialchars($relatedProduct['id']); ?>"><i class="fa fa-heart-o"></i><span class="tooltipp">añadir al carrito</span></button>
+                    <button class="add-to-wishlist" onclick="addToCart(<?php echo htmlspecialchars($relatedProduct['id']); ?>)"><i class="fa-solid fa-cart-plus fa-flip" style="--fa-animation-duration: 3s;"></i><span class="tooltipp">añadir al carrito</span></button>
 					<button class="quick-view" data-product-id="<?php echo $relatedProduct['id']; ?>">
 														<i class="fa fa-eye"></i><span class="tooltipp">Ver mas</span>
 													</button>
                 </div>
             </div>
             <div class="add-to-cart">
-                <button class="add-to-cart-btn" data-product-id="<?php echo htmlspecialchars($relatedProduct['id']); ?>"><i class="fa fa-shopping-cart"></i> añadir al carrito</button>
+                <button class="add-to-cart-btn" onclick="addToCart(<?php echo htmlspecialchars($relatedProduct['id']); ?>)"><i class="fa fa-shopping-cart"></i> añadir al carrito</button>
             </div>
         </div>
     </div>

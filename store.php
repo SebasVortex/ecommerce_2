@@ -311,14 +311,14 @@ function getBrandName($brandId) {
                     <?php endfor; ?>
                 </div>
                 <div class="product-btns">
-                    <button class="add-to-wishlist" data-product-id="<?php echo $producto['id']; ?>"><i class="fa-solid fa-cart-plus fa-flip" style="--fa-animation-duration: 3s;"></i><span class="tooltipp">Añadir carrito</span></button>
+                    <button class="add-to-wishlist" onclick="addToCart(<?php echo htmlspecialchars($producto['id']); ?>)"><i class="fa-solid fa-cart-plus fa-flip" style="--fa-animation-duration: 3s;"></i><span class="tooltipp">Añadir carrito</span></button>
 					<button class="quick-view" data-product-id="<?php echo $producto['id']; ?>">
 														<i class="fa fa-eye fa-beat" style="--fa-animation-duration: 2s;"></i><span class="tooltipp">Ver mas</span>
 													</button>
                 </div>
             </div>
             <div class="add-to-cart">
-                <button class="add-to-cart-btn" data-product-id="<?php echo $producto['id']; ?>"><i class="fa fa-shopping-cart"></i> Añadir al carrito</button>
+                <button class="add-to-cart-btn" onclick="addToCart(<?php echo htmlspecialchars($producto['id']); ?>)"><i class="fa fa-shopping-cart"></i> Añadir al carrito</button>
             </div>
         </div>
     </div>

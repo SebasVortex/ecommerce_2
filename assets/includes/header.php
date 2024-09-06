@@ -113,50 +113,18 @@ $categorias = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                 <!-- ACCOUNT -->
                 <div class="col-md-3 clearfix">
-                    <div class="header-ctn">
-                        <!-- Cart -->
-                        <div class="dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
-                                <i class="fa fa-shopping-cart"></i>
-                                <span>Carrito</span>
-                                <div class="qty"><?php echo $total_items; ?></div>
-                            </a>
-                            <div class="cart-dropdown">
-                                <div class="cart-list">
-                                    <?php if (!empty($cart_items)): ?>
-                                        <?php foreach ($cart_items as $item): ?>
-                                            <div class="product-widget">
-                                                <div class="product-img">
-                                                    <img src="assets/images/<?php echo htmlspecialchars($item['imagen']); ?>" alt="">
-                                                </div>
-                                                <div class="product-body">
-                                                    <h3 class="product-name"><a href="product_detalle.php?id=<?php echo $item['id']; ?>"><?php echo htmlspecialchars($item['name']); ?></a></h3>
-                                                    <h4 class="product-price"><span class="qty"><?php echo htmlspecialchars($item['quantity']); ?>x</span>$<?php echo number_format($item['price'], 2); ?></h4>
-                                                </div>
-                                                <form method="POST" action="">
-                                                    <input type="hidden" name="delete_id" value="<?php echo $item['id']; ?>">
-                                                    <button class="delete" type="submit"><i class="fa fa-close"></i></button>
-                                                </form>
-                                            </div>
-                                        <?php endforeach; ?>
-                                    <?php else: ?>
-                                        <p>Tu carrito está vacío</p>
-                                    <?php endif; ?>
+                    <div class="header-ctn"  >
+                    <!-- Cart -->
+                    <div class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                            <i class="fa fa-shopping-cart"></i>
+                            <span>Carrito</span>
+                            <div class="qty"><?php echo $total_items; ?></div>
+                        </a>
+                        <div class="cart-dropdown" id="carrito-contenido">
                                 </div>
-                                <div class="cart-summary">
-                                    <small><?php echo $total_items; ?> Item(s)</small>
-                                    <h5>SUBTOTAL: $<?php echo number_format($total, 2); ?></h5>
-                                </div>
-                                <div class="cart-btns">
-                                    <?php if (isset($_SESSION['user_id'])): ?>
-                                        <a href="carrito.php">Ver carrito</a>
-                                        <a href="checkout.php">Finalizar <i class="fa fa-arrow-circle-right"></i></a>
-                                    <?php else: ?>
-                                        <a href="login.php">Inicia sesión para finalizar compra</a>
-                                    <?php endif; ?>
-                                </div>
-                            </div>
                         </div>
+
                         <!-- /Cart -->
 
                         <!-- Menu Toggle -->

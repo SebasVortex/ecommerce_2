@@ -121,37 +121,7 @@
 		<script src="./js/main.js"></script>
 
 					<!-- carrito agregar -->
-					<script>
-document.querySelectorAll('.add-to-cart-btn, .add-to-wishlist').forEach(button => {
-    button.addEventListener('click', function() {
-        console.log("Botón clickeado"); // Añadir un log para ver si el evento se dispara
-        const productId = this.getAttribute('data-product-id');
-        const quantityInput = document.getElementById(`quantity-${productId}`);
-        const quantity = quantityInput ? parseInt(quantityInput.value) : 1;
-
-        // Solicitud fetch
-        fetch('addcarrito.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: `product_id=${productId}&quantity=${quantity}`,
-        })
-        .then(response => response.text())
-        .then(data => {
-            if (data.includes('Error')) { // Verificar si la respuesta indica un error
-                window.location.href = 'login.php'; // Redirige al login en caso de error
-            } else {
-                alert(data); // Mostrar mensaje de éxito o manejar la respuesta
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            window.location.href = 'login.php'; // Redirige al login en caso de error en la solicitud
-        });
-    });
-});
-</script>
+			
 
 
 			<!-- codigo para la busqueda -->
@@ -378,6 +348,66 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 </script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+function addToCart(productId) {
+    // Obtener la cantidad del input correspondiente
+    var quantityInput = document.getElementById("quantity-" + productId);
+    var quantity = quantityInput ? quantityInput.value : 1;
+
+    // Crear una solicitud AJAX
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "agregar_al_carrito.php", true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+    // Configurar lo que sucede cuando se recibe una respuesta
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+            // Analizar la respuesta JSON
+            var response = JSON.parse(xhr.responseText);
+            
+            // Actualizar el contenido del carrito
+            if (response.cart_content) {
+                document.getElementById("carrito-contenido").innerHTML = response.cart_content;
+            }
+            
+            // Actualizar el total de artículos
+            var qtyElement = document.querySelector(".dropdown .qty");
+            if (qtyElement) {
+                qtyElement.textContent = response.total_items;
+            }
+            
+            // Actualizar el subtotal si es necesario
+            // Puedes añadir una lógica similar para el subtotal si es necesario
+        }
+    };
+
+    // Enviar los datos al servidor
+    xhr.send("product_id=" + productId + "&quantity=" + quantity);
+}
+// Opcional: Puedes usar esta función para cargar el carrito al cargar la página
+document.addEventListener("DOMContentLoaded", function() {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "agregar_al_carrito.php", true);
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            var response = JSON.parse(xhr.responseText);
+            if (response.cart_content) {
+                document.getElementById("carrito-contenido").innerHTML = response.cart_content;
+            }
+            if (response.total_items) {
+                document.querySelector(".dropdown .qty").textContent = response.total_items;
+            }
+        }
+    };
+    xhr.send();
+});
+</script>
+
+
+
+
 <!-- Incluye jQuery UI para el control deslizante -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
