@@ -481,6 +481,7 @@ if (distancia < 0) {
 		prevEl: '.custom-button-prev', // Apunta al nuevo botón personalizado
     },
     autoplay: {
+      delay: 3500,
       disableOnInteraction: false,
     },
     effect: 'slide', // Aquí puedes cambiar el efecto a 'fade', 'cube', etc.
