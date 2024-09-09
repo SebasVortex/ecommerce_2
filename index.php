@@ -53,18 +53,8 @@ if ($stmt->execute()) {
 						<div class="custom-button-next"><span class="material-symbols-outlined">chevron_right</span></div>
 					</div>
 					<div class="swiper-wrapper"><!-- Slide 1 -->
-						<div class="swiper-slide" id="dimensionador">
-                            <div class="slide-1">
-                                <div class="first-p">
-                                    <p>¿Queres acceder a nuestra lista de precios?</p>
-                                </div>
-                                <div class="second-s">  
-                                    <img src="assets/images/verified.png" alt="">
-									<a href="sheet.php">Verificate</a>
-                                </div>
-                            </div>
-                        </div>
-						<div class="swiper-slide" id="slide-2">	<!-- Slide 2 -->
+
+					<div class="swiper-slide" id="slide-2">	<!-- Slide 2 -->
 							<div class="banner-2">
 								<div class="overlay-2">
 									<div class="content-2">
@@ -75,6 +65,8 @@ if ($stmt->execute()) {
 								</div>
 							</div>
 						</div>
+
+
 						<div class="swiper-slide" id="slider-3"><!-- Slide 3 -->
 							<div class="banner-3">
 								<div class="content-3">
@@ -96,6 +88,17 @@ if ($stmt->execute()) {
 								</div>
 							</div>
 						</div>
+						<div class="swiper-slide" id="dimensionador">
+                            <div class="slide-1">
+                                <div class="first-p">
+                                    <p>¿Queres acceder a nuestra lista de precios?</p>
+                                </div>
+                                <div class="second-s">  
+                                    <img src="assets/images/verified.png" alt="">
+									<a href="sheet.php">Verificate</a>
+                                </div>
+                            </div>
+                        </div>
 					</div>
 				</div>
 				<div class="swiper-pagination"></div>
