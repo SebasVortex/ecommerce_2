@@ -350,6 +350,8 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> <!-- Importa SweetAlert -->
+
 <script>
 function addToCart(productId) {
     var quantityInput = document.getElementById("quantity-" + productId);
@@ -377,6 +379,15 @@ function addToCart(productId) {
             if (qtyElement) {
                 qtyElement.textContent = response.total_items;
             }
+
+            // Mostrar alerta de SweetAlert cuando se añada correctamente al carrito
+            Swal.fire({
+                icon: 'success',
+                title: 'Producto Añadido',
+                text: '¡El producto ha sido añadido al carrito correctamente!',
+                showConfirmButton: false,
+                timer: 1500
+            });
         }
     };
 
@@ -401,6 +412,7 @@ document.addEventListener("DOMContentLoaded", function() {
     xhr.send();
 });
 </script>
+
 
 
 
