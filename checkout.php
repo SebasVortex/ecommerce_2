@@ -162,7 +162,7 @@ if (isset($_SESSION['user_id'])) {
     <!-- Important Notice -->
     <div class="container mt-5">
         <div class="alert alert-info text-center">
-            <h1 class="important-heading">Importante: Procedimiento de Compra</h1>
+            <h1 class="important-heading">Importante: Procedimiento de orden de compra</h1>
             <p class="important-text">Por razones de seguridad, no aceptamos pagos a través de medios electrónicos en nuestra tienda en línea. Sin embargo, le invitamos a completar el formulario de pedido para iniciar el proceso de compra. Una vez que haya enviado su formulario con los detalles de su pedido, uno de nuestros asistentes de ventas se pondrá en contacto con usted para finalizar la transacción y coordinar el pago y la entrega. Agradecemos su comprensión y esperamos poder asistirle personalmente para garantizar una experiencia de compra segura y satisfactoria.</p>
         </div>
     </div>
@@ -271,7 +271,7 @@ if (isset($_SESSION['user_id'])) {
                         <div class="form-group" id="submit-group" style="display: none;">
                             <button id="customButton" type="submit" class="custom-button">
                                 <div class="content-wrapper">
-                                    <span class="button-text">Finalizar compra</span>
+                                    <span class="button-text">Iniciar orden</span>
                                     <span class="checkmark"><span class="material-symbols-outlined">task_alt</span></span>
                                     <span class="error-x"><span class="material-symbols-outlined">cancel</span></span>
                                 </div>

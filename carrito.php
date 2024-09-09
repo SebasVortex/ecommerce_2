@@ -343,7 +343,7 @@ $items = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <h5>SUBTOTAL: <span id="subtotal">$<?php echo number_format($total, 2); ?></span></h5>
             </div>
             <div class="mt-3 right">
-                <a href="checkout.php" class="btn btn-primary">Finalizar pago</a>
+                <a href="checkout.php" class="btn btn-primary">Iniciar Orden</a>
             </div>
         <?php else: ?>
             <br>

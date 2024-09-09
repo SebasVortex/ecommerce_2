@@ -200,7 +200,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
             .img-reg {
                 width: 100%;
-                height: 200px;
+                height: 0;
             }
             .form-reg {
                 width: 100%;

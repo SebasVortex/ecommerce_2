@@ -364,11 +364,13 @@ try {
                         <input type="email" id="email" name="email" class="form-control" value="<?php echo htmlspecialchars($user['email']); ?>" required>
                     </div>
                     <div class="form-group">
+                                            <!-- 
                         <label for="password">Contraseña:</label>
                         <div class="password-container psw-cnt">
                             <input type="password" id="password" name="password" class="form-control" value="<?php echo htmlspecialchars($user['password']); ?>" readonly>
                             <span class="show-password" onclick="togglePassword('password', 'passwordIcon')"><img id="passwordIcon" src="assets/images/lock.png" alt="Toggle Password"></span>
                         </div>
+                        -->
                         <div class="psw-btn">
                             <button type="button" class="btn-secondary change-pssw" data-toggle="modal" data-target="#changePasswordModal">Cambiar Contraseña</button><img id="changepasswordIcon" src="assets/images/new-password.png" alt="Change Password">
                         </div>

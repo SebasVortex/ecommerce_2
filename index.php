@@ -60,7 +60,7 @@ if ($stmt->execute()) {
                                 </div>
                                 <div class="second-s">  
                                     <img src="assets/images/verified.png" alt="">
-									<a href="">Verificate</a>
+									<a href="sheet.php">Verificate</a>
                                 </div>
                             </div>
                         </div>
@@ -291,91 +291,8 @@ if ($stmt->execute()) {
 
 		<!-- SECTION -->
 		<div class="section">
-			<!-- container -->
+			<!-- container productos dentro iria un row como el de arriba -->
 			<div class="container">
-				<!-- row -->
-				<div class="row">
-
-					<!-- section title -->
-					<div class="col-md-12">
-						<div class="section-title">
-							<h3 class="title">Mas productos</h3>
-							<div class="section-nav">
-								<ul class="section-tab-nav tab-nav">
-									<li class="active"><a href="store.php">Inversores</a></li>
-									<li><a href="store.php?category%5B%5D=11">Paneles Solares</a></li>
-									<li><a href="store.php?category%5B%5D=9">Baterías</a></li>
-									<li><a href="store.php?category%5B%5D=6">Plantas Modulares</a></li>
-								</ul>
-							</div>
-						</div>
-					</div>
-					<!-- /section title -->
-
-					<!-- Products tab & slick -->
-					<div class="col-md-12">
-						<div class="row">
-							<div class="products-tabs">
-								<!-- tab -->
-								<div id="tab2" class="tab-pane fade in active">
-									<div class="products-slick" data-nav="#slick-nav-2">
-									<?php foreach ($productos as $producto): ?>
-										<div class="product">
-											<div class="product-img">
-											<a class="product-img" href="product_detalle.php?id=<?php echo $producto['id']; ?>">
-												<img src="assets/images/<?php echo htmlspecialchars($producto['imagen']); ?>" alt="<?php echo htmlspecialchars($producto['name']); ?>">
-											</a>
-											<div class="product-label">
-													<?php if ($producto['discount'] > 0): ?>
-														<span class="sale">-<?php echo htmlspecialchars($producto['discount']); ?>%</span>
-													<?php endif; ?>
-													<?php if ($producto['new']): ?>
-														<span class="new">Nuevo!</span>
-													<?php endif; ?>
-												</div>
-											</div>
-											<div class="product-body">
-												<p class="product-category"><?php echo htmlspecialchars($producto['category_name']); ?></p>
-												<h3 class="product-name">
-													<a href="product_detalle.php?id=<?php echo $producto['id']; ?>">
-													<?php echo htmlspecialchars($producto['brand_name']); ?> -
-														<?php echo htmlspecialchars($producto['name']); ?>
-													</a>
-												</h3>
-												<h4 class="product-price">
-													$<?php echo number_format($producto['price'], 2); ?>
-												</h4>
-
-												<div class="product-rating">
-
-												</div>
-
-												<div class="product-btns">
-													<button class="add-to-wishlist"onclick="addToCart(<?php echo htmlspecialchars($producto['id']); ?>)"><i class="fa-solid fa-cart-plus fa-flip" style="--fa-animation-duration: 3s;"></i><span class="tooltipp">añadir al carrito</span></button>
-													<button class="quick-view" data-product-id="<?php echo $producto['id']; ?>">
-														<i class="fa fa-eye fa-beat" style="--fa-animation-duration: 2s;"></i><span class="tooltipp">Ver más</span>
-													</button>
-												</div>
-											</div>
-											<div class="add-to-cart">
-										<button class="add-to-cart-btn" onclick="addToCart(<?php echo htmlspecialchars($producto['id']); ?>)">
-											<i class="fa fa-shopping-cart"></i> Añadir al carrito
-										</button>
-									</div>
-										</div>
-										<?php endforeach; ?>
-
-
-									</div>
-									<div id="slick-nav-2" class="products-slick-nav"></div>
-								</div>
-								<!-- /tab -->
-							</div>
-						</div>
-					</div>
-					<!-- /Products tab & slick -->
-				</div>
-				<!-- /row -->
 			</div>
 			<!-- /container -->
 		</div>
@@ -522,12 +439,24 @@ var x = setInterval(function() {
     document.getElementById("mins").innerHTML = minutos;
     document.getElementById("secs").innerHTML = segundos;
 
-    // Si el contador llega a cero, mostrar un mensaje
-    if (distancia < 0) {
-        clearInterval(x);
-        document.querySelector(".hot-deal").innerHTML = "<h2 class='text-uppercase'>¡La oferta ha terminado!</h2><p>Mira nuestro nuevos inversores</p><a class='primary-btn cta-btn' href='store.php?category%5B%5D=5'>Comprar ahora</a>";
+// Si el contador llega a cero, mostrar un mensaje
+if (distancia < 0) {
+    clearInterval(x);
+    document.querySelector(".hot-deal").innerHTML = "<h2 class='text-uppercase'>¡Hasta 35% OFF en Inversores!</h2><p>Descubri nuestros nuevos modelos con grandes descuentos.</p><a class='primary-btn cta-btn' href='store.php?category%5B%5D=5'>Ver ofertas</a>";
 
-    }
+    // Cambiar el fondo de la sección
+    var hotDealSection = document.querySelector("#hot-deal.section");
+    hotDealSection.style.backgroundColor = "#000000";
+    hotDealSection.style.backgroundImage = "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25' viewBox='0 0 1600 800'%3E%3Cg %3E%3Cpolygon fill='%23220000' points='1600 160 0 460 0 350 1600 50'/%3E%3Cpolygon fill='%23440000' points='1600 260 0 560 0 450 1600 150'/%3E%3Cpolygon fill='%23660000' points='1600 360 0 660 0 550 1600 250'/%3E%3Cpolygon fill='%23880000' points='1600 460 0 760 0 650 1600 350'/%3E%3Cpolygon fill='%23A00' points='1600 800 0 800 0 750 1600 450'/%3E%3C/g%3E%3C/svg%3E\")";
+    hotDealSection.style.backgroundSize = "cover";
+    hotDealSection.style.backgroundPosition = "center";
+    hotDealSection.style.backgroundRepeat = "no-repeat";
+    hotDealSection.style.paddingTop = "10rem";
+    hotDealSection.style.paddingBottom = "10rem";
+}
+
+
+
 }, 1000);
 </script>
 
@@ -879,10 +808,7 @@ div#slider-3 {
 }
 }
     </style>
-	</body>
-</html>
-
-<?php
+	<?php
 // Verificar si el parámetro 'pedido' existe en la URL y si es igual a 'realizado'
 if (isset($_GET['pedido']) && $_GET['pedido'] === 'realizado') {
     echo "
@@ -896,3 +822,7 @@ if (isset($_GET['pedido']) && $_GET['pedido'] === 'realizado') {
     </script>";
 }
 ?>
+	</body>
+</html>
+
+

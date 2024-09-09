@@ -154,7 +154,7 @@ try {
                         <p><strong>Nombre:</strong> <?php echo htmlspecialchars($user['nombre']); ?></p>
                         <p><strong>Email:</strong> <?php echo htmlspecialchars($user['email']); ?></p>
                         <p><strong>Usuario:</strong> <?php echo htmlspecialchars($user['username']); ?></p>
-                        <p><strong>Perfil:</strong> <?php echo htmlspecialchars($user['tipo_usuario']);?> </p>
+                        <p><strong>Perfil:</strong> <?php if ($user['tipo_usuario'] == 'consumidor_final') {echo "Consumidor final";} else {echo "Empresa";}?></p>
                         <!-- Agrega más información del usuario según sea necesario -->
                     </div>
                 </div>
