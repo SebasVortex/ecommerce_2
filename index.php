@@ -47,6 +47,7 @@ if ($stmt->execute()) {
 		<!-- container -->
 		<div class="container" style="overflow: hidden;">
             <!-- Controles de navegación -->
+			 
 				<div class="swiper-container">
 					<div class="control-slider">
 						<div class="custom-button-prev"><span class="material-symbols-outlined">chevron_left</span></div>
@@ -61,6 +62,7 @@ if ($stmt->execute()) {
 									<h1>¿Probaste nuestro dimensionador?</h1>
 										<p>Dimensioná tu sistema en tan solo unos pasos</p>
 										<span>TOTALMENTE GRATIS</span>
+										<a target="_blank" href="https://www.sistemasenergeticos.com.ar/dimensionadorsolar">PROBAR</a>
 									</div>
 								</div>
 							</div>
@@ -479,7 +481,6 @@ if (distancia < 0) {
 		prevEl: '.custom-button-prev', // Apunta al nuevo botón personalizado
     },
     autoplay: {
-      delay: 7500,
       disableOnInteraction: false,
     },
     effect: 'slide', // Aquí puedes cambiar el efecto a 'fade', 'cube', etc.
@@ -620,9 +621,25 @@ if (distancia < 0) {
 
 .content-2 {
     text-align: center;
-    z-index: 2; /* El contenido debe estar sobre la imagen */
-	color: white !important;
-
+    display: flex;
+    z-index: 2;
+    color: white !important;
+    align-items: center;
+    flex-direction: column;
+}
+.content-2 a{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 85%;
+	max-width: 295px;
+	padding: 1rem;
+	color: #d91e22;
+	background-color: #ffffff;
+	border: 2px solid #d91e22;
+	margin-top: 25px;
+	border-radius: 25px;
+	font-weight: 600;
 }
 
 .content-2 h1 {
