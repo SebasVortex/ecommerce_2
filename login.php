@@ -174,6 +174,11 @@ if (isset($_SESSION['error'])) {
             color: #D10024;
             font-weight: 500;
         }
+        .error-message {
+            color: #D10024;
+            font-size: 14px;
+            margin-top: 14px;
+        }
         @media (max-width: 768px) {
             .container-inside {
                 flex-direction: column;
@@ -218,6 +223,7 @@ if (isset($_SESSION['error'])) {
                         <input type="password" id="password" name="password" placeholder="Contraseña" class="password-input" required>
                         <span class="show-password" onclick="togglePassword()"><i id="passwordIcon" class="fa-solid fa-lock" style="font-size:26px"></i></span>
                     </div>
+                    <div id="error-message" class="error-message"></div>
                     <input type="submit" value="Iniciar sesión" class="btn-log">
                 </form>
                 <p><a href="register.php">¿No tenés una cuenta? <span class="register">Registrate acá</span></a></p>
@@ -238,6 +244,20 @@ if (isset($_SESSION['error'])) {
                 passwordField.type = 'password';
                 passwordIcon.classList.remove('fa-unlock');
                 passwordIcon.classList.add('fa-lock');
+            }
+        }
+           // Mostrar mensaje de error basado en la URL
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const error = urlParams.get('error');
+            const errorMessageElement = document.getElementById('error-message');
+            
+            if (error === 'loginfailed') {
+                errorMessageElement.textContent = 'Nombre de usuario o contraseña incorrectos.';
+            } else if (error === 'passwrong') {
+                errorMessageElement.textContent = 'Contraseña incorrecta.';
+            } else if (error === 'userwrong') {
+                errorMessageElement.textContent = 'Nombre de usuario o correo electrónico incorrectos.';
             }
         }
     </script>

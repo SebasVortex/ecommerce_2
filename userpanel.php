@@ -34,6 +34,7 @@ try {
         display: flex;
         align-items: center;
         margin: 60px 0 ;
+        gap: 60px;
     }
     .d-flex{
         display: flex;
@@ -129,6 +130,21 @@ try {
     }
 
 }
+.profile-image-container {
+        position: relative;
+        display: inline-block;
+        width: 250px;
+        height: 220px;
+        border-radius: 50%;
+        overflow: hidden;
+    }
+
+    .profile-image-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
+    }
 </style>
 </head>
 <body>
@@ -139,12 +155,12 @@ try {
         <h1 class="mb-4 title"> Hola, <?php echo htmlspecialchars($user['nombre']); ?>!</h1>
         
         <div class="row-us">
-            <div class="col-md-4 text-center">
+            <div class="col-md-4 text-center profile-image-container">
                 <!-- Mostrar imagen de perfil si está disponible -->
                 <?php if (!empty($user['imagen_perfil'])): ?>
-                    <img src="assets/userimages/<?php echo htmlspecialchars($user['imagen_perfil']); ?>" alt="Imagen de perfil" class="img-fluid rounded-circle" style="position: relative;display: inline-block;width: 200px;height: 200px;border-radius: 50%;overflow: hidden;">
+                    <img  id="profileImage" src="assets/userimages/<?php echo htmlspecialchars($user['imagen_perfil']); ?>" alt="Imagen de perfil" class="img-fluid rounded-circle">
                 <?php else: ?>
-                    <img src="assets/userimages/default.png" alt="Imagen de perfil predeterminada" class="img-fluid rounded-circle" style="position: relative; display: inline-block;width: 200px;height: 200px;border-radius: 50%;overflow: hidden;">
+                    <img  id="profileImage" src="assets/userimages/default.png" alt="Imagen de perfil predeterminada" class="img-fluid rounded-circle">
                 <?php endif; ?>
             </div>
 

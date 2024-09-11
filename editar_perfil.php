@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             if ($uploadOk) {
                 if (move_uploaded_file($_FILES["imagen_perfil"]["tmp_name"], $target_file)) {
-                    $stmt = $conn->prepare("UPDATE clientes SET username = :username, email = :email, imagen_perfil = :imagen_perfil WHERE id = :user_id");
+                    $stmt = $conn->prepare("UPDATE clientes SET username = :username, email = :email, nombre = :nombre, imagen_perfil = :imagen_perfil WHERE id = :user_id");
                     $stmt->bindParam(':imagen_perfil', $imagen_perfil);
                 } else {
                     $_SESSION['message'] = ['type' => 'danger', 'text' => 'Hubo un error al subir la imagen.'];
@@ -112,8 +112,8 @@ try {
     .profile-image-container {
         position: relative;
         display: inline-block;
-        width: 200px;
-        height: 200px;
+        width: 230px;
+        height: 230px;
         border-radius: 50%;
         overflow: hidden;
     }
@@ -439,7 +439,6 @@ try {
                 reader.readAsDataURL(file);
             }
         }
-
         function togglePassword(fieldId, iconId) {
             var passwordField = document.getElementById(fieldId);
             var passwordIcon = document.getElementById(iconId);
@@ -450,6 +449,42 @@ try {
                 passwordField.type = 'password';
                 passwordIcon.src = 'assets/images/lock.png';
             }
+        }
+        // Obtén la URL actual
+        const currentUrl = window.location.href;
+        // Verifica si la URL contiene "verificado=contrasena_cambiada" para mostrar éxito
+        if (currentUrl.includes("verificado=contrasena_cambiada")) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Contraseña cambiada con éxito',
+                text: 'Ahora puedes iniciar sesión con tu nueva contraseña.',
+                confirmButtonText: 'OK',
+                background: '#f0f0f0', // Cambia el fondo
+                timer: 5000, // Cierra automáticamente después de 5 segundos
+                timerProgressBar: true, // Muestra una barra de progreso
+            });
+        }
+        // Verifica si la URL contiene "error=error_contrasena" para mostrar error de coincidencia
+        if (currentUrl.includes("error=error_contrasena")) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Las nuevas contraseñas no coinciden',
+            text: 'Verificá que las estés escribiendo correctamente.',
+            confirmButtonText: 'OK',
+            background: '#f0f0f0',
+            timer: 5000,
+            timerProgressBar: true,
+        });
+        }
+        // Verifica si la URL contiene "error=contrasena_incorrecta" para mostrar error de contraseña actual
+        if (currentUrl.includes("error=contrasena_incorrecta")) {
+        Swal.fire({
+            icon: 'error',
+            title: 'La contraseña actual es incorrecta',
+            text: 'Verifica que la estés escribiendo correctamente.',
+            confirmButtonText: 'OK',
+            background: '#f0f0f0',
+        });
         }
     </script>
 </body>

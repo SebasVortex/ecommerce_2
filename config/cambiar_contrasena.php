@@ -30,13 +30,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 header("Location: ../editar_perfil.php?verificado=contrasena_cambiada");
                 exit();
             } else {
-                echo "Las nuevas contraseñas no coinciden.";
+                // Redirige si las contraseñas no coinciden
+                header("Location: ../editar_perfil.php?error=error_contrasena");
+                exit();
             }
         } else {
-            echo "La contraseña actual es incorrecta.";
+            // Redirige si la contraseña actual es incorrecta
+            header("Location: ../editar_perfil.php?error=contrasena_incorrecta");
+            exit();
         }
     } else {
         echo "Por favor completa todos los campos.";
     }
 }
-
