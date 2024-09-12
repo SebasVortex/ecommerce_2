@@ -1,6 +1,6 @@
-
 <?php
 include('config/producto.php'); // Incluye el archivo que recupera los datos de los productos
+include('config/checksession.php'); // Incluye el archivo que recupera los datos de los productos
 // Obtener la oferta activa desde la base de datos
 
 $query = "SELECT fecha_inicio, fecha_fin FROM ofertas WHERE index_id = 1"; // Ajusta la consulta según sea necesario
@@ -31,7 +31,7 @@ if ($stmt->execute()) {
 ?>
 
 <?php include 'assets/includes/head.php';?>
-
+		<title>Ecommerce Sistemas Energéticos - Baterías de Litio, Paneles Solares e Inversores</title>
     <!-- CSS de Swiper -->
 	<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
 </head>
@@ -60,8 +60,8 @@ if ($stmt->execute()) {
 								<div class="overlay-2">
 									<div class="content-2">
 									<h1>¿Probaste nuestro dimensionador?</h1>
-										<p>Dimensioná tu sistema en tan solo unos pasos</p>
-										<span>TOTALMENTE GRATIS <i class="fa-light fa-badge-dollar"></i></span>
+										<p>Dimensioná tu sistema solar en tan solo unos pasos</p>
+										<span>TOTALMENTE GRATIS</span>
 										<a target="_blank" href="https://www.sistemasenergeticos.com.ar/dimensionadorsolar">PROBAR</a>
 									</div>
 								</div>
@@ -194,7 +194,7 @@ if ($stmt->execute()) {
                 <img src="assets/images/<?php echo htmlspecialchars($producto['imagen']); ?>" alt="<?php echo htmlspecialchars($producto['name']); ?>">
                 <div class="product-label">
                     <?php if ($producto['discount'] > 0): ?>
-                        <span class="sale">-<?php echo htmlspecialchars($producto['discount']); ?><i class="fa-solid fa-tag fa-shake"></i>%</span>
+                        <span class="sale">-<?php echo htmlspecialchars($producto['discount']); ?>%</span>
                     <?php endif; ?>
                     <?php if ($producto['new']): ?>
                         <span class="new">Nuevo <i class="fa-solid fa-exclamation fa-shake" style="--fa-animation-duration: 2s;"></i></span>
@@ -210,9 +210,13 @@ if ($stmt->execute()) {
                     <?php echo htmlspecialchars($producto['name']); ?>
                 </a>
             </h3>
-            <h4 class="product-price">
-                $<?php echo number_format($producto['price'], 2); ?>
-            </h4>
+<h4 class="product-price">
+    $<?php echo number_format($producto['price'], 2); ?>
+    <?php if ($producto['old_price'] > 0): ?>
+        <del class="product-old-price"><?php echo number_format($producto['old_price'], 2); ?></del>
+    <?php endif; ?>
+</h4>
+
 
             <div class="product-rating"></div>
 
@@ -330,11 +334,12 @@ if ($stmt->execute()) {
 											<p class="product-category"><?php echo htmlspecialchars($producto['category_name']); ?></p>
 											<h3 class="product-name"><a href="product_detalle.php?id=<?php echo $producto['id']; ?>"><?php echo htmlspecialchars($producto['brand_name']); ?> - <?php echo htmlspecialchars($producto['name']); ?></a></h3>
 											<h4 class="product-price">
-												$<?php echo number_format($producto['price'], 2); ?> 
-												<?php if ($producto['price'] > 990.00): ?>
-													<del class="product-old-price">$990.00</del>
-												<?php endif; ?>
-											</h4>
+    $<?php echo number_format($producto['price'], 2); ?>
+    <?php if ($producto['old_price'] > 0): ?>
+        <del class="product-old-price"><?php echo number_format($producto['old_price'], 2); ?></del>
+    <?php endif; ?>
+</h4>
+
 										</div>
 									</div>
 									<!-- /product widget -->
@@ -345,7 +350,7 @@ if ($stmt->execute()) {
 
 					<div class="col-md-4 col-xs-6">
 						<div class="section-title">
-							<h4 class="title">Baterías </h4>
+							<h4 class="title">Baterías</h4>
 							<div class="section-nav">
 								<div id="slick-nav-4" class="products-slick-nav"></div>
 							</div>
@@ -363,11 +368,12 @@ if ($stmt->execute()) {
 											<p class="product-category"><?php echo htmlspecialchars($producto['category_name']); ?></p>
 											<h3 class="product-name"><a href="product_detalle.php?id=<?php echo $producto['id']; ?>"> <?php echo htmlspecialchars($producto['brand_name']); ?> - <?php echo htmlspecialchars($producto['name']); ?></a></h3>
 											<h4 class="product-price">
-												$<?php echo number_format($producto['price'], 2); ?> 
-												<?php if ($producto['price'] > 990.00): ?>
-													<del class="product-old-price">$990.00</del>
-												<?php endif; ?>
-											</h4>
+    $<?php echo number_format($producto['price'], 2); ?>
+    <?php if ($producto['old_price'] > 0): ?>
+        <del class="product-old-price"><?php echo number_format($producto['old_price'], 2); ?></del>
+    <?php endif; ?>
+</h4>
+
 										</div>
 									</div>
 									<!-- /product widget -->
@@ -399,11 +405,12 @@ if ($stmt->execute()) {
                     <p class="product-category"><?php echo htmlspecialchars($producto['category_name']); ?></p>
                     <h3 class="product-name"><a href="product_detalle.php?id=<?php echo $producto['id']; ?>"> <?php echo htmlspecialchars($producto['brand_name']); ?> - <?php echo htmlspecialchars($producto['name']); ?></a></h3>
                     <h4 class="product-price">
-                        $<?php echo number_format($producto['price'], 2); ?> 
-                        <?php if ($producto['price'] > 990.00): ?>
-                            <del class="product-old-price">$990.00</del>
-                        <?php endif; ?>
-                    </h4>
+    $<?php echo number_format($producto['price'], 2); ?>
+    <?php if ($producto['old_price'] > 0): ?>
+        <del class="product-old-price"><?php echo number_format($producto['old_price'], 2); ?></del>
+    <?php endif; ?>
+</h4>
+
                 </div>
             </div>
             <!-- /product widget -->
@@ -600,7 +607,7 @@ if (distancia < 0) {
 	position: relative;
     width: 100%;
     height: 100%; /* Toda la altura de la pantalla */
-    background-image: url('assets/images/prueba.png'); /* Imagen de fondo */
+    background-image: url('assets/images/skypanelh.jpeg'); /* Imagen de fondo */
     background-size: cover;
     background-position: center;
     display: flex;
@@ -635,9 +642,9 @@ if (distancia < 0) {
 	width: 85%;
 	max-width: 295px;
 	padding: 1rem;
-	color: #d91e22;
-	background-color: #ffffff;
-	border: 2px solid #d91e22;
+	color: #ffffff;
+	background-color: #d91e22;
+	border: 1px solid #d91e22;
 	margin-top: 25px;
 	border-radius: 25px;
 	font-weight: 600;
@@ -766,6 +773,12 @@ div#slider-3 {
 	.swiper-pagination-bullet {
 		border: 2px solid black;
 	}
+.content-2 h1 {
+    font-size: 2.8rem;
+}
+.content-2 p {
+    font-size: 1.9rem;
+}
     .second-s {
         display: flex;
         align-items: center;
@@ -780,7 +793,7 @@ div#slider-3 {
         margin-bottom: 40px;
     }
     .first-p p {
-        font-size: 28px;
+        font-size: 25px;
         margin-bottom: 40px;
     }
     .banner-3 {
@@ -845,5 +858,3 @@ if (isset($_GET['pedido']) && $_GET['pedido'] === 'realizado') {
 ?>
 	</body>
 </html>
-
-
